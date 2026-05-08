@@ -1012,14 +1012,27 @@
       .language-list { gap: 6px; }
       .lang-option { height: 60px; border-radius: 16px; }
       .lang-option img, .lang-option .flag-svg { width: 42px; height: 30px; }
-      .language-bg { object-position: center bottom; }
+      .language-bg {
+  top: auto;
+  bottom: 0;
+  height: 135%; /*110 조금 위로, 118 추천, 125 더 많이 위로, 135 꽤 강하게 위로 */
+  object-position: center bottom;
+}
+
     }
     @media (min-aspect-ratio: 3/2) and (min-width: 700px) {
       .language-bg { object-position: center 72%; }
     }
 
     @media (max-height: 700px) {
-      .language-bg { object-position: center bottom; opacity: 1; }
+      .language-bg {
+  top: auto;
+  bottom: 0;
+  height: 135%; /*110 조금 위로, 118 추천, 125 더 많이 위로, 135 꽤 강하게 위로 */
+  object-position: center bottom;
+  opacity: 1;
+}
+
     }
     @media (max-width: 360px) {
       .app { padding-left: 12px; padding-right: 12px; }
