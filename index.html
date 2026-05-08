@@ -1,1 +1,2162 @@
-test
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Kall helps travelers make Korean phone reservations without speaking Korean.">
+  <title>Kall | Korean Phone Reservations</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fff;
+      --paper: #fff;
+      --paper-soft: rgba(255,255,255,.92);
+      --ink: #111827;
+      --ink-2: #334155;
+      --muted: #7b8796;
+      --line: rgba(17,24,39,.09);
+      --blue: #2563ff;
+      --blue-2: #174bd7;
+      --blue-soft: #eaf1ff;
+      --green: #13b981;
+      --orange: #f97316;
+      --pink: #ec4899;
+      --violet: #7c3aed;
+      --yellow: #f7c948;
+      --red: #ef4444;
+      --shadow: 0 24px 60px rgba(15,23,42,.14);
+      --shadow-soft: 0 12px 30px rgba(15,23,42,.09);
+      --max: 560px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans JP", "Noto Sans SC", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+    body.locked { overflow: hidden; }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; }
+    button { border: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    img, svg { display: block; }
+
+    .app {
+      width: min(100%, var(--max));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: calc(12px + var(--safe-top)) 16px calc(98px + var(--safe-bottom));
+      position: relative;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: calc(-12px - var(--safe-top)) -16px 12px;
+      padding: calc(12px + var(--safe-top)) 16px 11px;
+      background: #fff;
+      border-bottom: 1px solid rgba(17,24,39,.06);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, #1d4ed8 0%, #2563ff 58%, #1fb6a5 100%);
+      box-shadow: 0 14px 26px rgba(37,99,255,.24), inset 0 1px 0 rgba(255,255,255,.42);
+      font-size: 21px;
+      font-weight: 950;
+    }
+    .brand-copy { display: grid; gap: 2px; min-width: 0; }
+    .brand-name { font-size: 18px; line-height: 1; font-weight: 950; }
+    .brand-sub {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.15;
+      font-weight: 780;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      color: #0f172a;
+      background: rgba(255,255,255,.95);
+      border: 1px solid rgba(17,24,39,.07);
+      box-shadow: 0 10px 24px rgba(15,23,42,.08);
+      position: relative;
+      transition: transform .18s ease;
+    }
+    .icon-btn:active, .btn:active, .nav-btn:active, .choice:active, .pay-method:active, .timeline-item:active { transform: translateY(1px) scale(.99); }
+    .lang-icon { width: 23px; height: 23px; }
+    .lang-code {
+      position: absolute;
+      right: -2px;
+      bottom: -4px;
+      min-width: 23px;
+      height: 23px;
+      display: grid;
+      place-items: center;
+      padding: 0 5px;
+      border-radius: 99px;
+      color: #fff;
+      background: var(--blue);
+      border: 2px solid #fff;
+      font-size: 10px;
+      font-weight: 950;
+    }
+
+    .view { display: none; animation: rise .24s ease both; }
+    .view.active { display: block; }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    h1, h2, h3 { margin: 0; letter-spacing: 0; }
+    h1 { color: var(--ink); font-size: 40px; line-height: 1.04; font-weight: 950; }
+    h2 { color: var(--ink); font-size: 25px; line-height: 1.18; font-weight: 940; }
+    h3 { color: var(--ink); font-size: 17px; line-height: 1.2; font-weight: 930; }
+    .lead {
+      margin: 14px 0 20px;
+      color: var(--ink-2);
+      font-size: 15px;
+      line-height: 1.58;
+      font-weight: 650;
+    }
+    .copy {
+      margin: 8px 0 0;
+      color: var(--ink-2);
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 650;
+    }
+    .kicker {
+      margin-bottom: 6px;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 930;
+    }
+
+    .hero { padding: 12px 0 0; }
+    .hero-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 18px 0 20px;
+    }
+    .btn {
+      width: 100%;
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 18px;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(180deg, #3375ff 0%, #1d55ef 100%);
+      box-shadow: 0 16px 34px rgba(37,99,255,.30), inset 0 1px 0 rgba(255,255,255,.28);
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 920;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .btn.secondary {
+      color: #1f2937;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.08);
+      box-shadow: 0 12px 28px rgba(15,23,42,.08);
+    }
+    .btn.dark {
+      background: linear-gradient(180deg, #202938 0%, #111827 100%);
+      box-shadow: 0 16px 34px rgba(17,24,39,.24);
+    }
+    .btn.small { min-height: 44px; border-radius: 14px; padding: 0 13px; font-size: 13px; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+    .icon { width: 21px; height: 21px; flex: 0 0 auto; }
+
+    .phone-scene {
+      min-height: 330px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      perspective: 1200px;
+      margin: 2px -2px 4px;
+    }
+    .phone {
+      width: min(100%, 324px);
+      min-height: 316px;
+      border-radius: 39px;
+      padding: 13px;
+      background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(230,238,250,.94));
+      border: 1px solid rgba(255,255,255,.92);
+      box-shadow: 0 34px 70px rgba(37,99,255,.16), 0 18px 42px rgba(15,23,42,.14), inset 0 1px 0 rgba(255,255,255,.9);
+      transform: rotateX(9deg) rotateY(-8deg) rotateZ(1deg);
+      transform-style: preserve-3d;
+      animation: floatPhone 5s ease-in-out infinite;
+    }
+    @keyframes floatPhone {
+      0%,100% { transform: rotateX(9deg) rotateY(-8deg) rotateZ(1deg) translateY(0); }
+      50% { transform: rotateX(7deg) rotateY(-6deg) rotateZ(-1deg) translateY(-8px); }
+    }
+    .screen {
+      min-height: 290px;
+      border-radius: 29px;
+      padding: 16px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #fff 0%, #f7fbff 100%);
+      box-shadow: inset 0 0 0 1px rgba(17,24,39,.05);
+    }
+    .screen-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 13px; }
+    .screen-head b { font-size: 13px; font-weight: 920; }
+    .screen-badge {
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 9px;
+      color: #05704a;
+      background: rgba(19,185,129,.12);
+      font-size: 11px;
+      font-weight: 930;
+      white-space: nowrap;
+    }
+    .mini-card {
+      border-radius: 22px;
+      padding: 15px;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.06);
+      box-shadow: var(--shadow-soft);
+    }
+    .mini-card h3 { font-size: 20px; line-height: 1.15; }
+    .mini-card p {
+      margin: 8px 0 14px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 730;
+    }
+    .mini-row {
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 0 11px;
+      border-radius: 14px;
+      background: #f2f6ff;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .mini-row span:last-child { color: var(--blue); font-weight: 950; }
+    .float-chip {
+      position: absolute;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.95);
+      border: 1px solid rgba(255,255,255,.85);
+      box-shadow: 0 14px 32px rgba(15,23,42,.13);
+      backdrop-filter: blur(12px);
+      font-size: 12px;
+      font-weight: 920;
+      transform: translateZ(60px);
+    }
+    .float-left { left: 0; top: 66px; }
+    .float-right { right: -2px; bottom: 68px; }
+    .chip-symbol {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: #fff;
+      background: var(--green);
+      font-size: 13px;
+      font-weight: 950;
+    }
+    .chip-symbol.blue { background: var(--blue); }
+
+    .section { margin: 25px 0; }
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 13px;
+    }
+    .glass {
+      border-radius: 22px;
+      background: var(--paper-soft);
+      border: 1px solid rgba(255,255,255,.84);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .pricing { display: grid; gap: 10px; }
+    .price-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.06);
+      box-shadow: 0 10px 24px rgba(15,23,42,.07);
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .price-card.featured {
+      color: #fff;
+      background: linear-gradient(135deg, #2563ff 0%, #174bd7 62%, #103072 100%);
+      box-shadow: 0 18px 42px rgba(37,99,255,.27);
+    }
+    .price-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .price { font-size: 28px; line-height: 1; font-weight: 950; white-space: nowrap; }
+    .price-card p { margin: 11px 0 0; color: var(--ink-2); font-size: 13px; line-height: 1.5; font-weight: 670; }
+    .price-card.featured h3, .price-card.featured .price { color: #fff; text-shadow: 0 1px 10px rgba(2,6,23,.18); }
+    .price-card.featured p { color: rgba(255,255,255,.88); }
+    .price-card:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(15,23,42,.10); }
+    .price-card:focus-visible { outline: 3px solid rgba(37,99,255,.25); outline-offset: 3px; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
+    .tag {
+      min-height: 29px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      color: #475569;
+      background: #f1f5f9;
+      font-size: 11px;
+      font-weight: 870;
+    }
+    .featured .tag { color: #fff; background: rgba(255,255,255,.18); }
+
+    .steps { display: grid; gap: 10px; }
+    .step-card {
+      min-height: 78px;
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      align-items: center;
+      gap: 12px;
+      border-radius: 20px;
+      padding: 13px;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.06);
+      box-shadow: 0 10px 24px rgba(15,23,42,.07);
+    }
+    .step-no {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: #fff;
+      background: var(--blue);
+      font-weight: 950;
+    }
+    .step-card b { display: block; font-size: 14px; line-height: 1.22; font-weight: 920; }
+    .step-card span { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.38; font-weight: 740; }
+
+    .messenger-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .messenger {
+      min-height: 96px;
+      min-width: 0;
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 6px;
+      border-radius: 17px;
+      padding: 9px 4px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.06);
+      box-shadow: 0 10px 24px rgba(15,23,42,.07);
+    }
+    .logo-box {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 15px;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.08);
+      overflow: hidden;
+    }
+    .logo-box img { width: 27px; height: 27px; object-fit: contain; }
+    .messenger b { display: block; font-size: 11px; line-height: 1; font-weight: 920; }
+    .messenger span { display: block; margin-top: 5px; color: var(--muted); font-size: 9.5px; line-height: 1.22; font-weight: 760; }
+
+    .book-shell { display: grid; gap: 14px; }
+    .progress-card { padding: 15px; }
+    .progress-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .progress-title { color: var(--muted); font-size: 13px; font-weight: 890; }
+    .progress-percent {
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 9px;
+      border-radius: 999px;
+      color: #1f58da;
+      background: rgba(37,99,255,.10);
+      font-size: 11px;
+      font-weight: 930;
+    }
+    .progress-line { height: 8px; border-radius: 99px; background: #e7edf6; overflow: hidden; }
+    .progress-fill { width: 33%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #2563ff, #1fb6a5); transition: width .2s ease; }
+    .summary {
+      display: grid;
+      gap: 9px;
+      padding: 13px;
+      border-radius: 18px;
+      background: #f8fafc;
+      border: 1px solid rgba(17,24,39,.06);
+    }
+    .summary-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 820;
+    }
+    .summary-row b {
+      max-width: 62%;
+      color: var(--ink);
+      text-align: right;
+      font-size: 13px;
+      font-weight: 930;
+      overflow-wrap: anywhere;
+    }
+
+    .form-card { padding: 17px; }
+    .form-step { display: none; }
+    .form-step.active { display: grid; gap: 12px; }
+    .field { display: grid; gap: 7px; }
+    .field label { color: #334155; font-size: 12px; font-weight: 920; }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      min-height: 50px;
+      border-radius: 15px;
+      border: 1px solid rgba(17,24,39,.09);
+      padding: 0 13px;
+      color: var(--ink);
+      background: #f8fafc;
+      outline: none;
+      font-size: 14px;
+      font-weight: 720;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .field textarea {
+      min-height: 94px;
+      padding-top: 13px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: rgba(37,99,255,.50);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(37,99,255,.10);
+    }
+    .field.invalid input, .field.invalid textarea, .field.invalid select {
+      border-color: rgba(239,68,68,.72);
+      background: #fff7f7;
+      box-shadow: 0 0 0 4px rgba(239,68,68,.10);
+    }
+    .field-help { display: none; color: var(--red); font-size: 11px; font-weight: 800; }
+    .field.invalid .field-help { display: block; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .choice {
+      min-height: 76px;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: center;
+      gap: 10px;
+      border-radius: 18px;
+      padding: 10px;
+      text-align: left;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.07);
+      box-shadow: 0 9px 22px rgba(15,23,42,.06);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .choice.selected {
+      border-color: rgba(37,99,255,.55);
+      box-shadow: 0 12px 28px rgba(37,99,255,.14);
+      background: linear-gradient(180deg, #fff, #f7faff);
+    }
+    .choice-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: #fff;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 9px 18px rgba(15,23,42,.12);
+      transform: rotateX(10deg) rotateY(-10deg);
+    }
+    .choice-icon svg { width: 29px; height: 29px; }
+    .bg-orange { background: linear-gradient(135deg, #fb923c, #f97316); }
+    .bg-pink { background: linear-gradient(135deg, #f9a8d4, #ec4899); }
+    .bg-green { background: linear-gradient(135deg, #34d399, #0f9f74); }
+    .bg-violet { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+    .choice b { display: block; font-size: 13px; line-height: 1.16; font-weight: 920; }
+    .choice span { display: block; margin-top: 4px; color: var(--muted); font-size: 10.5px; line-height: 1.28; font-weight: 750; }
+    .plan-options { display: grid; gap: 9px; }
+    .plan-option {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px;
+      border-radius: 19px;
+      border: 1px solid rgba(17,24,39,.08);
+      background: #fff;
+      padding: 13px;
+      box-shadow: 0 9px 22px rgba(15,23,42,.06);
+      cursor: pointer;
+    }
+    .plan-option input { display: none; }
+    .plan-option:has(input:checked) {
+      border-color: rgba(37,99,255,.56);
+      background: linear-gradient(180deg, #fff, #f7faff);
+      box-shadow: 0 12px 28px rgba(37,99,255,.14);
+    }
+    .plan-option b { display: block; font-size: 15px; font-weight: 930; }
+    .plan-option span span { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.35; font-weight: 760; }
+    .plan-price-pill {
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      color: #1d4ed8;
+      background: var(--blue-soft);
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+    .form-actions { display: grid; grid-template-columns: .75fr 1fr; gap: 10px; margin-top: 4px; }
+    .form-actions.single { grid-template-columns: 1fr; }
+    .form-actions .btn { min-height: 51px; }
+
+    [hidden] { display: none !important; }
+
+    .payment-sheet, .info-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: grid;
+      align-items: end;
+      background: rgba(15,23,42,.30);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s ease, visibility .2s ease;
+    }
+    .payment-sheet.open, .info-modal.open { opacity: 1; visibility: visible; }
+    .sheet-panel, .modal-panel {
+      width: min(100%, var(--max));
+      max-height: min(88vh, 760px);
+      overflow: auto;
+      margin: 0 auto;
+      border-radius: 28px 28px 0 0;
+      padding: 16px 16px calc(18px + var(--safe-bottom));
+      background: #fff;
+      box-shadow: 0 -24px 70px rgba(15,23,42,.20);
+    }
+    .sheet-handle { width: 42px; height: 5px; border-radius: 99px; background: #d7deea; margin: 0 auto 14px; }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .sheet-head h2 { font-size: 23px; }
+    .pay-methods { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 14px 0; }
+    .pay-method {
+      min-height: 80px;
+      display: grid;
+      align-content: center;
+      gap: 8px;
+      border-radius: 19px;
+      padding: 12px;
+      text-align: center;
+      background: #f8fafc;
+      border: 1px solid rgba(17,24,39,.08);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .pay-method.selected {
+      border-color: rgba(37,99,255,.56);
+      background: #fff;
+      box-shadow: 0 12px 28px rgba(37,99,255,.13);
+    }
+    .pay-logo {
+      width: 100%;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .pay-logo img { width: 96px; max-width: 100%; height: 30px; object-fit: contain; object-position: center center; }
+    .pay-logo.square img { width: 34px; height: 34px; }
+    .pay-method b { font-size: 13px; font-weight: 920; text-align: center; }
+    .policy { display: grid; gap: 8px; margin: 14px 0; }
+    .check-row {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 9px;
+      align-items: start;
+      color: var(--ink-2);
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+    .check-row input { width: 19px; height: 19px; accent-color: var(--blue); margin-top: 1px; }
+
+    .lookup-card { padding: 16px; margin-bottom: 14px; }
+    .lookup-row { display: grid; grid-template-columns: 1fr auto; gap: 9px; margin-top: 12px; }
+    .status-card {
+      border-radius: 25px;
+      padding: 17px;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.06);
+      box-shadow: var(--shadow-soft);
+    }
+    .status-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+    .status-no { color: var(--muted); font-size: 12px; font-weight: 920; }
+    .status-pill {
+      min-height: 31px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 0 10px;
+      color: #05704a;
+      background: rgba(19,185,129,.12);
+      font-size: 12px;
+      font-weight: 920;
+      white-space: nowrap;
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 6px rgba(19,185,129,.14);
+      animation: pulseSoft 2.4s ease-in-out infinite;
+    }
+    @keyframes pulseSoft {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(19,185,129,.13); opacity: .78; }
+      50% { box-shadow: 0 0 0 8px rgba(19,185,129,.22); opacity: 1; }
+    }
+    .status-card h2 { font-size: 24px; line-height: 1.18; }
+    .status-card p { margin: 9px 0 0; color: var(--ink-2); font-size: 14px; line-height: 1.56; font-weight: 650; }
+    .booking-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .timeline {
+      position: relative;
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+      padding: 6px 0 0 2px;
+      background: #fff;
+      border-radius: 22px;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 31px;
+      top: 30px;
+      bottom: 28px;
+      width: 2px;
+      background: linear-gradient(180deg, #60a5fa 0 32%, #22c55e 32% 55%, #2563ff 55% 76%, #d7deea 76%);
+      border-radius: 99px;
+    }
+    .timeline-item {
+      position: relative;
+      min-height: 74px;
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      border-radius: 19px;
+      padding: 10px;
+      text-align: left;
+      appearance: none;
+      width: 100%;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.07);
+      box-shadow: 0 9px 24px rgba(15,23,42,.055);
+    }
+    .timeline-item.active {
+      border-color: rgba(37,99,255,.32);
+      background: #fff;
+      box-shadow: 0 0 0 1px rgba(37,99,255,.08), 0 10px 24px rgba(37,99,255,.10);
+    }
+    .stage-icon {
+      position: relative;
+      z-index: 1;
+      width: 50px;
+      height: 50px;
+      display: grid;
+      place-items: center;
+      border-radius: 17px;
+      background: #fff;
+      color: inherit;
+      box-shadow: none;
+      transform-origin: center;
+    }
+    .stage-icon svg { width: 58px; height: 58px; display: block; overflow: visible; }
+    .active .stage-icon { animation: stageBlink 2.25s ease-in-out infinite; }
+    .todo .stage-icon { opacity: .86; filter: saturate(.78); }
+    @keyframes stageBlink {
+      0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 8px 14px rgba(37,99,255,.13)); }
+      50% { transform: translateY(-1px) scale(1.035); filter: drop-shadow(0 12px 21px rgba(37,99,255,.25)); }
+    }
+    .timeline-item b { display: block; font-size: 13px; line-height: 1.2; font-weight: 920; }
+    .timeline-item > div span { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.3; font-weight: 760; }
+    .timeline-time { color: var(--muted); font-size: 11px; font-weight: 920; white-space: nowrap; }
+    .empty-state {
+      min-height: 240px;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 14px;
+      padding: 25px;
+      border-radius: 25px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.06);
+      box-shadow: var(--shadow-soft);
+    }
+    .empty-icon {
+      width: 80px;
+      height: 80px;
+      display: grid;
+      place-items: center;
+      border-radius: 27px;
+      color: #fff;
+      background: linear-gradient(135deg, #2563ff, #1fb6a5);
+      box-shadow: 0 16px 36px rgba(37,99,255,.24);
+    }
+    .support-panel { padding: 16px; margin-top: 14px; }
+    .support-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; margin-top: 12px; }
+    .support-chip {
+      min-height: 54px;
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 6px;
+      border-radius: 16px;
+      color: #1f2937;
+      background: #f8fafc;
+      border: 1px solid rgba(17,24,39,.06);
+      font-size: 11px;
+      font-weight: 880;
+    }
+    .support-chip img { width: 25px; height: 25px; object-fit: contain; }
+
+    .receipt-paper {
+      position: relative;
+      margin: 14px 4px 0;
+      padding: 20px 18px 22px;
+      color: #172033;
+      background:
+        linear-gradient(135deg, transparent 10px, #fff 0) top left,
+        linear-gradient(225deg, transparent 10px, #fff 0) top right,
+        linear-gradient(315deg, transparent 10px, #fff 0) bottom right,
+        linear-gradient(45deg, transparent 10px, #fff 0) bottom left;
+      background-size: 50% 50%;
+      background-repeat: no-repeat;
+      filter: drop-shadow(0 16px 28px rgba(15,23,42,.14));
+      border: 1px solid rgba(17,24,39,.08);
+    }
+    .receipt-paper::before, .receipt-paper::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: radial-gradient(circle at 8px 5px, transparent 5px, #fff 5.5px) left/16px 10px repeat-x;
+    }
+    .receipt-paper::before { top: -9px; }
+    .receipt-paper::after { bottom: -9px; transform: rotate(180deg); }
+    .receipt-logo { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+    .receipt-logo b { font-size: 24px; font-weight: 950; }
+    .receipt-logo span { color: #64748b; font-size: 12px; font-weight: 800; }
+    .receipt-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed #cbd5e1;
+    }
+    .receipt-total b { font-size: 28px; font-weight: 950; }
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 50;
+      left: 50%;
+      bottom: 0;
+      width: min(100%, var(--max));
+      transform: translateX(-50%);
+      padding: 8px 14px calc(10px + var(--safe-bottom));
+      background: #fff;
+      backdrop-filter: blur(14px);
+    }
+    .nav-inner {
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 7px;
+      border-radius: 23px;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.07);
+      box-shadow: 0 16px 36px rgba(15,23,42,.14);
+    }
+    .nav-btn {
+      min-width: 0;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 4px;
+      border-radius: 17px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 11px;
+      font-weight: 920;
+    }
+    .nav-btn.active { color: var(--blue); background: var(--blue-soft); }
+    .nav-btn svg { width: 21px; height: 21px; }
+
+    .language-modal {
+      position: fixed;
+      min-height: 100vh;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: calc(18px + var(--safe-top)) 16px calc(18px + var(--safe-bottom));
+      background: #fff;
+      overflow: hidden;
+      isolation: isolate;
+      backdrop-filter: none;
+      transition: opacity .2s ease, visibility .2s ease;
+    }
+    .language-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center bottom;
+      opacity: 0.6;
+      filter: saturate(1.1) contrast(1.05);
+      pointer-events: none;
+      user-select: none;
+    }
+    .language-modal::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.02) 0%, rgba(255,255,255,.04) 46%, rgba(255,255,255,.08) 100%);
+      pointer-events: none;
+    }
+    .language-modal.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .language-panel {
+      position: relative;
+      z-index: 1;
+      width: min(calc(100vw - 32px), 400px);
+      width: min(calc(100dvw - 32px), 400px);
+      max-width: 100%;
+      max-height: min(660px, calc(100vh - 34px - var(--safe-top) - var(--safe-bottom)));
+      overflow: auto;
+      border-radius: 28px;
+      padding: 17px;
+      background: #fff;
+      border: 1px solid rgba(255,255,255,.88);
+      box-shadow: 0 30px 78px rgba(15,23,42,.18);
+      transform: translateY(0);
+    }
+    .language-visual {
+      width: min(100%, 316px);
+      height: 106px;
+      display: grid;
+      place-items: center;
+      margin: 14px auto 12px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.055);
+      box-shadow: 0 16px 34px rgba(15,23,42,.08);
+      overflow: hidden;
+      padding: 0 24px;
+    }
+    .language-hero-logo {
+      width: 100%;
+      max-width: 252px;
+      max-height: 68px;
+      object-fit: contain;
+      display: block;
+      filter: brightness(1.08) contrast(1.08) saturate(1.06);
+    }
+    .language-copy { display: grid; gap: 5px; text-align: center; }
+    .language-copy h2 { font-size: 22px; }
+    .language-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 720;
+    }
+    .language-list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin: 15px 0;
+    }
+    .lang-option {
+      height: 62px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: #f8fafc;
+      border: 1px solid rgba(17,24,39,.07);
+      box-shadow: 0 8px 18px rgba(15,23,42,.05);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+      min-width: 0;
+    }
+    .lang-option img, .lang-option .flag-svg {
+      width: 44px;
+      height: 31px;
+      object-fit: cover;
+      border-radius: 7px;
+      box-shadow: 0 0 0 1px rgba(17,24,39,.08);
+    }
+    .lang-option .ko-flag { object-fit: contain; background: #fff; }
+    .lang-option.selected {
+      background: #fff;
+      border-color: rgba(37,99,255,.58);
+      box-shadow: 0 12px 26px rgba(37,99,255,.15);
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 120;
+      left: 50%;
+      bottom: calc(96px + var(--safe-bottom));
+      width: min(calc(100% - 32px), 430px);
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border-radius: 18px;
+      color: #fff;
+      background: rgba(17,24,39,.94);
+      box-shadow: 0 18px 42px rgba(15,23,42,.24);
+      font-size: 13px;
+      font-weight: 850;
+      text-align: center;
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .2s ease, opacity .2s ease;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+
+    @media (max-width: 560px) {
+      .language-panel {
+        width: min(calc(100vw - 28px), 340px);
+        width: min(calc(100dvw - 28px), 340px);
+        transform: translateY(-clamp(78px, 13vh, 130px));
+      }
+      .language-list { gap: 6px; }
+      .lang-option { height: 60px; border-radius: 16px; }
+      .lang-option img, .lang-option .flag-svg { width: 42px; height: 30px; }
+      .language-bg { object-position: center bottom; }
+    }
+    @media (min-aspect-ratio: 3/2) and (min-width: 700px) {
+      .language-bg { object-position: center 72%; }
+    }
+
+    @media (max-height: 700px) {
+      .language-bg { object-position: center bottom; opacity: 1; }
+    }
+    @media (max-width: 360px) {
+      .app { padding-left: 12px; padding-right: 12px; }
+      .topbar { margin-left: -12px; margin-right: -12px; padding-left: 12px; padding-right: 12px; }
+      h1 { font-size: 34px; }
+      h2 { font-size: 22px; }
+      .lead { font-size: 14px; }
+      .phone { width: 292px; min-height: 300px; }
+      .phone-scene { min-height: 312px; }
+      .screen { min-height: 274px; }
+      .choice-grid, .pay-methods { grid-template-columns: 1fr; }
+      .messenger-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .support-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .messenger { min-height: 92px; }
+    }
+
+    @media (min-width: 430px) {
+      .hero-actions { grid-template-columns: 1fr .82fr; }
+    }
+
+    @media (min-width: 560px) {
+      :root { --max: 680px; }
+      .app { padding-left: 24px; padding-right: 24px; }
+      .topbar { margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px; }
+      .hero { display: grid; grid-template-columns: 1fr minmax(280px, 334px); align-items: center; gap: 22px; }
+      .messenger-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    @media (min-width: 920px) {
+      body { display: grid; justify-items: center; }
+      :root { --max: 720px; }
+      .app {
+        margin-top: 26px;
+        margin-bottom: 26px;
+        min-height: calc(100vh - 52px);
+        border-radius: 38px;
+        background: #fff;
+        box-shadow: 0 0 0 1px rgba(17,24,39,.06), 0 32px 80px rgba(15,23,42,.13);
+      }
+      .bottom-nav { border-radius: 0 0 38px 38px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body class="locked">
+  <div class="language-modal" id="languageModal" role="dialog" aria-modal="true" aria-labelledby="languageTitle">
+    <img class="language-bg" src="./background.png?v=5" alt="" aria-hidden="true">
+    <div class="language-panel">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">K</div>
+        <div class="brand-copy">
+          <div class="brand-name">Kall</div>
+          <div class="brand-sub" data-i18n="brandSub">Korean phone booking help</div>
+        </div>
+      </div>
+      <div class="language-visual" aria-hidden="true">
+        <img class="language-hero-logo" src="./logo.png" alt="">
+      </div>
+      <div class="language-copy">
+        <h2 id="languageTitle" data-i18n="languageTitle">Choose language</h2>
+        <p data-i18n="languageDesc">Pick a flag to continue.</p>
+      </div>
+      <div class="language-list" role="listbox" aria-label="Language">
+        <button class="lang-option selected" type="button" data-lang="en" aria-label="English">
+          <svg class="flag-svg" viewBox="0 0 44 31" aria-hidden="true"><rect width="44" height="31" fill="#fff"/><path d="M0 0h44v2.4H0zm0 4.8h44v2.4H0zm0 4.8h44V12H0zm0 4.8h44v2.4H0zm0 4.8h44v2.4H0zm0 4.8h44v2.4H0zm0 4.8h44V31H0z" fill="#b22234"/><rect width="19.5" height="16.8" fill="#3c3b6e"/><g fill="#fff"><circle cx="3.2" cy="3" r=".8"/><circle cx="7.2" cy="3" r=".8"/><circle cx="11.2" cy="3" r=".8"/><circle cx="15.2" cy="3" r=".8"/><circle cx="5.2" cy="6.2" r=".8"/><circle cx="9.2" cy="6.2" r=".8"/><circle cx="13.2" cy="6.2" r=".8"/><circle cx="17.2" cy="6.2" r=".8"/><circle cx="3.2" cy="9.4" r=".8"/><circle cx="7.2" cy="9.4" r=".8"/><circle cx="11.2" cy="9.4" r=".8"/><circle cx="15.2" cy="9.4" r=".8"/><circle cx="5.2" cy="12.6" r=".8"/><circle cx="9.2" cy="12.6" r=".8"/><circle cx="13.2" cy="12.6" r=".8"/><circle cx="17.2" cy="12.6" r=".8"/></g></svg>
+        </button>
+        <button class="lang-option" type="button" data-lang="ja" aria-label="日本語">
+          <svg class="flag-svg" viewBox="0 0 44 31" aria-hidden="true"><rect width="44" height="31" fill="#fff"/><circle cx="22" cy="15.5" r="8.4" fill="#bc002d"/></svg>
+        </button>
+        <button class="lang-option" type="button" data-lang="zh" aria-label="中文">
+          <svg class="flag-svg" viewBox="0 0 44 31" aria-hidden="true"><rect width="44" height="31" fill="#de2910"/><path d="m8 5 1.2 3.5h3.7l-3 2.1 1.2 3.5L8 12 5 14.1l1.1-3.5-3-2.1h3.7L8 5Z" fill="#ffde00"/><circle cx="16.5" cy="6.8" r="1.1" fill="#ffde00"/><circle cx="19.2" cy="10.5" r="1.1" fill="#ffde00"/><circle cx="19" cy="15" r="1.1" fill="#ffde00"/><circle cx="16.2" cy="18.4" r="1.1" fill="#ffde00"/></svg>
+        </button>
+        <button class="lang-option" type="button" data-lang="fr" aria-label="Français">
+          <svg class="flag-svg" viewBox="0 0 44 31" aria-hidden="true"><rect width="14.7" height="31" fill="#0055a4"/><rect x="14.7" width="14.6" height="31" fill="#fff"/><rect x="29.3" width="14.7" height="31" fill="#ef4135"/></svg>
+        </button>
+        <button class="lang-option" type="button" data-lang="ko" aria-label="한국어">
+          <img class="flag-svg ko-flag" alt="" src="https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg">
+        </button>
+      </div>
+      <button class="btn" type="button" id="startApp" data-i18n="startApp">Start with Kall</button>
+    </div>
+  </div>
+
+  <main class="app">
+    <header class="topbar">
+      <a class="brand" href="#" data-nav="intro" aria-label="Kall home">
+        <div class="brand-logo" aria-hidden="true">K</div>
+        <div class="brand-copy">
+          <div class="brand-name">Kall</div>
+          <div class="brand-sub" data-i18n="brandSub">Korean phone booking help</div>
+        </div>
+      </a>
+      <button class="icon-btn" type="button" id="openLanguage" aria-label="Open language settings">
+        <svg class="lang-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" stroke="currentColor" stroke-width="2"/>
+          <path d="M3.7 9h16.6M3.7 15h16.6M12 3c2 2.2 3 5.2 3 9s-1 6.8-3 9c-2-2.2-3-5.2-3-9s1-6.8 3-9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="lang-code" id="langCode">EN</span>
+      </button>
+    </header>
+
+    <section class="view active" id="view-intro">
+      <div class="hero">
+        <div>
+          <h1 data-i18n="heroTitle">Need a Korean phone reservation?</h1>
+          <p class="lead" data-i18n="heroLead">Tell us the place, time, and required details. Kall calls in Korean and sends the result to your messenger.</p>
+          <div class="hero-actions">
+            <button class="btn" type="button" data-nav="book">
+              <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M5 5h14v14H5z" stroke="currentColor" stroke-width="2.2"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+              <span data-i18n="ctaBook">Make a request</span>
+            </button>
+            <button class="btn secondary" type="button" data-nav="status" data-i18n="ctaTrack">Track booking</button>
+          </div>
+        </div>
+        <div class="phone-scene" aria-label="Kall booking preview">
+          <div class="float-chip float-left"><span class="chip-symbol">✓</span><span data-i18n="chipConfirmed">Details received</span></div>
+          <div class="phone">
+            <div class="screen">
+              <div class="screen-head"><b>Kall</b><span class="screen-badge" data-i18n="screenBadge">Calling now</span></div>
+              <div class="mini-card">
+                <h3 data-i18n="screenTitle">Dinner in Seoul</h3>
+                <p data-i18n="screenText">May 12 · 7:30 PM · 2 guests · backup time ready</p>
+                <div class="mini-row"><span data-i18n="miniSubmitted">Request sent</span><span data-i18n="miniDone">Done</span></div>
+                <div class="mini-row"><span data-i18n="miniPayment">Payment</span><span data-i18n="miniDone">Done</span></div>
+                <div class="mini-row"><span data-i18n="miniCalling">Calling venue</span><span data-i18n="miniLive">Live</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="float-chip float-right"><span class="chip-symbol blue">$</span><span id="chipPrice">From $3.99</span></div>
+        </div>
+      </div>
+
+      <section class="section">
+        <div class="section-head"><div><div class="kicker" data-i18n="priceKicker">Pricing first</div><h2 data-i18n="priceTitle">Pick the call support you need.</h2></div></div>
+        <div class="pricing">
+          <article class="price-card" data-select-plan="Basic Booking" role="button" tabindex="0">
+            <div class="price-top"><h3 data-i18n="planBasicName">Basic Booking</h3><div class="price" data-price-plan="Basic Booking">$3.99</div></div>
+            <p data-i18n="planBasicDesc">📞 One place, one request, up to five Korean call attempts every 10 minutes.</p>
+            <div class="tag-row"><span class="tag" data-i18n="tagAttempts">5 attempts</span><span class="tag" data-i18n="tagInterval">10 min interval</span></div>
+          </article>
+          <article class="price-card featured" data-select-plan="Plus Booking" role="button" tabindex="0">
+            <div class="price-top"><h3 data-i18n="planPlusName">Plus Booking</h3><div class="price" data-price-plan="Plus Booking">$7.99</div></div>
+            <p data-i18n="planPlusDesc">🗓️ Backup date or time coordination if the first choice is full.</p>
+            <div class="tag-row"><span class="tag" data-i18n="tagBackup">Backup options</span><span class="tag" data-i18n="tagPopular">Most popular</span></div>
+          </article>
+          <article class="price-card" data-select-plan="Rush Booking" role="button" tabindex="0">
+            <div class="price-top"><h3 data-i18n="planRushName">Rush Booking</h3><div class="price" data-price-plan="Rush Booking">$14.99</div></div>
+            <p data-i18n="planRushDesc">⚡ Priority handling for same-day restaurant, beauty, clinic, or special requests.</p>
+            <div class="tag-row"><span class="tag" data-i18n="tagPriority">Priority</span><span class="tag" data-i18n="tagSameDay">Same day</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><div><div class="kicker" data-i18n="howKicker">How it works</div><h2 data-i18n="howTitle">Three steps, no Korean phone needed.</h2></div></div>
+        <div class="steps">
+          <article class="step-card"><div class="step-no">1</div><div><b data-i18n="step1Title">Choose a plan and type</b><span data-i18n="step1Desc">Start with the price, then select restaurant, beauty, clinic, or other.</span></div></article>
+          <article class="step-card"><div class="step-no">2</div><div><b data-i18n="step2Title">Add required details</b><span data-i18n="step2Desc">Dates cannot be in the past, and required fields block the next step.</span></div></article>
+          <article class="step-card"><div class="step-no">3</div><div><b data-i18n="step3Title">Pay and track</b><span data-i18n="step3Desc">Get a booking number, request popup, and paper-style receipt.</span></div></article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><div><div class="kicker" data-i18n="messengerKicker">Messenger updates</div><h2 data-i18n="messengerTitle">Receive updates where you already chat.</h2></div></div>
+        <div class="messenger-grid">
+          <div class="messenger"><div class="logo-box"><img alt="WhatsApp logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/WhatsApp.svg"></div><div><b>WhatsApp</b><span data-i18n="waDesc">Global updates</span></div></div>
+          <div class="messenger"><div class="logo-box"><img alt="WeChat logo" src="https://static.cdnlogo.com/logos/w/79/wechat.svg"></div><div><b>WeChat</b><span data-i18n="wechatDesc">China updates</span></div></div>
+          <div class="messenger"><div class="logo-box"><img alt="LINE logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/LINE_logo.svg"></div><div><b>LINE</b><span data-i18n="lineDesc">Japan and Taiwan</span></div></div>
+          <div class="messenger"><div class="logo-box"><img alt="KakaoTalk logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/KakaoTalk_logo.svg"></div><div><b>KakaoTalk</b><span data-i18n="kakaoDesc">Useful in Korea</span></div></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="view" id="view-book">
+      <section class="section" style="margin-top:16px;">
+        <div class="section-head"><div><div class="kicker" data-i18n="bookKicker">Reservation request</div><h2 data-i18n="bookTitle">Plan first, then details.</h2><p class="copy" data-i18n="bookCopy">Required fields must be complete before the next step.</p></div></div>
+        <div class="book-shell">
+          <aside class="glass progress-card">
+            <div class="progress-top"><span class="progress-title" id="stepLabel">Step 1 of 3</span><span class="progress-percent" id="progressLabel">33%</span></div>
+            <div class="progress-line"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="summary" style="margin-top:14px;">
+              <div class="summary-row"><span data-i18n="sumPlan">Plan</span><b id="sumPlan">Plus Booking · $7.99</b></div>
+              <div class="summary-row"><span data-i18n="sumType">Type</span><b id="sumType">Restaurant</b></div>
+              <div class="summary-row"><span data-i18n="sumPlace">Place</span><b id="sumPlace">Not added</b></div>
+              <div class="summary-row"><span data-i18n="sumTime">Time</span><b id="sumTime">Not added</b></div>
+            </div>
+          </aside>
+
+          <div class="glass form-card">
+            <form id="bookingForm" novalidate>
+              <div class="form-step active" data-step="1">
+                <h2 data-i18n="stepPlanTitle">Choose plan and service type</h2>
+                <p class="copy" data-i18n="stepPlanCopy">Prices are shown in your selected language's currency.</p>
+                <div class="plan-options">
+                  <label class="plan-option"><span><b data-plan-label="Basic Booking">Basic Booking · $3.99</b><span data-i18n="planBasicShort">1 place, 5 call attempts, every 10 minutes.</span></span><span class="plan-price-pill" data-price-plan="Basic Booking">$3.99</span><input type="radio" name="plan" value="Basic Booking" data-price-usd="3.99"></label>
+                  <label class="plan-option"><span><b data-plan-label="Plus Booking">Plus Booking · $7.99</b><span data-i18n="planPlusShort">Backup time/date coordination included.</span></span><span class="plan-price-pill" data-price-plan="Plus Booking">$7.99</span><input type="radio" name="plan" value="Plus Booking" data-price-usd="7.99" checked></label>
+                  <label class="plan-option"><span><b data-plan-label="Rush Booking">Rush Booking · $14.99</b><span data-i18n="planRushShort">Priority same-day handling when available.</span></span><span class="plan-price-pill" data-price-plan="Rush Booking">$14.99</span><input type="radio" name="plan" value="Rush Booking" data-price-usd="14.99"></label>
+                </div>
+                <div class="choice-grid" aria-label="Service type">
+                  <button class="choice selected" type="button" data-category="Restaurant">
+                    <div class="choice-icon bg-orange" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M10 9v10c0 3 2 5 5 5v8" stroke="white" stroke-width="3" stroke-linecap="round"/><path d="M15 9v23M21 10v22M27 9c3 5 3 11 0 16v7" stroke="white" stroke-width="3" stroke-linecap="round"/></svg></div>
+                    <div><b data-i18n="catRestaurant">Restaurant</b><span data-i18n="catRestaurantDesc">Dining, cafes, bars</span></div>
+                  </button>
+                  <button class="choice" type="button" data-category="Beauty">
+                    <div class="choice-icon bg-pink" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 7l2.7 7.5L30 17l-7.3 2.6L20 27l-2.7-7.4L10 17l7.3-2.5L20 7Z" fill="white"/><path d="M29 25l1.2 3.2 3.1 1.1-3.1 1.1L29 34l-1.2-3.6-3.1-1.1 3.1-1.1L29 25Z" fill="white" opacity=".8"/></svg></div>
+                    <div><b data-i18n="catBeauty">Beauty</b><span data-i18n="catBeautyDesc">Hair, skin, spa</span></div>
+                  </button>
+                  <button class="choice" type="button" data-category="Clinic">
+                    <div class="choice-icon bg-green" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M17 9h6v8h8v6h-8v8h-6v-8H9v-6h8V9Z" fill="white"/><path d="M10 32h20" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".55"/></svg></div>
+                    <div><b data-i18n="catClinic">Clinic</b><span data-i18n="catClinicDesc">Treatment, consult</span></div>
+                  </button>
+                  <button class="choice" type="button" data-category="Other">
+                    <div class="choice-icon bg-violet" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 7 31 13.5v13L20 33 9 26.5v-13L20 7Z" fill="white" opacity=".92"/><path d="m9.5 14 10.5 6 10.5-6M20 20v12" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div><b data-i18n="catOther">Other</b><span data-i18n="catOtherDesc">Lost item, event, stock</span></div>
+                  </button>
+                </div>
+                <div class="form-actions single"><button class="btn" type="button" data-next-step data-i18n="continuePlace">Continue to place</button></div>
+              </div>
+
+              <div class="form-step" data-step="2">
+                <h2 data-i18n="stepPlaceTitle">Place information</h2>
+                <p class="copy" data-i18n="stepPlaceCopy">A Google Maps, Naver Map, Instagram, or website link helps us call the right location.</p>
+                <div class="field"><label for="placeName" data-i18n="placeNameLabel">Place name</label><input id="placeName" name="placeName" autocomplete="organization" placeholder="Mongtan Seoul" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                <div class="field"><label for="placeLink" data-i18n="placeLinkLabel">Map, Instagram, or website link</label><input id="placeLink" name="placeLink" inputmode="url" placeholder="https://maps.google.com/..." data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                <div class="field"><label for="placePhone" data-i18n="placePhoneLabel">Phone number if you know it</label><input id="placePhone" name="placePhone" inputmode="tel" placeholder="+82 2 ..."></div>
+                <div class="form-actions"><button class="btn secondary" type="button" data-prev-step data-i18n="back">Back</button><button class="btn" type="button" data-next-step data-i18n="continueDetails">Continue to details</button></div>
+              </div>
+
+              <div class="form-step" data-step="3">
+                <h2 data-i18n="stepDetailTitle">Reservation details</h2>
+                <p class="copy" data-i18n="stepDetailCopy">Preferred and backup dates cannot be in the past.</p>
+                <div class="two-col">
+                  <div class="field"><label for="date1" data-i18n="date1Label">Preferred date</label><input id="date1" name="date1" type="date" data-required data-future-date><span class="field-help" data-i18n="dateHelp">Choose today or a future date.</span></div>
+                  <div class="field"><label for="time1" data-i18n="time1Label">Preferred time</label><input id="time1" name="time1" type="time" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                </div>
+                <div class="two-col">
+                  <div class="field"><label for="date2" data-i18n="date2Label">Backup date</label><input id="date2" name="date2" type="date" data-required data-future-date><span class="field-help" data-i18n="dateHelp">Choose today or a future date.</span></div>
+                  <div class="field"><label for="time2" data-i18n="time2Label">Backup time</label><input id="time2" name="time2" type="time" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                </div>
+
+                <div data-category-fields="Restaurant">
+                  <div class="two-col">
+                    <div class="field"><label for="people" data-i18n="peopleLabel">People</label><input id="people" name="people" inputmode="numeric" value="2" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                    <div class="field"><label for="reservationName" data-i18n="reservationNameLabel">Name for booking</label><input id="reservationName" name="reservationName" autocomplete="name" placeholder="John Smith" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  </div>
+                  <div class="field"><label for="note" data-i18n="noteLabel">Requests to tell the venue</label><textarea id="note" name="note" data-i18n-placeholder="notePlaceholder" placeholder="Window seat if possible. Please check deposit and cancellation policy."></textarea></div>
+                </div>
+
+                <div data-category-fields="Beauty Clinic" hidden>
+                  <div class="field"><label for="fullName" data-i18n="fullNameLabel">Full name as shown on passport</label><input id="fullName" name="fullName" autocomplete="name" placeholder="JOHN SMITH" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  <div class="two-col">
+                    <div class="field"><label for="passportNo" data-i18n="passportNoLabel">Passport number</label><input id="passportNo" name="passportNo" placeholder="M12345678" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                    <div class="field"><label for="birthDate" data-i18n="birthDateLabel">Date of birth</label><input id="birthDate" name="birthDate" type="date" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  </div>
+                  <div class="two-col">
+                    <div class="field"><label for="gender" data-i18n="genderLabel">Gender</label><select id="gender" name="gender" data-required><option value="" data-i18n="selectOne">Select</option><option data-i18n="genderFemale">Female</option><option data-i18n="genderMale">Male</option><option data-i18n="genderOther">Other</option></select><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                    <div class="field"><label for="procedureName" data-i18n="procedureNameLabel">Needed treatment name</label><input id="procedureName" name="procedureName" placeholder="Skin consultation, haircut..." data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  </div>
+                  <div class="field"><label for="symptoms" data-i18n="symptomsLabel">Symptoms or request</label><textarea id="symptoms" name="symptoms" placeholder="Describe symptoms or the treatment you want." data-required></textarea><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                </div>
+
+                <div data-category-fields="Other" hidden>
+                  <div class="field"><label for="requestTitle" data-i18n="requestTitleLabel">What should we ask?</label><input id="requestTitle" name="requestTitle" placeholder="Lost item, event ticket, product stock..." data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  <div class="field"><label for="otherNote" data-i18n="otherNoteLabel">Request details</label><textarea id="otherNote" name="otherNote" placeholder="Share the exact question or outcome you need." data-required></textarea><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                </div>
+
+                <div class="two-col">
+                  <div class="field"><label for="messenger" data-i18n="messengerLabel">Messenger</label><select id="messenger" name="messenger" data-required><option>WhatsApp</option><option>WeChat</option><option>LINE</option><option>KakaoTalk</option></select><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  <div class="field"><label for="messengerId" data-i18n="messengerIdLabel">Messenger ID or number</label><input id="messengerId" name="messengerId" placeholder="+1 555 ..." data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                </div>
+
+                <div class="summary">
+                  <div class="summary-row"><span data-i18n="sumPlace">Place</span><b id="payPlace">Not added</b></div>
+                  <div class="summary-row"><span data-i18n="sumTime">Time</span><b id="payTime">Not added</b></div>
+                  <div class="summary-row"><span data-i18n="messengerLabel">Messenger</span><b id="payMessenger">WhatsApp</b></div>
+                  <div class="summary-row"><span data-i18n="paymentSummaryTotal">Total</span><b id="payTotal">$7.99</b></div>
+                </div>
+                <div class="form-actions"><button class="btn secondary" type="button" data-prev-step data-i18n="back">Back</button><button class="btn dark" type="button" id="checkoutBtn" data-i18n="checkout">Checkout</button></div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="view" id="view-status">
+      <section class="section" style="margin-top:16px;">
+        <div class="section-head"><div><div class="kicker" data-i18n="statusKicker">My booking</div><h2 data-i18n="statusTitle">Check your Kall request.</h2></div></div>
+        <div class="glass lookup-card">
+          <h3 data-i18n="lookupTitle">Find by booking number</h3>
+          <p class="copy" data-i18n="lookupCopy">Enter your Kall number to show the saved request details below.</p>
+          <div class="lookup-row">
+            <div class="field"><input id="lookupInput" placeholder="KA-260508-1234"></div>
+            <button class="btn small" type="button" id="lookupBtn" data-i18n="lookupBtn">Check</button>
+          </div>
+        </div>
+
+        <div id="emptyStatus" class="empty-state">
+          <div class="empty-icon"><svg class="icon" style="width:42px;height:42px;" viewBox="0 0 24 24" fill="none"><path d="M5 5h14v14H5z" stroke="currentColor" stroke-width="2.2"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+          <h2 data-i18n="emptyTitle">No booking yet</h2>
+          <p class="copy" data-i18n="emptyCopy">Make a request first. After checkout, your Kall booking number will appear here.</p>
+          <button class="btn" type="button" data-nav="book" data-i18n="startBooking">Start booking</button>
+        </div>
+
+        <div id="activeStatus" hidden>
+          <div class="status-card" id="receiptCard">
+            <div class="status-top">
+              <span class="status-no" id="bookingNo">Kall #KA-0000</span>
+              <span class="status-pill"><span class="live-dot"></span><span data-i18n="statusReceived">Received</span></span>
+            </div>
+            <h2 id="statusMain">Your request is ready for Kall.</h2>
+            <p id="statusDesc">We will call the venue in Korean and update your selected messenger.</p>
+            <div class="summary" style="margin-top:14px;">
+              <div class="summary-row"><span data-i18n="sumType">Type</span><b id="statusType">-</b></div>
+              <div class="summary-row"><span data-i18n="sumPlace">Place</span><b id="statusPlace">-</b></div>
+              <div class="summary-row"><span data-i18n="sumTime">Time</span><b id="statusTime">-</b></div>
+              <div class="summary-row"><span data-i18n="messengerLabel">Messenger</span><b id="statusMessenger">-</b></div>
+              <div class="summary-row"><span data-i18n="sumPlan">Plan</span><b id="statusPlan">-</b></div>
+            </div>
+            <div class="booking-actions">
+              <button class="btn small" type="button" id="copyNoBtn" data-i18n="copyBookingNo">Copy booking number</button>
+              <button class="btn small secondary" type="button" data-status-modal="receipt" data-i18n="viewReceipt">View receipt</button>
+            </div>
+            <div class="timeline">
+              <button class="timeline-item done" type="button" data-status-modal="request"><span class="stage-icon stage-request"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="v4ChatBlue" x1="15" y1="8" x2="47" y2="50" gradientUnits="userSpaceOnUse"><stop stop-color="#38bdf8"/><stop offset="1" stop-color="#0866df"/></linearGradient>
+    <linearGradient id="v4BellGold" x1="42" y1="4" x2="57" y2="27" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe66d"/><stop offset=".56" stop-color="#f8b928"/><stop offset="1" stop-color="#df8800"/></linearGradient>
+    <filter id="v4ChatShadow" x="5" y="3" width="57" height="58" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#0f4fba" flood-opacity=".2"/></filter>
+  </defs>
+  <ellipse cx="31" cy="55" rx="19" ry="5" fill="#dbeafe" opacity=".9"/>
+  <path d="M13 19.5C13 11.7 18.8 7 27.5 7h10.8C47 7 53 12.1 53 20.1v12.6C53 40.9 46.7 46 38 46h-7.3L20.4 56.5v-13C15.8 41.5 13 37.2 13 31.8V19.5Z" fill="url(#v4ChatBlue)" filter="url(#v4ChatShadow)"/>
+  <path d="M17 20.5c0-5.5 4.2-9.4 10-9.4h10.3c6.1 0 10.2 3.7 10.7 9.1" stroke="#ffffff" stroke-opacity=".34" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="26" cy="28" r="3.7" fill="#f1f7ff"/><circle cx="33.5" cy="28" r="3.7" fill="#f1f7ff"/><circle cx="41" cy="28" r="3.7" fill="#f1f7ff"/>
+  <g filter="url(#v4ChatShadow)">
+    <path d="M50.5 9.2c4 0 7.1 3.2 7.1 7.1v5.4l2.9 4.7H40.6l2.9-4.7v-5.4c0-3.9 3.1-7.1 7-7.1Z" fill="url(#v4BellGold)"/>
+    <path d="M47.4 26.2c.5 2 1.8 3.1 3.6 3.1 1.9 0 3.1-1.1 3.7-3.1" stroke="#c97600" stroke-width="2" stroke-linecap="round"/>
+    <path d="M45.8 15.8c.7-2.2 2.5-3.5 4.8-3.5" stroke="#fff7c7" stroke-width="1.8" stroke-linecap="round" opacity=".85"/>
+  </g>
+</svg></span><div><b data-i18n="tlRequest">Request submitted</b><span data-i18n="tlRequestSub">Tap to review submitted details</span></div><span class="timeline-time" id="tlTime1">Now</span></button>
+              <button class="timeline-item done" type="button" data-status-modal="receipt"><span class="stage-icon stage-payment"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="v4WalletBlue" x1="15" y1="22" x2="55" y2="54" gradientUnits="userSpaceOnUse"><stop stop-color="#5aa2ff"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient>
+    <radialGradient id="v4CoinGold" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(35 14) rotate(52) scale(16)"><stop stop-color="#fff6a7"/><stop offset=".55" stop-color="#f7bd37"/><stop offset="1" stop-color="#d67b00"/></radialGradient>
+    <linearGradient id="v4PlusGreen" x1="7" y1="42" x2="29" y2="60" gradientUnits="userSpaceOnUse"><stop stop-color="#77e35f"/><stop offset="1" stop-color="#16a34a"/></linearGradient>
+    <filter id="v4PayShadow" x="4" y="1" width="58" height="64" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#0f4fba" flood-opacity=".22"/></filter>
+  </defs>
+  <ellipse cx="32" cy="57" rx="22" ry="5" fill="#dbeafe"/>
+  <circle cx="36.5" cy="15.5" r="13" fill="url(#v4CoinGold)" filter="url(#v4PayShadow)"/>
+  <circle cx="36.5" cy="15.5" r="9.5" stroke="#d88400" stroke-width="1.5" opacity=".55"/>
+  <path d="M36.5 8.8v13.4M32.4 12.1c1.1-2 7-2.2 8 0 .9 2.1-1.1 3.1-3.9 3.5-2.7.4-4.9 1.2-4 3.5.8 2.2 7.2 2.1 8.4-.2" stroke="#936100" stroke-width="2" stroke-linecap="round"/>
+  <rect x="13" y="24" width="40" height="26" rx="8" fill="url(#v4WalletBlue)" filter="url(#v4PayShadow)"/>
+  <path d="M15 29c2.8-3.2 7.3-4.5 13.2-4.5h16.6c4.6 0 7.2 2.5 7.7 5.8" stroke="#e9f3ff" stroke-opacity=".42" stroke-width="2.2" stroke-linecap="round"/>
+  <rect x="41" y="33" width="15" height="12" rx="5" fill="#75a9ff" stroke="#b8d4ff" stroke-width="1.1"/>
+  <circle cx="47.8" cy="39" r="2.8" fill="#dbeafe"/>
+  <circle cx="19" cy="46" r="12" fill="url(#v4PlusGreen)" filter="url(#v4PayShadow)"/>
+  <path d="M19 39.5v13M12.5 46h13" stroke="#effff2" stroke-width="4" stroke-linecap="round"/>
+</svg></span><div><b data-i18n="tlPayment">Payment completed</b><span id="tlPaymentSub">$7.99 · PayPal</span></div><span class="timeline-time" id="tlTime2">Now</span></button>
+              <div class="timeline-item active"><span class="stage-icon stage-call"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="v4PhoneBlue" x1="17" y1="6" x2="49" y2="60" gradientUnits="userSpaceOnUse"><stop stop-color="#67aaff"/><stop offset=".52" stop-color="#2563eb"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient>
+    <linearGradient id="v4PhoneEdge" x1="16" y1="7" x2="48" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#a7d7ff"/><stop offset="1" stop-color="#0078d9"/></linearGradient>
+    <filter id="v4PhoneShadow" x="4" y="1" width="58" height="64" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#0756c7" flood-opacity=".25"/></filter>
+  </defs>
+  <ellipse cx="33" cy="57" rx="20" ry="5" fill="#dbeafe"/>
+  <path d="M18.6 7.2c3.8-3 9.5-1.8 11.7 2.5l5.3 10.2c1.5 2.9.6 6.5-2.2 8.5l-4.2 3.1c3.7 5.8 8.4 10.4 14.3 14l3.2-4.2c2.1-2.7 5.9-3.5 8.8-1.7l8.8 5.3c4.4 2.7 5.1 8.8 1.5 12.5l-3.2 3.2c-2.8 2.8-7 3.7-10.7 2.3C28.6 54.3 11.9 37.6 3.2 14.2 1.8 10.5 2.7 6.3 5.5 3.5l3.1-3.1" fill="url(#v4PhoneBlue)" filter="url(#v4PhoneShadow)" transform="translate(2 1) scale(.9)"/>
+  <path d="M18.7 10.4c2.8-2.1 6.8-1.1 8.5 2l4.2 8c.9 1.7.4 3.9-1.2 5.1l-4.9 3.7c4.5 8.6 10.8 14.8 19.3 19.2l3.8-4.9c1.2-1.6 3.4-2 5.1-1l7.1 4.2" stroke="url(#v4PhoneEdge)" stroke-width="3" stroke-linecap="round" opacity=".52" transform="translate(2 1) scale(.9)"/>
+  <path d="M16.4 9.2c3.1-2.2 7.1-1.3 8.7 1.9" stroke="#d8ecff" stroke-width="2" stroke-linecap="round" opacity=".78"/>
+</svg></span><div><b data-i18n="tlQueue">Waiting for call</b><span data-i18n="tlQueueSub">Kall will call during Korean business hours</span></div><span class="timeline-time" data-i18n="soon">Soon</span></div>
+              <div class="timeline-item todo"><span class="stage-icon stage-result"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="v4Paper" x1="16" y1="13" x2="43" y2="56" gradientUnits="userSpaceOnUse"><stop stop-color="#e5eeff"/><stop offset="1" stop-color="#b9ccff"/></linearGradient>
+    <linearGradient id="v4PaperBack" x1="25" y1="8" x2="52" y2="49" gradientUnits="userSpaceOnUse"><stop stop-color="#b8e6ff"/><stop offset="1" stop-color="#5ba6ef"/></linearGradient>
+    <linearGradient id="v4Pencil" x1="42" y1="38" x2="58" y2="52" gradientUnits="userSpaceOnUse"><stop stop-color="#ffd66e"/><stop offset=".55" stop-color="#f59e0b"/><stop offset="1" stop-color="#d97706"/></linearGradient>
+    <filter id="v4DocShadow" x="5" y="3" width="58" height="61" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#3b82f6" flood-opacity=".2"/></filter>
+  </defs>
+  <ellipse cx="33" cy="57" rx="20" ry="5" fill="#dbeafe"/>
+  <rect x="24" y="7" width="31" height="43" rx="9" fill="url(#v4PaperBack)" opacity=".95" filter="url(#v4DocShadow)"/>
+  <rect x="11" y="14" width="38" height="43" rx="9" fill="url(#v4Paper)" filter="url(#v4DocShadow)"/>
+  <path d="M20 25h18M20 32h22M20 39h19M20 46h15" stroke="#79a4e8" stroke-width="3" stroke-linecap="round"/>
+  <path d="M43.5 45.6 55.2 33.9c1.5-1.5 4-1.4 5.5.1l.6.6c1.5 1.5 1.6 4 .1 5.5L49.8 51.8 42 53.6l1.5-8Z" fill="url(#v4Pencil)" filter="url(#v4DocShadow)"/>
+  <path d="M56.6 32.6 62.7 38.7" stroke="#b45309" stroke-width="3" stroke-linecap="round"/>
+  <path d="M42 53.6 44.1 48.7 47 51.5Z" fill="#1f2937"/>
+  <path d="M17 20c1.9-1.8 4.4-2.7 7.4-2.7h13" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/>
+</svg></span><div><b data-i18n="tlResult">Result update</b><span data-i18n="tlResultSub">Confirmed, full, no answer, or backup needed</span></div><span class="timeline-time" data-i18n="next">Next</span></div>
+            </div>
+          </div>
+          <div class="glass support-panel">
+            <h3 data-i18n="supportTitle">Want to change something?</h3>
+            <p class="copy" data-i18n="supportCopy">If you change your mind within 10 minutes after payment, contact support through WhatsApp, WeChat, LINE, or KakaoTalk.</p>
+            <div class="support-grid">
+              <a class="support-chip" href="https://wa.me/" target="_blank" rel="noreferrer"><img alt="WhatsApp logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/WhatsApp.svg"><span>WhatsApp</span></a>
+              <a class="support-chip" href="https://www.wechat.com/" target="_blank" rel="noreferrer"><img alt="WeChat logo" src="https://static.cdnlogo.com/logos/w/79/wechat.svg"><span>WeChat</span></a>
+              <a class="support-chip" href="https://line.me/" target="_blank" rel="noreferrer"><img alt="LINE logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/LINE_logo.svg"><span>LINE</span></a>
+              <a class="support-chip" href="https://www.kakaocorp.com/page/service/service/KakaoTalk" target="_blank" rel="noreferrer"><img alt="KakaoTalk logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/KakaoTalk_logo.svg"><span>KakaoTalk</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <button class="nav-btn active" type="button" data-nav="intro"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12 12 5l8 7v7a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-7Z" stroke="currentColor" stroke-width="2.1"/></svg><span data-i18n="navIntro">Intro</span></button>
+      <button class="nav-btn" type="button" data-nav="book"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12v16H6z" stroke="currentColor" stroke-width="2.1"/><path d="M9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span data-i18n="navBook">Book</span></button>
+      <button class="nav-btn" type="button" data-nav="status"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5 10 17 19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M21 12a9 9 0 1 1-4.1-7.6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span data-i18n="navStatus">Status</span></button>
+    </div>
+  </nav>
+
+  <div class="payment-sheet" id="paymentSheet" aria-hidden="true">
+    <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="paymentTitle">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><h2 id="paymentTitle" data-i18n="paymentTitle">Complete payment</h2><button class="icon-btn" type="button" id="closePayment" aria-label="Close payment"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg></button></div>
+      <div class="summary">
+        <div class="summary-row"><span data-i18n="paymentSummaryPlan">Plan</span><b id="sheetPlan">Plus Booking</b></div>
+        <div class="summary-row"><span data-i18n="paymentSummaryPlace">Place</span><b id="sheetPlace">Mongtan Seoul</b></div>
+        <div class="summary-row"><span data-i18n="paymentSummaryTotal">Total</span><b id="sheetTotal">$7.99</b></div>
+      </div>
+      <div class="pay-methods">
+        <button class="pay-method selected" type="button" data-pay="WeChat Pay"><div class="pay-logo"><img alt="WeChat Pay logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/WeChat_Pay.png"></div><b>WeChat Pay</b></button>
+        <button class="pay-method" type="button" data-pay="PayPal"><div class="pay-logo"><img alt="PayPal logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/PayPal.svg"></div><b>PayPal</b></button>
+        <button class="pay-method" type="button" data-pay="Alipay"><div class="pay-logo"><img alt="Alipay logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Alipay_Wordmark_Logo.png"></div><b>Alipay</b></button>
+        <button class="pay-method" type="button" data-pay="Visa"><div class="pay-logo"><img alt="Visa logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Visa_2021.svg"></div><b>Visa</b></button>
+        <button class="pay-method" type="button" data-pay="Apple Pay"><div class="pay-logo"><img alt="Apple Pay logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Apple_Pay_logo.svg"></div><b>Apple Pay</b></button>
+        <button class="pay-method" type="button" data-pay="Google Pay"><div class="pay-logo"><img alt="Google Pay logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Google_Pay_Logo_(2020).svg"></div><b>Google Pay</b></button>
+      </div>
+      <div class="policy">
+        <label class="check-row"><input type="checkbox" id="policy1"><span data-i18n="policy1">I understand Kall provides call support, not a guaranteed reservation.</span></label>
+        <label class="check-row"><input type="checkbox" id="policy2"><span data-i18n="policy2">Please ask me before confirming any deposit, cancellation fee, or major change.</span></label>
+      </div>
+      <button class="btn" type="button" id="payNowBtn" data-i18n="payNow">Pay and get booking number</button>
+    </div>
+  </div>
+
+  <div class="info-modal" id="infoModal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><h2 id="modalTitle">Booking details</h2><button class="icon-btn" type="button" id="closeInfoModal" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg></button></div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const planPrices = {
+      "Basic Booking": 3.99,
+      "Plus Booking": 7.99,
+      "Rush Booking": 14.99
+    };
+    const currencies = {
+      en: { prefix: "$", values: { 3.99: 3.99, 7.99: 7.99, 14.99: 14.99 }, decimals: 2 },
+      ko: { suffix: "원", values: { 3.99: 5900, 7.99: 11900, 14.99: 21900 }, decimals: 0 },
+      ja: { prefix: "¥", values: { 3.99: 599, 7.99: 1199, 14.99: 2199 }, decimals: 0 },
+      zh: { suffix: "元", values: { 3.99: 29.99, 7.99: 59.99, 14.99: 109.99 }, decimals: 2 },
+      fr: { prefix: "€", values: { 3.99: 3.99, 7.99: 7.99, 14.99: 14.99 }, decimals: 2 }
+    };
+
+    const i18n = {
+      en: {
+        brandSub: "Korean phone booking help",
+        languageTitle: "Choose language",
+        languageDesc: "Pick a flag to continue.",
+        startApp: "Start with Kall",
+        heroTitle: "Need a Korean phone reservation?",
+        heroLead: "Tell us the place, time, and required details. Kall calls in Korean and sends the result to your messenger.",
+        ctaBook: "Make a request", ctaTrack: "Track booking", chipConfirmed: "Details received", screenBadge: "Calling now",
+        screenTitle: "Dinner in Seoul", screenText: "May 12 · 7:30 PM · 2 guests · backup time ready",
+        miniSubmitted: "Request sent", miniPayment: "Payment", miniCalling: "Calling venue", miniDone: "Done", miniLive: "Live",
+        priceKicker: "Pricing first", priceTitle: "Pick the call support you need.",
+        planBasicName: "Basic Booking", planPlusName: "Plus Booking", planRushName: "Rush Booking",
+        planBasicDesc: "📞 One place, one request, up to five Korean call attempts every 10 minutes.",
+        planPlusDesc: "🗓️ Backup date or time coordination if the first choice is full.",
+        planRushDesc: "⚡ Priority handling for same-day restaurant, beauty, clinic, or special requests.",
+        planBasicShort: "1 place, 5 call attempts, every 10 minutes.", planPlusShort: "Backup time/date coordination included.", planRushShort: "Priority same-day handling when available.",
+        tagAttempts: "5 attempts", tagInterval: "10 min interval", tagBackup: "Backup options", tagPopular: "Most popular", tagPriority: "Priority", tagSameDay: "Same day",
+        howKicker: "How it works", howTitle: "Three steps, no Korean phone needed.",
+        step1Title: "Choose a plan and type", step1Desc: "Start with the price, then select restaurant, beauty, clinic, or other.",
+        step2Title: "Add required details", step2Desc: "Dates cannot be in the past, and required fields block the next step.",
+        step3Title: "Pay and track", step3Desc: "Get a booking number, request popup, and paper-style receipt.",
+        messengerKicker: "Messenger updates", messengerTitle: "Receive updates where you already chat.",
+        waDesc: "Global updates", wechatDesc: "China updates", lineDesc: "Japan and Taiwan", kakaoDesc: "Useful in Korea",
+        bookKicker: "Reservation request", bookTitle: "Plan first, then details.", bookCopy: "Required fields must be complete before the next step.",
+        sumPlan: "Plan", sumType: "Type", sumPlace: "Place", sumTime: "Time", paymentSummaryTotal: "Total",
+        stepPlanTitle: "Choose plan and service type", stepPlanCopy: "Prices are shown in your selected language's currency.",
+        catRestaurant: "Restaurant", catRestaurantDesc: "Dining, cafes, bars", catBeauty: "Beauty", catBeautyDesc: "Hair, skin, spa", catClinic: "Clinic", catClinicDesc: "Treatment, consult", catOther: "Other", catOtherDesc: "Lost item, event, stock",
+        continuePlace: "Continue to place", stepPlaceTitle: "Place information", stepPlaceCopy: "A Google Maps, Naver Map, Instagram, or website link helps us call the right location.",
+        placeNameLabel: "Place name", placeLinkLabel: "Map, Instagram, or website link", placePhoneLabel: "Phone number if you know it",
+        continueDetails: "Continue to details", stepDetailTitle: "Reservation details", stepDetailCopy: "Preferred and backup dates cannot be in the past.",
+        peopleLabel: "People", reservationNameLabel: "Name for booking", date1Label: "Preferred date", time1Label: "Preferred time",
+        date2Label: "Backup date", time2Label: "Backup time", noteLabel: "Requests to tell the venue",
+        notePlaceholder: "Window seat if possible. Please check deposit and cancellation policy.",
+        fullNameLabel: "Full name as shown on passport", passportNoLabel: "Passport number", birthDateLabel: "Date of birth", genderLabel: "Gender",
+        selectOne: "Select", genderFemale: "Female", genderMale: "Male", genderOther: "Other", procedureNameLabel: "Needed treatment name", symptomsLabel: "Symptoms or request",
+        requestTitleLabel: "What should we ask?", otherNoteLabel: "Request details",
+        messengerLabel: "Messenger", messengerIdLabel: "Messenger ID or number", back: "Back", checkout: "Checkout",
+        statusKicker: "My booking", statusTitle: "Check your Kall request.", lookupTitle: "Find by booking number", lookupCopy: "Enter your Kall number to show the saved request details below.", lookupBtn: "Check",
+        emptyTitle: "No booking yet", emptyCopy: "Make a request first. After checkout, your Kall booking number will appear here.", startBooking: "Start booking",
+        statusReceived: "Received", copyBookingNo: "Copy booking number", viewReceipt: "View receipt",
+        tlRequest: "Request submitted", tlRequestSub: "Tap to review submitted details", tlPayment: "Payment completed",
+        tlQueue: "Waiting for call", tlQueueSub: "Kall will call during Korean business hours", tlResult: "Result update", tlResultSub: "Confirmed, full, no answer, or backup needed", soon: "Soon", next: "Next",
+        supportTitle: "Want to change something?", supportCopy: "If you change your mind within 10 minutes after payment, contact support through WhatsApp, WeChat, LINE, or KakaoTalk.",
+        navIntro: "Intro", navBook: "Book", navStatus: "Status", paymentTitle: "Complete payment", paymentSummaryPlan: "Plan", paymentSummaryPlace: "Place",
+        policy1: "I understand Kall provides call support, not a guaranteed reservation.", policy2: "Please ask me before confirming any deposit, cancellation fee, or major change.",
+        payNow: "Pay and get booking number", requiredHelp: "Required", dateHelp: "Choose today or a future date.",
+        toastRequired: "Please complete the required fields.", toastDate: "Preferred and backup dates cannot be in the past.", toastPolicy: "Please agree to both payment confirmations.", toastCreated: "Booking number created.", toastCopied: "Booking number copied.", toastNotFound: "No booking found on this device.",
+        notAdded: "Not added", stepCounter: "Step {n} of 3", statusDescTemplate: "Kall will call in Korean and send updates to {messenger}.",
+        receiptTitle: "Payment receipt", requestTitle: "Submitted request", receiptBookingPrefix: "Booking", receiptPaidWith: "Paid with", receiptStatusLabel: "Status", receiptStatusValue: "Paid · waiting for call"
+      },
+      ko: {
+        brandSub: "한국 전화 예약 도움",
+        languageTitle: "언어 선택",
+        languageDesc: "국기를 선택해 계속하세요.",
+        startApp: "Kall 시작하기",
+        heroTitle: "한국 전화 예약이 필요하신가요?",
+        heroLead: "장소, 시간, 필요한 정보를 알려주세요. Kall이 한국어로 전화하고 결과를 메신저로 보내드립니다.",
+        ctaBook: "예약 요청하기", ctaTrack: "예약 조회", chipConfirmed: "정보 접수", screenBadge: "전화 중",
+        screenTitle: "서울 저녁 예약", screenText: "5월 12일 · 오후 7:30 · 2명 · 차선 시간 준비",
+        miniSubmitted: "요청 접수", miniPayment: "결제", miniCalling: "가게 전화", miniDone: "완료", miniLive: "진행 중",
+        priceKicker: "가격 먼저", priceTitle: "필요한 전화 지원을 선택하세요.",
+        planBasicName: "베이직 예약", planPlusName: "플러스 예약", planRushName: "러시 예약",
+        planBasicDesc: "📞 한 곳, 예약 요청 1건, 10분 간격 최대 5회 전화.",
+        planPlusDesc: "🗓️ 첫 희망 시간이 어려울 때 차선 날짜나 시간 조율 포함.",
+        planRushDesc: "⚡ 당일 식당, 뷰티, 클리닉, 기타 요청 우선 처리.",
+        planBasicShort: "1곳, 10분 간격 최대 5회 전화.", planPlusShort: "차선 날짜/시간 조율 포함.", planRushShort: "가능 시 당일 우선 처리.",
+        tagAttempts: "5회 전화", tagInterval: "10분 간격", tagBackup: "차선 옵션", tagPopular: "인기", tagPriority: "우선 처리", tagSameDay: "당일",
+        howKicker: "이용 방법", howTitle: "한국 전화번호 없이 3단계로 끝납니다.",
+        step1Title: "플랜과 유형 선택", step1Desc: "가격을 먼저 보고 식당, 뷰티, 클리닉, 기타를 선택하세요.",
+        step2Title: "필수 정보 입력", step2Desc: "과거 날짜는 선택할 수 없고 필수값이 비면 다음 단계로 갈 수 없습니다.",
+        step3Title: "결제 및 조회", step3Desc: "예약 번호, 접수 팝업, 종이 영수증 팝업을 확인하세요.",
+        messengerKicker: "메신저 알림", messengerTitle: "자주 쓰는 메신저로 진행 상황을 받아보세요.",
+        waDesc: "글로벌 업데이트", wechatDesc: "중국 여행자", lineDesc: "일본/대만 여행자", kakaoDesc: "한국 체류에 편리",
+        bookKicker: "예약 요청", bookTitle: "가격 먼저, 그다음 정보.", bookCopy: "필수 입력이 완료되어야 다음 단계로 넘어갑니다.",
+        sumPlan: "플랜", sumType: "유형", sumPlace: "장소", sumTime: "시간", paymentSummaryTotal: "총액",
+        stepPlanTitle: "플랜과 서비스 유형 선택", stepPlanCopy: "선택한 언어 기준 통화로 가격이 표시됩니다.",
+        catRestaurant: "식당", catRestaurantDesc: "식사, 카페, 바", catBeauty: "뷰티", catBeautyDesc: "헤어, 피부, 스파", catClinic: "클리닉", catClinicDesc: "시술, 상담", catOther: "기타", catOtherDesc: "분실물, 이벤트, 재고",
+        continuePlace: "장소 입력", stepPlaceTitle: "가게 정보", stepPlaceCopy: "구글맵, 네이버지도, 인스타그램, 웹사이트 링크가 있으면 정확히 전화할 수 있습니다.",
+        placeNameLabel: "가게 이름", placeLinkLabel: "지도, 인스타그램, 웹사이트 링크", placePhoneLabel: "전화번호를 안다면 입력",
+        continueDetails: "예약 정보 입력", stepDetailTitle: "예약 상세 정보", stepDetailCopy: "희망일과 차선일은 과거 날짜를 선택할 수 없습니다.",
+        peopleLabel: "인원", reservationNameLabel: "예약자 이름", date1Label: "희망일", time1Label: "희망 시간",
+        date2Label: "차선일", time2Label: "차선 시간", noteLabel: "가게에 전달할 요청",
+        notePlaceholder: "가능하면 창가 자리. 예약금과 취소 정책도 확인해 주세요.",
+        fullNameLabel: "여권 기준 Full name", passportNoLabel: "여권 번호", birthDateLabel: "생년월일", genderLabel: "성별",
+        selectOne: "선택", genderFemale: "여성", genderMale: "남성", genderOther: "기타", procedureNameLabel: "필요 시술 이름", symptomsLabel: "증상 또는 요청",
+        requestTitleLabel: "무엇을 문의할까요?", otherNoteLabel: "요청 상세",
+        messengerLabel: "메신저", messengerIdLabel: "메신저 ID 또는 번호", back: "뒤로", checkout: "결제하기",
+        statusKicker: "내 예약", statusTitle: "Kall 요청을 조회하세요.", lookupTitle: "예약 번호로 조회", lookupCopy: "Kall 예약 번호를 입력하면 아래에 접수 정보를 보여드립니다.", lookupBtn: "조회",
+        emptyTitle: "아직 예약이 없습니다", emptyCopy: "먼저 예약을 요청하세요. 결제 후 Kall 예약 번호가 여기에 표시됩니다.", startBooking: "예약 시작하기",
+        statusReceived: "접수 완료", copyBookingNo: "예약 번호 복사", viewReceipt: "영수증 보기",
+        tlRequest: "요청 접수", tlRequestSub: "누르면 접수 정보를 확인합니다", tlPayment: "결제 완료",
+        tlQueue: "전화 대기 중", tlQueueSub: "한국 영업시간에 맞춰 Kall이 전화합니다", tlResult: "결과 업데이트", tlResultSub: "확정, 만석, 미연결, 차선 필요 여부 안내", soon: "곧 진행", next: "다음",
+        supportTitle: "내용을 바꾸고 싶나요?", supportCopy: "결제 후 10분 이내 변심이 생기면 WhatsApp, WeChat, LINE, KakaoTalk으로 문의센터에 연결하세요.",
+        navIntro: "소개", navBook: "예약", navStatus: "조회", paymentTitle: "결제 완료하기", paymentSummaryPlan: "플랜", paymentSummaryPlace: "장소",
+        policy1: "Kall은 전화 지원 서비스이며 예약 성공을 보장하지 않는다는 점을 이해했습니다.", policy2: "예약금, 취소 수수료, 큰 변경은 확정 전 먼저 확인해 주세요.",
+        payNow: "결제하고 예약 번호 받기", requiredHelp: "필수 입력", dateHelp: "오늘 또는 이후 날짜를 선택하세요.",
+        toastRequired: "필수 정보를 입력해 주세요.", toastDate: "희망일과 차선일은 과거 날짜를 선택할 수 없습니다.", toastPolicy: "결제 확인 항목 2개에 동의해 주세요.", toastCreated: "예약 번호가 생성되었습니다.", toastCopied: "예약 번호를 복사했습니다.", toastNotFound: "이 기기에서 예약을 찾을 수 없습니다.",
+        notAdded: "미입력", stepCounter: "{n}/3 단계", statusDescTemplate: "Kall이 한국어로 전화하고 {messenger}로 진행 상황을 보내드립니다.",
+        receiptTitle: "결제 영수증", requestTitle: "접수된 요청", receiptBookingPrefix: "예약", receiptPaidWith: "결제 수단", receiptStatusLabel: "상태", receiptStatusValue: "결제 완료 · 전화 대기 중"
+      },
+      ja: {
+        brandSub: "韓国電話予約サポート",
+        languageTitle: "言語を選択",
+        languageDesc: "国旗を選んで続行してください。",
+        startApp: "Kallを始める",
+        heroTitle: "韓国語の電話予約が必要ですか？",
+        heroLead: "場所、時間、必要情報を入力してください。Kallが韓国語で電話し、結果をメッセンジャーに送ります。",
+        ctaBook: "予約を依頼", ctaTrack: "予約確認", chipConfirmed: "情報受付済み", screenBadge: "通話中",
+        screenTitle: "ソウルの夕食", screenText: "5月12日 · 19:30 · 2名 · 予備時間あり",
+        miniSubmitted: "依頼受付", miniPayment: "支払い", miniCalling: "店舗へ電話", miniDone: "完了", miniLive: "進行中",
+        priceKicker: "料金から選択", priceTitle: "必要な電話サポートを選んでください。",
+        planBasicName: "Basic予約", planPlusName: "Plus予約", planRushName: "Rush予約",
+        planBasicDesc: "📞 1店舗、1件の依頼、10分ごとに最大5回電話します。",
+        planPlusDesc: "🗓️ 第一希望が満席の場合、予備日程や時間の調整を含みます。",
+        planRushDesc: "⚡ 当日レストラン、美容、クリニック、特別依頼を優先対応。",
+        planBasicShort: "1店舗、10分ごとに最大5回電話。", planPlusShort: "予備日時の調整込み。", planRushShort: "可能な場合は当日優先対応。",
+        tagAttempts: "5回電話", tagInterval: "10分間隔", tagBackup: "予備オプション", tagPopular: "人気", tagPriority: "優先", tagSameDay: "当日",
+        howKicker: "使い方", howTitle: "韓国の電話番号なしで3ステップ。",
+        step1Title: "プランと種類を選択", step1Desc: "料金を確認して、レストラン、美容、クリニック、その他を選択。",
+        step2Title: "必須情報を入力", step2Desc: "過去の日付は選択できず、必須項目が未入力なら進めません。",
+        step3Title: "支払いと確認", step3Desc: "予約番号、受付ポップアップ、紙風の領収書を確認。",
+        messengerKicker: "メッセンジャー通知", messengerTitle: "普段使うメッセンジャーで更新を受信。",
+        waDesc: "グローバル更新", wechatDesc: "中国向け", lineDesc: "日本・台湾向け", kakaoDesc: "韓国滞在に便利",
+        bookKicker: "予約依頼", bookTitle: "料金を先に、詳細は後で。", bookCopy: "必須項目を完了すると次へ進めます。",
+        sumPlan: "プラン", sumType: "種類", sumPlace: "場所", sumTime: "時間", paymentSummaryTotal: "合計",
+        stepPlanTitle: "プランとサービス種類を選択", stepPlanCopy: "選択した言語の通貨で料金を表示します。",
+        catRestaurant: "レストラン", catRestaurantDesc: "食事、カフェ、バー", catBeauty: "美容", catBeautyDesc: "ヘア、肌、スパ", catClinic: "クリニック", catClinicDesc: "施術、相談", catOther: "その他", catOtherDesc: "忘れ物、イベント、在庫",
+        continuePlace: "場所入力へ", stepPlaceTitle: "店舗情報", stepPlaceCopy: "Google Maps、Naver Map、Instagram、サイトリンクがあると正確に電話できます。",
+        placeNameLabel: "店舗名", placeLinkLabel: "地図、Instagram、サイトリンク", placePhoneLabel: "電話番号が分かれば入力",
+        continueDetails: "詳細入力へ", stepDetailTitle: "予約詳細", stepDetailCopy: "希望日と予備日は過去の日付を選択できません。",
+        peopleLabel: "人数", reservationNameLabel: "予約名", date1Label: "希望日", time1Label: "希望時間",
+        date2Label: "予備日", time2Label: "予備時間", noteLabel: "店舗へ伝える要望",
+        notePlaceholder: "可能であれば窓側席。予約金とキャンセル規定も確認してください。",
+        fullNameLabel: "パスポート表記の氏名", passportNoLabel: "パスポート番号", birthDateLabel: "生年月日", genderLabel: "性別",
+        selectOne: "選択", genderFemale: "女性", genderMale: "男性", genderOther: "その他", procedureNameLabel: "必要な施術名", symptomsLabel: "症状または要望",
+        requestTitleLabel: "何を確認しますか？", otherNoteLabel: "依頼詳細",
+        messengerLabel: "メッセンジャー", messengerIdLabel: "IDまたは番号", back: "戻る", checkout: "支払い",
+        statusKicker: "予約確認", statusTitle: "Kallの依頼状況を確認。", lookupTitle: "予約番号で検索", lookupCopy: "Kall番号を入力すると、保存された依頼情報を下に表示します。", lookupBtn: "確認",
+        emptyTitle: "予約はまだありません", emptyCopy: "先に依頼してください。支払い後、Kall予約番号がここに表示されます。", startBooking: "予約開始",
+        statusReceived: "受付済み", copyBookingNo: "番号をコピー", viewReceipt: "領収書を見る",
+        tlRequest: "依頼受付", tlRequestSub: "タップして受付内容を確認", tlPayment: "支払い完了",
+        tlQueue: "電話待ち", tlQueueSub: "韓国の営業時間にKallが電話します", tlResult: "結果更新", tlResultSub: "確定、満席、不通、予備案内など", soon: "まもなく", next: "次",
+        supportTitle: "内容を変更しますか？", supportCopy: "支払い後10分以内なら、WhatsApp、WeChat、LINE、KakaoTalkからサポートへ連絡できます。",
+        navIntro: "紹介", navBook: "予約", navStatus: "状況", paymentTitle: "支払い完了", paymentSummaryPlan: "プラン", paymentSummaryPlace: "場所",
+        policy1: "Kallは電話サポートであり、予約成功を保証しないことを理解しました。", policy2: "予約金、キャンセル料、大きな変更は確定前に確認してください。",
+        payNow: "支払い、予約番号を取得", requiredHelp: "必須", dateHelp: "今日以降の日付を選択してください。",
+        toastRequired: "必須項目を入力してください。", toastDate: "希望日と予備日は過去の日付を選択できません。", toastPolicy: "2つの確認に同意してください。", toastCreated: "予約番号を作成しました。", toastCopied: "予約番号をコピーしました。", toastNotFound: "この端末で予約が見つかりません。",
+        notAdded: "未入力", stepCounter: "ステップ {n}/3", statusDescTemplate: "Kallが韓国語で電話し、{messenger}に更新を送ります。",
+        receiptTitle: "支払い領収書", requestTitle: "受付済み依頼", receiptBookingPrefix: "予約", receiptPaidWith: "支払い方法", receiptStatusLabel: "状態", receiptStatusValue: "支払い済み · 電話待ち"
+      },
+      zh: {
+        brandSub: "韩国电话预约帮助",
+        languageTitle: "选择语言",
+        languageDesc: "选择国旗继续。",
+        startApp: "开始使用 Kall",
+        heroTitle: "需要韩国电话预约吗？",
+        heroLead: "告诉我们地点、时间和必要信息。Kall 会用韩语打电话，并把结果发到你的聊天软件。",
+        ctaBook: "提交请求", ctaTrack: "查询预约", chipConfirmed: "信息已接收", screenBadge: "正在拨打",
+        screenTitle: "首尔晚餐", screenText: "5月12日 · 19:30 · 2人 · 已准备备用时间",
+        miniSubmitted: "请求已提交", miniPayment: "付款", miniCalling: "联系商家", miniDone: "完成", miniLive: "进行中",
+        priceKicker: "先看价格", priceTitle: "选择需要的电话支持。",
+        planBasicName: "基础预约", planPlusName: "Plus 预约", planRushName: "加急预约",
+        planBasicDesc: "📞 一个地点，一次请求，每10分钟最多拨打5次。",
+        planPlusDesc: "🗓️ 首选时间不可用时，包含备用日期或时间协调。",
+        planRushDesc: "⚡ 当日餐厅、美容、诊所或特殊请求优先处理。",
+        planBasicShort: "1个地点，每10分钟最多5次电话。", planPlusShort: "包含备用日期/时间协调。", planRushShort: "可用时当日优先处理。",
+        tagAttempts: "5次拨打", tagInterval: "10分钟间隔", tagBackup: "备用选项", tagPopular: "最受欢迎", tagPriority: "优先", tagSameDay: "当日",
+        howKicker: "使用方式", howTitle: "三步完成，不需要韩国手机号。",
+        step1Title: "选择套餐和类型", step1Desc: "先看价格，再选择餐厅、美容、诊所或其他。",
+        step2Title: "填写必填信息", step2Desc: "不能选择过去日期，必填项未完成不能进入下一步。",
+        step3Title: "付款并查询", step3Desc: "获取预约编号，查看请求弹窗和纸质收据样式。",
+        messengerKicker: "聊天软件更新", messengerTitle: "在常用聊天软件接收进度。",
+        waDesc: "全球更新", wechatDesc: "中国旅客", lineDesc: "日本和台湾", kakaoDesc: "在韩国很方便",
+        bookKicker: "预约请求", bookTitle: "先选价格，再填详情。", bookCopy: "必填项完成后才能进入下一步。",
+        sumPlan: "套餐", sumType: "类型", sumPlace: "地点", sumTime: "时间", paymentSummaryTotal: "总计",
+        stepPlanTitle: "选择套餐和服务类型", stepPlanCopy: "价格会按所选语言显示对应货币。",
+        catRestaurant: "餐厅", catRestaurantDesc: "餐饮、咖啡、酒吧", catBeauty: "美容", catBeautyDesc: "头发、皮肤、SPA", catClinic: "诊所", catClinicDesc: "治疗、咨询", catOther: "其他", catOtherDesc: "失物、活动、库存",
+        continuePlace: "继续填写地点", stepPlaceTitle: "商家信息", stepPlaceCopy: "Google Maps、Naver Map、Instagram 或网站链接有助于准确联系。",
+        placeNameLabel: "商家名称", placeLinkLabel: "地图、Instagram 或网站链接", placePhoneLabel: "知道电话可填写",
+        continueDetails: "继续填写详情", stepDetailTitle: "预约详情", stepDetailCopy: "首选日和备用日不能选择过去日期。",
+        peopleLabel: "人数", reservationNameLabel: "预约姓名", date1Label: "首选日期", time1Label: "首选时间",
+        date2Label: "备用日期", time2Label: "备用时间", noteLabel: "需要转告商家的要求",
+        notePlaceholder: "如果可以，请安排靠窗座位。请确认订金和取消政策。",
+        fullNameLabel: "护照上的完整姓名", passportNoLabel: "护照号码", birthDateLabel: "出生日期", genderLabel: "性别",
+        selectOne: "选择", genderFemale: "女性", genderMale: "男性", genderOther: "其他", procedureNameLabel: "需要的项目名称", symptomsLabel: "症状或要求",
+        requestTitleLabel: "需要我们询问什么？", otherNoteLabel: "请求详情",
+        messengerLabel: "聊天软件", messengerIdLabel: "ID 或号码", back: "返回", checkout: "结账",
+        statusKicker: "我的预约", statusTitle: "查看 Kall 请求。", lookupTitle: "用预约编号查询", lookupCopy: "输入 Kall 编号后，下方会显示保存的请求信息。", lookupBtn: "查询",
+        emptyTitle: "还没有预约", emptyCopy: "请先提交请求。付款后，你的 Kall 预约编号会显示在这里。", startBooking: "开始预约",
+        statusReceived: "已接收", copyBookingNo: "复制预约编号", viewReceipt: "查看收据",
+        tlRequest: "请求已接收", tlRequestSub: "点击查看提交信息", tlPayment: "付款完成",
+        tlQueue: "等待拨打电话", tlQueueSub: "Kall 会在韩国营业时间联系商家", tlResult: "结果更新", tlResultSub: "确认、满位、无人接听或需要备用方案", soon: "即将", next: "下一步",
+        supportTitle: "想修改内容吗？", supportCopy: "付款后10分钟内如改变想法，可通过 WhatsApp、WeChat、LINE 或 KakaoTalk 联系客服。",
+        navIntro: "介绍", navBook: "预约", navStatus: "状态", paymentTitle: "完成付款", paymentSummaryPlan: "套餐", paymentSummaryPlace: "地点",
+        policy1: "我了解 Kall 提供电话沟通支持，但不保证一定预约成功。", policy2: "如有订金、取消费或重大变更，请在确认前先联系我。",
+        payNow: "付款并获取预约编号", requiredHelp: "必填", dateHelp: "请选择今天或未来日期。",
+        toastRequired: "请填写必填信息。", toastDate: "首选日和备用日不能选择过去日期。", toastPolicy: "请同意两个付款确认项。", toastCreated: "预约编号已生成。", toastCopied: "预约编号已复制。", toastNotFound: "此设备上未找到预约。",
+        notAdded: "未填写", stepCounter: "第 {n}/3 步", statusDescTemplate: "Kall 会用韩语联系商家，并通过 {messenger} 发送进度。",
+        receiptTitle: "付款收据", requestTitle: "已提交请求", receiptBookingPrefix: "预约", receiptPaidWith: "支付方式", receiptStatusLabel: "状态", receiptStatusValue: "已付款 · 等待拨打"
+      },
+      fr: {
+        brandSub: "Aide aux réservations par téléphone en Corée",
+        languageTitle: "Choisir la langue",
+        languageDesc: "Choisissez un drapeau pour continuer.",
+        startApp: "Commencer avec Kall",
+        heroTitle: "Besoin d'une réservation téléphonique en Corée ?",
+        heroLead: "Indiquez le lieu, l'heure et les informations nécessaires. Kall appelle en coréen et envoie le résultat sur votre messagerie.",
+        ctaBook: "Faire une demande", ctaTrack: "Suivre", chipConfirmed: "Détails reçus", screenBadge: "Appel en cours",
+        screenTitle: "Dîner à Séoul", screenText: "12 mai · 19:30 · 2 personnes · secours prêt",
+        miniSubmitted: "Demande envoyée", miniPayment: "Paiement", miniCalling: "Appel du lieu", miniDone: "Terminé", miniLive: "En cours",
+        priceKicker: "Prix d'abord", priceTitle: "Choisissez l'aide téléphonique nécessaire.",
+        planBasicName: "Réservation Basic", planPlusName: "Réservation Plus", planRushName: "Réservation urgente",
+        planBasicDesc: "📞 Un lieu, une demande, jusqu'à cinq appels toutes les 10 minutes.",
+        planPlusDesc: "🗓️ Coordination d'une date ou heure de secours si le premier choix est complet.",
+        planRushDesc: "⚡ Traitement prioritaire pour restaurant, beauté, clinique ou demande spéciale le jour même.",
+        planBasicShort: "1 lieu, 5 appels toutes les 10 minutes.", planPlusShort: "Date/heure de secours incluse.", planRushShort: "Priorité le jour même si disponible.",
+        tagAttempts: "5 appels", tagInterval: "Toutes les 10 min", tagBackup: "Options secours", tagPopular: "Populaire", tagPriority: "Prioritaire", tagSameDay: "Jour même",
+        howKicker: "Comment ça marche", howTitle: "Trois étapes, sans numéro coréen.",
+        step1Title: "Choisir formule et type", step1Desc: "Commencez par le prix, puis restaurant, beauté, clinique ou autre.",
+        step2Title: "Ajouter les détails requis", step2Desc: "Les dates passées sont bloquées et les champs requis bloquent l'étape suivante.",
+        step3Title: "Payer et suivre", step3Desc: "Recevez un numéro, une popup de demande et un reçu papier.",
+        messengerKicker: "Notifications", messengerTitle: "Recevez les mises à jour dans votre messagerie.",
+        waDesc: "Mises à jour globales", wechatDesc: "Voyageurs chinois", lineDesc: "Japon et Taïwan", kakaoDesc: "Pratique en Corée",
+        bookKicker: "Demande", bookTitle: "Le prix d'abord, les détails ensuite.", bookCopy: "Les champs requis doivent être complétés avant l'étape suivante.",
+        sumPlan: "Formule", sumType: "Type", sumPlace: "Lieu", sumTime: "Heure", paymentSummaryTotal: "Total",
+        stepPlanTitle: "Choisir formule et type de service", stepPlanCopy: "Les prix s'affichent dans la devise de votre langue.",
+        catRestaurant: "Restaurant", catRestaurantDesc: "Repas, cafés, bars", catBeauty: "Beauté", catBeautyDesc: "Cheveux, peau, spa", catClinic: "Clinique", catClinicDesc: "Soin, consultation", catOther: "Autre", catOtherDesc: "Objet perdu, événement, stock",
+        continuePlace: "Continuer au lieu", stepPlaceTitle: "Informations du lieu", stepPlaceCopy: "Un lien Google Maps, Naver Map, Instagram ou site web nous aide à appeler le bon lieu.",
+        placeNameLabel: "Nom du lieu", placeLinkLabel: "Lien carte, Instagram ou site", placePhoneLabel: "Numéro si vous le connaissez",
+        continueDetails: "Continuer", stepDetailTitle: "Détails de réservation", stepDetailCopy: "Les dates souhaitée et de secours ne peuvent pas être passées.",
+        peopleLabel: "Personnes", reservationNameLabel: "Nom pour la réservation", date1Label: "Date souhaitée", time1Label: "Heure souhaitée",
+        date2Label: "Date de secours", time2Label: "Heure de secours", noteLabel: "Demandes à transmettre",
+        notePlaceholder: "Table près de la fenêtre si possible. Merci de vérifier l'acompte et l'annulation.",
+        fullNameLabel: "Nom complet sur le passeport", passportNoLabel: "Numéro de passeport", birthDateLabel: "Date de naissance", genderLabel: "Genre",
+        selectOne: "Choisir", genderFemale: "Femme", genderMale: "Homme", genderOther: "Autre", procedureNameLabel: "Nom du soin demandé", symptomsLabel: "Symptômes ou demande",
+        requestTitleLabel: "Que devons-nous demander ?", otherNoteLabel: "Détails de la demande",
+        messengerLabel: "Messagerie", messengerIdLabel: "ID ou numéro", back: "Retour", checkout: "Paiement",
+        statusKicker: "Ma réservation", statusTitle: "Vérifiez votre demande Kall.", lookupTitle: "Rechercher par numéro", lookupCopy: "Entrez votre numéro Kall pour afficher les détails enregistrés ci-dessous.", lookupBtn: "Vérifier",
+        emptyTitle: "Aucune réservation", emptyCopy: "Faites d'abord une demande. Après paiement, votre numéro Kall apparaîtra ici.", startBooking: "Commencer",
+        statusReceived: "Reçue", copyBookingNo: "Copier le numéro", viewReceipt: "Voir le reçu",
+        tlRequest: "Demande envoyée", tlRequestSub: "Touchez pour revoir les détails", tlPayment: "Paiement terminé",
+        tlQueue: "En attente d'appel", tlQueueSub: "Kall appellera pendant les horaires d'ouverture en Corée", tlResult: "Mise à jour du résultat", tlResultSub: "Confirmé, complet, sans réponse ou secours requis", soon: "Bientôt", next: "Suivant",
+        supportTitle: "Envie de modifier ?", supportCopy: "Si vous changez d'avis dans les 10 minutes après paiement, contactez le support via WhatsApp, WeChat, LINE ou KakaoTalk.",
+        navIntro: "Intro", navBook: "Réserver", navStatus: "Statut", paymentTitle: "Finaliser le paiement", paymentSummaryPlan: "Formule", paymentSummaryPlace: "Lieu",
+        policy1: "Je comprends que Kall fournit une aide par téléphone, sans garantir la réservation.", policy2: "Veuillez me demander avant de confirmer un acompte, des frais d'annulation ou un changement important.",
+        payNow: "Payer et recevoir le numéro", requiredHelp: "Requis", dateHelp: "Choisissez aujourd'hui ou une date future.",
+        toastRequired: "Veuillez compléter les champs requis.", toastDate: "Les dates ne peuvent pas être passées.", toastPolicy: "Veuillez accepter les deux confirmations.", toastCreated: "Numéro de réservation créé.", toastCopied: "Numéro copié.", toastNotFound: "Aucune réservation trouvée sur cet appareil.",
+        notAdded: "Non renseigné", stepCounter: "Étape {n}/3", statusDescTemplate: "Kall appellera en coréen et enverra les mises à jour sur {messenger}.",
+        receiptTitle: "Reçu de paiement", requestTitle: "Demande envoyée", receiptBookingPrefix: "Réservation", receiptPaidWith: "Payé avec", receiptStatusLabel: "Statut", receiptStatusValue: "Payé · en attente d'appel"
+      }
+    };
+
+    const state = {
+      lang: localStorage.getItem("kallLang") || "en",
+      step: 1,
+      category: "Restaurant",
+      selectedPay: "WeChat Pay",
+      booking: null
+    };
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+    const t = (key) => (i18n[state.lang] && i18n[state.lang][key]) || i18n.en[key] || key;
+
+    function formatMoney(usd) {
+      const config = currencies[state.lang] || currencies.en;
+      const value = config.values[Number(usd)] ?? Number(usd);
+      const formatted = Number(value).toLocaleString(undefined, {
+        minimumFractionDigits: config.decimals,
+        maximumFractionDigits: config.decimals
+      });
+      return `${config.prefix || ""}${formatted}${config.suffix || ""}`;
+    }
+    function planName(name) {
+      const key = {
+        "Basic Booking": "planBasicName",
+        "Plus Booking": "planPlusName",
+        "Rush Booking": "planRushName"
+      }[name];
+      return key ? t(key) : name;
+    }
+    function planLabel(name) {
+      return `${planName(name)} · ${formatMoney(planPrices[name])}`;
+    }
+
+    function applyLanguage(lang) {
+      state.lang = lang;
+      localStorage.setItem("kallLang", lang);
+      document.documentElement.lang = lang;
+      const codes = { en: "EN", ko: "KO", ja: "JP", zh: "CN", fr: "FR" };
+      $("#langCode").textContent = codes[lang] || "EN";
+      $$("[data-i18n]").forEach((el) => {
+        const value = t(el.dataset.i18n);
+        if (value) el.textContent = value;
+      });
+      $$("[data-i18n-placeholder]").forEach((el) => {
+        const value = t(el.dataset.i18nPlaceholder);
+        if (value) el.placeholder = value;
+      });
+      $$(".lang-option").forEach((button) => button.classList.toggle("selected", button.dataset.lang === lang));
+      updatePrices();
+      updateSummary();
+      renderBooking();
+    }
+
+    function updatePrices() {
+      $$("[data-price-plan]").forEach((el) => {
+        el.textContent = formatMoney(planPrices[el.dataset.pricePlan]);
+      });
+      $$("[data-plan-label]").forEach((el) => {
+        el.textContent = planLabel(el.dataset.planLabel);
+      });
+      $("#chipPrice").textContent = `From ${formatMoney(planPrices["Basic Booking"])}`;
+    }
+
+    function openLanguage() {
+      $("#languageModal").classList.remove("hidden");
+      document.body.classList.add("locked");
+    }
+    function closeLanguage() {
+      $("#languageModal").classList.add("hidden");
+      document.body.classList.remove("locked");
+    }
+    function navigate(view) {
+      $$(".view").forEach((el) => el.classList.remove("active"));
+      $(`#view-${view}`).classList.add("active");
+      $$(".nav-btn").forEach((button) => button.classList.toggle("active", button.dataset.nav === view));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    function selectPlanAndBook(plan) {
+      const input = $(`input[name="plan"][value="${plan}"]`);
+      if (input) {
+        input.checked = true;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      navigate("book");
+      setStep(1);
+      updateSummary();
+    }    function setStep(step) {
+      state.step = Math.max(1, Math.min(3, step));
+      $$(".form-step").forEach((el) => el.classList.toggle("active", Number(el.dataset.step) === state.step));
+      const percent = Math.round((state.step / 3) * 100);
+      $("#stepLabel").textContent = t("stepCounter").replace("{n}", state.step);
+      $("#progressLabel").textContent = `${percent}%`;
+      $("#progressFill").style.width = `${percent}%`;
+      updateSummary();
+    }
+
+    function todayISO() {
+      const d = new Date();
+      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      return d.toISOString().slice(0, 10);
+    }
+    function formatDate(value) {
+      if (!value) return t("notAdded");
+      const [year, month, day] = value.split("-");
+      if (state.lang === "ko") return `${year}.${month}.${day}`;
+      if (state.lang === "fr") return `${day}/${month}/${year}`;
+      return `${year}/${month}/${day}`;
+    }
+    function formatTime(value) {
+      return value || "";
+    }
+    function displayDateTime(date, time) {
+      if (!date && !time) return t("notAdded");
+      return `${formatDate(date)} · ${formatTime(time) || "--:--"}`;
+    }
+
+    function getData() {
+      const plan = $("input[name='plan']:checked");
+      return {
+        placeName: $("#placeName").value.trim(),
+        placeLink: $("#placeLink").value.trim(),
+        placePhone: $("#placePhone").value.trim(),
+        people: $("#people").value.trim(),
+        reservationName: $("#reservationName").value.trim(),
+        fullName: $("#fullName").value.trim(),
+        passportNo: $("#passportNo").value.trim(),
+        birthDate: $("#birthDate").value,
+        gender: $("#gender").value,
+        procedureName: $("#procedureName").value.trim(),
+        symptoms: $("#symptoms").value.trim(),
+        requestTitle: $("#requestTitle").value.trim(),
+        otherNote: $("#otherNote").value.trim(),
+        date1: $("#date1").value,
+        time1: $("#time1").value,
+        date2: $("#date2").value,
+        time2: $("#time2").value,
+        note: $("#note").value.trim(),
+        messenger: $("#messenger").value,
+        messengerId: $("#messengerId").value.trim(),
+        plan: plan.value,
+        priceUsd: Number(plan.dataset.priceUsd),
+        category: state.category
+      };
+    }
+
+    function categoryName(category) {
+      const key = {
+        Restaurant: "catRestaurant",
+        Beauty: "catBeauty",
+        Clinic: "catClinic",
+        Other: "catOther"
+      }[category];
+      return t(key);
+    }
+
+    function updateSummary() {
+      if (!$("#placeName")) return;
+      const data = getData();
+      const timeText = displayDateTime(data.date1, data.time1);
+      $("#sumPlan").textContent = planLabel(data.plan);
+      $("#sumType").textContent = categoryName(data.category);
+      $("#sumPlace").textContent = data.placeName || t("notAdded");
+      $("#sumTime").textContent = timeText;
+      $("#payPlace").textContent = data.placeName || t("notAdded");
+      $("#payTime").textContent = timeText;
+      $("#payMessenger").textContent = data.messenger;
+      $("#payTotal").textContent = formatMoney(data.priceUsd);
+      $("#sheetPlan").textContent = planName(data.plan);
+      $("#sheetPlace").textContent = data.placeName || t("notAdded");
+      $("#sheetTotal").textContent = formatMoney(data.priceUsd);
+    }
+
+    function updateCategoryFields() {
+      $$("[data-category-fields]").forEach((group) => {
+        const categories = group.dataset.categoryFields.split(" ");
+        const active = categories.includes(state.category);
+        group.hidden = !active;
+        group.querySelectorAll("[data-required]").forEach((field) => { field.disabled = !active; });
+      });
+      $$(".choice").forEach((item) => item.classList.toggle("selected", item.dataset.category === state.category));
+      updateSummary();
+    }
+
+    function toast(message) {
+      const el = $("#toast");
+      el.textContent = message;
+      el.classList.add("show");
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => el.classList.remove("show"), 2200);
+    }
+
+    function fieldsForCurrentStep() {
+      const stepEl = $(`.form-step[data-step="${state.step}"]`);
+      return Array.from(stepEl.querySelectorAll("[data-required]")).filter((field) => !field.disabled && !field.closest("[hidden]"));
+    }
+    function markField(field, invalid) {
+      const wrapper = field.closest(".field");
+      if (wrapper) wrapper.classList.toggle("invalid", invalid);
+    }
+    function validateStep() {
+      let valid = true;
+      fieldsForCurrentStep().forEach((field) => {
+        const missing = !String(field.value || "").trim();
+        const past = field.matches("[data-future-date]") && field.value && field.value < todayISO();
+        const invalid = missing || past;
+        markField(field, invalid);
+        if (invalid) valid = false;
+      });
+      if (!valid) toast(t("toastRequired"));
+      return valid;
+    }
+    function validateAllBeforePayment() {
+      const oldStep = state.step;
+      let valid = true;
+      [2, 3].forEach((step) => {
+        state.step = step;
+        if (!validateStep()) valid = false;
+      });
+      state.step = oldStep;
+      setStep(oldStep);
+      return valid;
+    }
+
+    function openPayment() {
+      if (!validateAllBeforePayment()) return;
+      updateSummary();
+      $("#paymentSheet").classList.add("open");
+      $("#paymentSheet").setAttribute("aria-hidden", "false");
+      document.body.classList.add("locked");
+    }
+    function closePayment() {
+      $("#paymentSheet").classList.remove("open");
+      $("#paymentSheet").setAttribute("aria-hidden", "true");
+      if ($("#languageModal").classList.contains("hidden") && !$("#infoModal").classList.contains("open")) document.body.classList.remove("locked");
+    }
+
+    function generateBookingNumber() {
+      const now = new Date();
+      const yy = String(now.getFullYear()).slice(-2);
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      const rand = Math.floor(1000 + Math.random() * 9000);
+      return `KA-${yy}${mm}${dd}-${rand}`;
+    }
+    function saveBooking(booking) {
+      const list = JSON.parse(localStorage.getItem("kallBookings") || "{}");
+      list[booking.bookingNo] = booking;
+      localStorage.setItem("kallBookings", JSON.stringify(list));
+      localStorage.setItem("kallLastBooking", JSON.stringify(booking));
+    }
+    function createBooking() {
+      if (!$("#policy1").checked || !$("#policy2").checked) {
+        toast(t("toastPolicy"));
+        return;
+      }
+      const data = getData();
+      const now = new Date();
+      const booking = {
+        ...data,
+        bookingNo: generateBookingNumber(),
+        payMethod: state.selectedPay,
+        createdAt: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        createdDate: now.toLocaleDateString()
+      };
+      state.booking = booking;
+      saveBooking(booking);
+      renderBooking();
+      closePayment();
+      navigate("status");
+      copyBookingNumber(false);
+      toast(`${t("toastCreated")} ${booking.bookingNo}`);
+    }
+
+    function renderBooking() {
+      const booking = state.booking;
+      if (!$("#emptyStatus")) return;
+      if (!booking) {
+        $("#emptyStatus").hidden = false;
+        $("#activeStatus").hidden = true;
+        return;
+      }
+      $("#emptyStatus").hidden = true;
+      $("#activeStatus").hidden = false;
+      const timeText = displayDateTime(booking.date1, booking.time1);
+      $("#bookingNo").textContent = `Kall #${booking.bookingNo}`;
+      $("#statusMain").textContent = `${booking.placeName} · ${planName(booking.plan)}`;
+      $("#statusDesc").textContent = t("statusDescTemplate").replace("{messenger}", booking.messenger);
+      $("#statusType").textContent = categoryName(booking.category);
+      $("#statusPlace").textContent = booking.placeName;
+      $("#statusTime").textContent = timeText;
+      $("#statusMessenger").textContent = booking.messenger;
+      $("#statusPlan").textContent = planLabel(booking.plan);
+      $("#tlPaymentSub").textContent = `${formatMoney(booking.priceUsd)} · ${booking.payMethod}`;
+      $("#tlTime1").textContent = booking.createdAt;
+      $("#tlTime2").textContent = booking.createdAt;
+      $("#lookupInput").value = booking.bookingNo;
+    }
+
+    async function copyBookingNumber(show = true) {
+      if (!state.booking) return;
+      try {
+        await navigator.clipboard.writeText(state.booking.bookingNo);
+        if (show) toast(t("toastCopied"));
+      } catch (error) {
+        const input = document.createElement("input");
+        input.value = state.booking.bookingNo;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        input.remove();
+        if (show) toast(t("toastCopied"));
+      }
+    }
+    function lookupBooking() {
+      const no = $("#lookupInput").value.trim().toUpperCase();
+      const list = JSON.parse(localStorage.getItem("kallBookings") || "{}");
+      if (list[no]) {
+        state.booking = list[no];
+        renderBooking();
+      } else {
+        toast(t("toastNotFound"));
+      }
+    }
+
+    function detailRows(booking) {
+      const rows = [
+        [t("sumType"), categoryName(booking.category)],
+        [t("sumPlace"), booking.placeName],
+        [t("placeLinkLabel"), booking.placeLink],
+        [t("sumTime"), displayDateTime(booking.date1, booking.time1)],
+        [t("date2Label"), displayDateTime(booking.date2, booking.time2)]
+      ];
+      if (booking.category === "Restaurant") {
+        rows.push([t("peopleLabel"), booking.people], [t("reservationNameLabel"), booking.reservationName], [t("noteLabel"), booking.note || t("notAdded")]);
+      } else if (booking.category === "Beauty" || booking.category === "Clinic") {
+        rows.push([t("fullNameLabel"), booking.fullName], [t("passportNoLabel"), booking.passportNo], [t("birthDateLabel"), formatDate(booking.birthDate)], [t("genderLabel"), booking.gender], [t("procedureNameLabel"), booking.procedureName], [t("symptomsLabel"), booking.symptoms]);
+      } else {
+        rows.push([t("requestTitleLabel"), booking.requestTitle], [t("otherNoteLabel"), booking.otherNote]);
+      }
+      rows.push([t("messengerLabel"), `${booking.messenger} · ${booking.messengerId}`]);
+      return rows;
+    }
+    function rowsHtml(rows) {
+      return `<div class="summary">${rows.map(([label, value]) => `<div class="summary-row"><span>${label}</span><b>${String(value || t("notAdded")).replace(/[<>]/g, "")}</b></div>`).join("")}</div>`;
+    }
+    function openInfoModal(kind) {
+      if (!state.booking) return;
+      const b = state.booking;
+      const title = kind === "receipt" ? t("receiptTitle") : t("requestTitle");
+      $("#toast").classList.remove("show");
+      $("#modalTitle").textContent = title;
+      if (kind === "receipt") {
+        $("#modalBody").innerHTML = `
+          <div class="receipt-paper">
+            <div class="receipt-logo"><b>Kall</b><span>${b.createdDate} ${b.createdAt}</span></div>
+            <div class="summary-row"><span>${t("receiptBookingPrefix") || "Booking"} #</span><b>${b.bookingNo}</b></div>
+            ${rowsHtml([
+              [t("paymentSummaryPlan"), planName(b.plan)],
+              [t("paymentSummaryPlace"), b.placeName],
+              [t("receiptPaidWith"), b.payMethod],
+              [t("receiptStatusLabel"), t("receiptStatusValue")]
+            ])}
+            <div class="receipt-total"><span>${t("paymentSummaryTotal")}</span><b>${formatMoney(b.priceUsd)}</b></div>
+          </div>`;
+      } else {
+        $("#modalBody").innerHTML = rowsHtml(detailRows(b));
+      }
+      $("#infoModal").classList.add("open");
+      $("#infoModal").setAttribute("aria-hidden", "false");
+      document.body.classList.add("locked");
+    }
+    function closeInfoModal() {
+      $("#infoModal").classList.remove("open");
+      $("#infoModal").setAttribute("aria-hidden", "true");
+      if ($("#languageModal").classList.contains("hidden") && !$("#paymentSheet").classList.contains("open")) document.body.classList.remove("locked");
+    }
+
+    $$(".lang-option").forEach((btn) => btn.addEventListener("click", () => applyLanguage(btn.dataset.lang)));
+    $("#startApp").addEventListener("click", closeLanguage);
+    $("#openLanguage").addEventListener("click", openLanguage);
+    $$("[data-nav]").forEach((btn) => btn.addEventListener("click", (e) => { e.preventDefault(); navigate(btn.dataset.nav); }));
+    $$("[data-select-plan]").forEach((card) => {
+      card.addEventListener("click", () => selectPlanAndBook(card.dataset.selectPlan));
+      card.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectPlanAndBook(card.dataset.selectPlan); } });
+    });
+    $$("[data-next-step]").forEach((btn) => btn.addEventListener("click", () => { if (validateStep()) setStep(state.step + 1); }));
+    $$("[data-prev-step]").forEach((btn) => btn.addEventListener("click", () => setStep(state.step - 1)));
+    $$(".choice").forEach((btn) => btn.addEventListener("click", () => { state.category = btn.dataset.category; updateCategoryFields(); }));
+    $$("input, select, textarea").forEach((field) => {
+      field.addEventListener("input", () => { markField(field, false); updateSummary(); });
+      field.addEventListener("change", () => { markField(field, false); updateSummary(); });
+    });
+    $$("input[name='plan']").forEach((field) => field.addEventListener("change", updateSummary));
+    $$(".pay-method").forEach((btn) => btn.addEventListener("click", () => { state.selectedPay = btn.dataset.pay; $$(".pay-method").forEach((item) => item.classList.remove("selected")); btn.classList.add("selected"); }));
+    $("#checkoutBtn").addEventListener("click", openPayment);
+    $("#closePayment").addEventListener("click", closePayment);
+    $("#paymentSheet").addEventListener("click", (e) => { if (e.target.id === "paymentSheet") closePayment(); });
+    $("#payNowBtn").addEventListener("click", createBooking);
+    $("#copyNoBtn").addEventListener("click", () => copyBookingNumber(true));
+    $("#lookupBtn").addEventListener("click", lookupBooking);
+    $$("[data-status-modal]").forEach((btn) => btn.addEventListener("click", () => openInfoModal(btn.dataset.statusModal)));
+    $("#closeInfoModal").addEventListener("click", closeInfoModal);
+    $("#infoModal").addEventListener("click", (e) => { if (e.target.id === "infoModal") closeInfoModal(); });
+
+    const minDate = todayISO();
+    $("#date1").min = minDate;
+    $("#date2").min = minDate;
+    $("#birthDate").max = minDate;
+
+    try {
+      const saved = JSON.parse(localStorage.getItem("kallLastBooking"));
+      if (saved && saved.bookingNo) state.booking = saved;
+    } catch (error) {}
+    applyLanguage(state.lang);
+    updateCategoryFields();
+    setStep(1);
+    renderBooking();
+    openLanguage();
+  </script>
+</body>
+</html>
