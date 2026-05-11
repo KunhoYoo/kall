@@ -400,26 +400,31 @@
       display: grid;
       justify-items: center;
       align-content: center;
-      gap: 6px;
+      gap: 7px;
       border-radius: 17px;
-      padding: 9px 4px;
+      padding: 10px 5px;
       text-align: center;
       background: #fff;
       border: 1px solid rgba(17,24,39,.06);
       box-shadow: 0 10px 24px rgba(15,23,42,.07);
     }
     .logo-box {
-      width: 36px;
-      height: 36px;
+      width: 42px;
+      height: 42px;
       display: grid;
       place-items: center;
       flex: 0 0 auto;
-      border-radius: 15px;
-      background: #fff;
-      border: 1px solid rgba(17,24,39,.08);
+      border-radius: 0;
+      background: transparent;
+      border: 0;
       overflow: hidden;
     }
-    .logo-box img { width: 27px; height: 27px; object-fit: contain; }
+    .logo-box img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
     .messenger b { display: block; font-size: 11px; line-height: 1; font-weight: 920; }
     .messenger span { display: block; margin-top: 5px; color: var(--muted); font-size: 9.5px; line-height: 1.22; font-weight: 760; }
 
@@ -721,11 +726,26 @@
       background: #fff;
       border: 1px solid rgba(17,24,39,.07);
       box-shadow: 0 9px 24px rgba(15,23,42,.055);
+      transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .timeline-item.done {
+      border-color: rgba(37,99,255,.14);
     }
     .timeline-item.active {
       border-color: rgba(37,99,255,.32);
       background: #fff;
       box-shadow: 0 0 0 1px rgba(37,99,255,.08), 0 10px 24px rgba(37,99,255,.10);
+      animation: activeStageCard 2.35s ease-in-out infinite;
+    }
+    @keyframes activeStageCard {
+      0%, 100% {
+        background: #fff;
+        box-shadow: 0 0 0 1px rgba(37,99,255,.08), 0 10px 24px rgba(37,99,255,.10);
+      }
+      50% {
+        background: #eef8ff;
+        box-shadow: 0 0 0 1px rgba(56,189,248,.20), 0 13px 28px rgba(56,189,248,.16);
+      }
     }
     .stage-icon {
       position: relative;
@@ -739,8 +759,15 @@
       color: inherit;
       box-shadow: none;
       transform-origin: center;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 40px 40px;
     }
-    .stage-icon svg { width: 58px; height: 58px; display: block; overflow: visible; }
+    .stage-icon svg { display: none; }
+    .stage-request { background-image: url("reception.png"); }
+    .stage-payment { background-image: url("pay.png"); }
+    .stage-call { background-image: url("call.png"); }
+    .stage-result { background-image: url("result.png"); }
     .active .stage-icon { animation: stageBlink 2.25s ease-in-out infinite; }
     .todo .stage-icon { opacity: .86; filter: saturate(.78); }
     @keyframes stageBlink {
@@ -750,6 +777,23 @@
     .timeline-item b { display: block; font-size: 13px; line-height: 1.2; font-weight: 920; }
     .timeline-item > div span { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.3; font-weight: 760; }
     .timeline-time { color: var(--muted); font-size: 11px; font-weight: 920; white-space: nowrap; }
+    .timeline-item.result-updated .timeline-time { color: #1d4ed8; }
+    .result-note {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: start;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 17px;
+      color: #0f172a;
+      background: #eef8ff;
+      border: 1px solid rgba(56,189,248,.22);
+      font-size: 12px;
+      font-weight: 820;
+    }
+    .result-note span { color: #2563eb; font-weight: 940; }
+    .result-note b { font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
     .empty-state {
       min-height: 240px;
       display: grid;
@@ -1015,7 +1059,7 @@
       .language-bg {
   top: auto;
   bottom: 0;
-  height: 129%; /*110 조금 위로, 118 추천, 125 더 많이 위로, 135 꽤 강하게 위로 */
+  height: 130%; /*110 조금 위로, 118 추천, 125 더 많이 위로, 135 꽤 강하게 위로 */
   object-position: center bottom;
 }
 
@@ -1028,7 +1072,7 @@
       .language-bg {
   top: auto;
   bottom: 0;
-  height: 129%; /*110 조금 위로, 118 추천, 125 더 많이 위로, 135 꽤 강하게 위로 */
+  height: 130%; /*110 조금 위로, 118 추천, 125 더 많이 위로, 135 꽤 강하게 위로 */
   object-position: center bottom;
   opacity: 1;
 }
@@ -1349,7 +1393,7 @@
           <div class="status-card" id="receiptCard">
             <div class="status-top">
               <span class="status-no" id="bookingNo">Kall #KA-0000</span>
-              <span class="status-pill"><span class="live-dot"></span><span data-i18n="statusReceived">Received</span></span>
+              <span class="status-pill"><span class="live-dot"></span><span id="statusPillText" data-i18n="statusReceived">Received</span></span>
             </div>
             <h2 id="statusMain">Your request is ready for Kall.</h2>
             <p id="statusDesc">We will call the venue in Korean and update your selected messenger.</p>
@@ -1363,6 +1407,10 @@
             <div class="booking-actions">
               <button class="btn small" type="button" id="copyNoBtn" data-i18n="copyBookingNo">Copy booking number</button>
               <button class="btn small secondary" type="button" data-status-modal="receipt" data-i18n="viewReceipt">View receipt</button>
+            </div>
+            <div class="result-note" id="resultNote" hidden>
+              <span id="resultNoteLabel">Result</span>
+              <b id="resultMessage">-</b>
             </div>
             <div class="timeline">
               <button class="timeline-item done" type="button" data-status-modal="request"><span class="stage-icon stage-request"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
@@ -1398,7 +1446,7 @@
   <circle cx="47.8" cy="39" r="2.8" fill="#dbeafe"/>
   <circle cx="19" cy="46" r="12" fill="url(#v4PlusGreen)" filter="url(#v4PayShadow)"/>
   <path d="M19 39.5v13M12.5 46h13" stroke="#effff2" stroke-width="4" stroke-linecap="round"/>
-</svg></span><div><b data-i18n="tlPayment">Payment completed</b><span id="tlPaymentSub">$7.99 · PayPal</span></div><span class="timeline-time" id="tlTime2">Now</span></button>
+</svg></span><div><b data-i18n="tlPayment">Payment</b><span id="tlPaymentSub">$7.99 · PayPal</span></div><span class="timeline-time" id="tlTime2">Now</span></button>
               <div class="timeline-item active"><span class="stage-icon stage-call"><svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
   <defs>
     <linearGradient id="v4PhoneBlue" x1="17" y1="6" x2="49" y2="60" gradientUnits="userSpaceOnUse"><stop stop-color="#67aaff"/><stop offset=".52" stop-color="#2563eb"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient>
@@ -1487,6 +1535,50 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAryJmkrF3wWJRymP41pmjFpPLTYGzZXBg",
+      authDomain: "kall-yellowknife.firebaseapp.com",
+      projectId: "kall-yellowknife",
+      storageBucket: "kall-yellowknife.firebasestorage.app",
+      messagingSenderId: "988921015756",
+      appId: "1:988921015756:web:e991407b592a75008b4169",
+      measurementId: "G-H5ZV5KFW33"
+    };
+    const BOOKINGS_COLLECTION = "reservations";
+    const firebase = {
+      app: null,
+      db: null,
+      doc: null,
+      getDoc: null,
+      setDoc: null,
+      serverTimestamp: null,
+      ready: null
+    };
+
+    async function initFirebase() {
+      try {
+        const [{ initializeApp }, firestoreModule] = await Promise.all([
+          import("https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js"),
+          import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js")
+        ]);
+        firebase.app = initializeApp(firebaseConfig);
+        firebase.db = firestoreModule.getFirestore(firebase.app);
+        firebase.doc = firestoreModule.doc;
+        firebase.getDoc = firestoreModule.getDoc;
+        firebase.setDoc = firestoreModule.setDoc;
+        firebase.serverTimestamp = firestoreModule.serverTimestamp;
+
+        import("https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js")
+          .then(({ getAnalytics, isSupported }) => isSupported().then((supported) => {
+            if (supported) getAnalytics(firebase.app);
+          }))
+          .catch((error) => console.warn("Firebase Analytics is not available.", error));
+      } catch (error) {
+        console.warn("Firebase could not be initialized. Booking sync will be unavailable until this is fixed.", error);
+      }
+    }
+    firebase.ready = initFirebase();
+
     const planPrices = {
       "Basic Booking": 3.99,
       "Plus Booking": 7.99,
@@ -1541,7 +1633,7 @@
         statusKicker: "My booking", statusTitle: "Check your Kall request.", lookupTitle: "Find by booking number", lookupCopy: "Enter your Kall number to show the saved request details below.", lookupBtn: "Check",
         emptyTitle: "No booking yet", emptyCopy: "Make a request first. After checkout, your Kall booking number will appear here.", startBooking: "Start booking",
         statusReceived: "Received", copyBookingNo: "Copy booking number", viewReceipt: "View receipt",
-        tlRequest: "Request submitted", tlRequestSub: "Tap to review submitted details", tlPayment: "Payment completed",
+        tlRequest: "Request submitted", tlRequestSub: "Tap to review submitted details", tlPayment: "Payment",
         tlQueue: "Waiting for call", tlQueueSub: "Kall will call during Korean business hours", tlResult: "Result update", tlResultSub: "Confirmed, full, no answer, or backup needed", soon: "Soon", next: "Next",
         supportTitle: "Want to change something?", supportCopy: "If you change your mind within 10 minutes after payment, contact support through WhatsApp, WeChat, LINE, or KakaoTalk.",
         navIntro: "Intro", navBook: "Book", navStatus: "Status", paymentTitle: "Complete payment", paymentSummaryPlan: "Plan", paymentSummaryPlace: "Place",
@@ -1591,7 +1683,7 @@
         statusKicker: "내 예약", statusTitle: "Kall 요청을 조회하세요.", lookupTitle: "예약 번호로 조회", lookupCopy: "Kall 예약 번호를 입력하면 아래에 접수 정보를 보여드립니다.", lookupBtn: "조회",
         emptyTitle: "아직 예약이 없습니다", emptyCopy: "먼저 예약을 요청하세요. 결제 후 Kall 예약 번호가 여기에 표시됩니다.", startBooking: "예약 시작하기",
         statusReceived: "접수 완료", copyBookingNo: "예약 번호 복사", viewReceipt: "영수증 보기",
-        tlRequest: "요청 접수", tlRequestSub: "누르면 접수 정보를 확인합니다", tlPayment: "결제 완료",
+        tlRequest: "요청 접수", tlRequestSub: "누르면 접수 정보를 확인합니다", tlPayment: "결제",
         tlQueue: "전화 대기 중", tlQueueSub: "한국 영업시간에 맞춰 Kall이 전화합니다", tlResult: "결과 업데이트", tlResultSub: "확정, 만석, 미연결, 차선 필요 여부 안내", soon: "곧 진행", next: "다음",
         supportTitle: "내용을 바꾸고 싶나요?", supportCopy: "결제 후 10분 이내 변심이 생기면 WhatsApp, WeChat, LINE, KakaoTalk으로 문의센터에 연결하세요.",
         navIntro: "소개", navBook: "예약", navStatus: "조회", paymentTitle: "결제 완료하기", paymentSummaryPlan: "플랜", paymentSummaryPlace: "장소",
@@ -1641,7 +1733,7 @@
         statusKicker: "予約確認", statusTitle: "Kallの依頼状況を確認。", lookupTitle: "予約番号で検索", lookupCopy: "Kall番号を入力すると、保存された依頼情報を下に表示します。", lookupBtn: "確認",
         emptyTitle: "予約はまだありません", emptyCopy: "先に依頼してください。支払い後、Kall予約番号がここに表示されます。", startBooking: "予約開始",
         statusReceived: "受付済み", copyBookingNo: "番号をコピー", viewReceipt: "領収書を見る",
-        tlRequest: "依頼受付", tlRequestSub: "タップして受付内容を確認", tlPayment: "支払い完了",
+        tlRequest: "依頼受付", tlRequestSub: "タップして受付内容を確認", tlPayment: "支払い",
         tlQueue: "電話待ち", tlQueueSub: "韓国の営業時間にKallが電話します", tlResult: "結果更新", tlResultSub: "確定、満席、不通、予備案内など", soon: "まもなく", next: "次",
         supportTitle: "内容を変更しますか？", supportCopy: "支払い後10分以内なら、WhatsApp、WeChat、LINE、KakaoTalkからサポートへ連絡できます。",
         navIntro: "紹介", navBook: "予約", navStatus: "状況", paymentTitle: "支払い完了", paymentSummaryPlan: "プラン", paymentSummaryPlace: "場所",
@@ -1691,7 +1783,7 @@
         statusKicker: "我的预约", statusTitle: "查看 Kall 请求。", lookupTitle: "用预约编号查询", lookupCopy: "输入 Kall 编号后，下方会显示保存的请求信息。", lookupBtn: "查询",
         emptyTitle: "还没有预约", emptyCopy: "请先提交请求。付款后，你的 Kall 预约编号会显示在这里。", startBooking: "开始预约",
         statusReceived: "已接收", copyBookingNo: "复制预约编号", viewReceipt: "查看收据",
-        tlRequest: "请求已接收", tlRequestSub: "点击查看提交信息", tlPayment: "付款完成",
+        tlRequest: "请求已接收", tlRequestSub: "点击查看提交信息", tlPayment: "付款",
         tlQueue: "等待拨打电话", tlQueueSub: "Kall 会在韩国营业时间联系商家", tlResult: "结果更新", tlResultSub: "确认、满位、无人接听或需要备用方案", soon: "即将", next: "下一步",
         supportTitle: "想修改内容吗？", supportCopy: "付款后10分钟内如改变想法，可通过 WhatsApp、WeChat、LINE 或 KakaoTalk 联系客服。",
         navIntro: "介绍", navBook: "预约", navStatus: "状态", paymentTitle: "完成付款", paymentSummaryPlan: "套餐", paymentSummaryPlace: "地点",
@@ -1741,7 +1833,7 @@
         statusKicker: "Ma réservation", statusTitle: "Vérifiez votre demande Kall.", lookupTitle: "Rechercher par numéro", lookupCopy: "Entrez votre numéro Kall pour afficher les détails enregistrés ci-dessous.", lookupBtn: "Vérifier",
         emptyTitle: "Aucune réservation", emptyCopy: "Faites d'abord une demande. Après paiement, votre numéro Kall apparaîtra ici.", startBooking: "Commencer",
         statusReceived: "Reçue", copyBookingNo: "Copier le numéro", viewReceipt: "Voir le reçu",
-        tlRequest: "Demande envoyée", tlRequestSub: "Touchez pour revoir les détails", tlPayment: "Paiement terminé",
+        tlRequest: "Demande envoyée", tlRequestSub: "Touchez pour revoir les détails", tlPayment: "Paiement",
         tlQueue: "En attente d'appel", tlQueueSub: "Kall appellera pendant les horaires d'ouverture en Corée", tlResult: "Mise à jour du résultat", tlResultSub: "Confirmé, complet, sans réponse ou secours requis", soon: "Bientôt", next: "Suivant",
         supportTitle: "Envie de modifier ?", supportCopy: "Si vous changez d'avis dans les 10 minutes après paiement, contactez le support via WhatsApp, WeChat, LINE ou KakaoTalk.",
         navIntro: "Intro", navBook: "Réserver", navStatus: "Statut", paymentTitle: "Finaliser le paiement", paymentSummaryPlan: "Formule", paymentSummaryPlace: "Lieu",
@@ -1763,6 +1855,51 @@
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => Array.from(document.querySelectorAll(selector));
     const t = (key) => (i18n[state.lang] && i18n[state.lang][key]) || i18n.en[key] || key;
+    const flowText = {
+      en: {
+        payment: "Payment",
+        callWaiting: "Waiting for call",
+        callWaitingSub: "Kall will call during Korean business hours",
+        callDone: "Call completed",
+        callDoneSub: "Kall has finished the phone call.",
+        resultPending: "Result update",
+        resultPendingSub: "Confirmed, full, no answer, or backup needed",
+        resultWaitingSub: "The call is complete. The result is being prepared.",
+        resultUpdatedSub: "The result has been updated.",
+        statusReceived: "Received",
+        statusCallDone: "Call completed",
+        statusResultUpdated: "Result updated",
+        resultLabel: "Result",
+        savingBooking: "Saving...",
+        checkingBooking: "Checking...",
+        firebaseSaveFailed: "Could not save to Firebase. Please check Firestore rules or network and try again.",
+        firebaseUnavailable: "Firebase is not ready yet. Please try again in a moment.",
+        done: "Done",
+        updated: "Updated"
+      },
+      ko: {
+        payment: "결제",
+        callWaiting: "전화 대기 중",
+        callWaitingSub: "한국 영업시간에 맞춰 Kall이 전화합니다",
+        callDone: "전화 완료",
+        callDoneSub: "Kall의 전화 처리가 완료되었습니다.",
+        resultPending: "결과 업데이트",
+        resultPendingSub: "확정, 만석, 미연결, 차선 필요 여부 안내",
+        resultWaitingSub: "전화는 완료되었고 결과를 정리하는 중입니다.",
+        resultUpdatedSub: "결과가 업데이트되었습니다.",
+        statusReceived: "접수 완료",
+        statusCallDone: "전화 완료",
+        statusResultUpdated: "결과 업데이트",
+        resultLabel: "결과",
+        savingBooking: "저장 중...",
+        checkingBooking: "조회 중...",
+        firebaseSaveFailed: "Firebase 저장에 실패했습니다. Firestore 규칙이나 네트워크를 확인한 뒤 다시 시도해 주세요.",
+        firebaseUnavailable: "Firebase 준비 중입니다. 잠시 뒤 다시 시도해 주세요.",
+        done: "완료",
+        updated: "업데이트"
+      }
+    };
+    const ui = (key) => (flowText[state.lang] && flowText[state.lang][key]) || flowText.en[key] || key;
 
     function formatMoney(usd) {
       const config = currencies[state.lang] || currencies.en;
@@ -1996,33 +2133,207 @@
       const rand = Math.floor(1000 + Math.random() * 9000);
       return `KA-${yy}${mm}${dd}-${rand}`;
     }
-    function saveBooking(booking) {
-      const list = JSON.parse(localStorage.getItem("kallBookings") || "{}");
-      list[booking.bookingNo] = booking;
-      localStorage.setItem("kallBookings", JSON.stringify(list));
-      localStorage.setItem("kallLastBooking", JSON.stringify(booking));
+    function readStoredBookings() {
+      try {
+        return JSON.parse(localStorage.getItem("kallBookings") || "{}") || {};
+      } catch (error) {
+        return {};
+      }
     }
-    function createBooking() {
+    function toLocalBooking(booking) {
+      return JSON.parse(JSON.stringify(booking, (key, value) => {
+        if (value && typeof value.toDate === "function") return value.toDate().toISOString();
+        if (value && typeof value.seconds === "number" && typeof value.nanoseconds === "number") {
+          return new Date(value.seconds * 1000).toISOString();
+        }
+        return value;
+      }));
+    }
+    function saveBookingLocal(booking) {
+      const safeBooking = toLocalBooking(booking);
+      const list = readStoredBookings();
+      list[safeBooking.bookingNo] = safeBooking;
+      localStorage.setItem("kallBookings", JSON.stringify(list));
+      localStorage.setItem("kallLastBooking", JSON.stringify(safeBooking));
+    }
+    function sanitizeForFirestore(value) {
+      if (Array.isArray(value)) return value.map(sanitizeForFirestore).filter((item) => item !== undefined);
+      if (value && typeof value === "object") {
+        return Object.fromEntries(Object.entries(value)
+          .filter(([, item]) => item !== undefined && typeof item !== "function")
+          .map(([key, item]) => [key, sanitizeForFirestore(item)]));
+      }
+      return value;
+    }
+    async function saveBookingRemote(booking) {
+      await firebase.ready;
+      if (!firebase.db) throw new Error(ui("firebaseUnavailable"));
+      const bookingRef = firebase.doc(firebase.db, BOOKINGS_COLLECTION, booking.bookingNo);
+      const payload = sanitizeForFirestore({
+        ...booking,
+        source: "index_v2",
+        firebasePath: `${BOOKINGS_COLLECTION}/${booking.bookingNo}`,
+        updatedAtClient: new Date().toISOString()
+      });
+      payload.updatedAtServer = firebase.serverTimestamp();
+      await firebase.setDoc(bookingRef, payload, { merge: true });
+      return payload;
+    }
+    async function saveBooking(booking) {
+      const remoteBooking = await saveBookingRemote(booking);
+      const syncedBooking = { ...booking, firebaseSynced: true, firebasePath: remoteBooking.firebasePath };
+      saveBookingLocal(syncedBooking);
+      return syncedBooking;
+    }
+    function setButtonBusy(button, busy, label) {
+      if (!button) return;
+      if (busy) {
+        button.dataset.originalText = button.textContent;
+        button.textContent = label;
+        button.disabled = true;
+      } else {
+        button.textContent = button.dataset.originalText || button.textContent;
+        button.disabled = false;
+      }
+    }
+    async function createBooking() {
       if (!$("#policy1").checked || !$("#policy2").checked) {
         toast(t("toastPolicy"));
         return;
       }
+      const payButton = $("#payNowBtn");
+      setButtonBusy(payButton, true, ui("savingBooking"));
       const data = getData();
       const now = new Date();
       const booking = {
         ...data,
         bookingNo: generateBookingNumber(),
         payMethod: state.selectedPay,
+        requestStatus: "submitted",
+        paymentStatus: "paid",
+        callStatus: "waiting",
+        resultStatus: "pending",
+        status: "waiting_call",
         createdAt: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        createdDate: now.toLocaleDateString()
+        createdDate: now.toLocaleDateString(),
+        createdAtISO: now.toISOString()
       };
-      state.booking = booking;
-      saveBooking(booking);
-      renderBooking();
-      closePayment();
-      navigate("status");
-      copyBookingNumber(false);
-      toast(`${t("toastCreated")} ${booking.bookingNo}`);
+      try {
+        state.booking = await saveBooking(booking);
+        renderBooking();
+        closePayment();
+        navigate("status");
+        copyBookingNumber(false);
+        toast(`${t("toastCreated")} ${booking.bookingNo}`);
+      } catch (error) {
+        console.error("Firebase booking save failed.", error);
+        toast(ui("firebaseSaveFailed"));
+      } finally {
+        setButtonBusy(payButton, false);
+      }
+    }
+
+    function normalizeStatus(value) {
+      return String(value || "").trim().toLowerCase().replace(/[\s-]+/g, "_");
+    }
+    function bookingProgress(booking) {
+      const callDoneValues = new Set(["done", "complete", "completed", "called", "call_done", "call_completed", "전화_완료", "완료"]);
+      const resultDoneValues = new Set(["done", "complete", "completed", "updated", "result_updated", "confirmed", "full", "no_answer", "backup_needed", "결과_완료", "결과_업데이트"]);
+      const callValues = [booking.callStatus, booking.callState, booking.status].map(normalizeStatus);
+      const resultValues = [booking.resultStatus, booking.resultState, booking.csStatus, booking.status].map(normalizeStatus);
+      const resultUpdated = Boolean(
+        booking.resultMessage ||
+        booking.resultSummary ||
+        booking.resultTitle ||
+        booking.resultUpdatedAt ||
+        booking.resultUpdatedAtServer ||
+        resultValues.some((value) => resultDoneValues.has(value))
+      );
+      return {
+        callDone: resultUpdated || callValues.some((value) => callDoneValues.has(value)),
+        resultUpdated
+      };
+    }
+    function bookingResultMessage(booking) {
+      return booking.resultMessage || booking.resultSummary || booking.resultTitle || booking.csMemo || booking.statusMessage || ui("resultUpdatedSub");
+    }
+    function statusDate(value) {
+      if (!value) return null;
+      if (value && typeof value.toDate === "function") return value.toDate();
+      if (value && typeof value.seconds === "number") return new Date(value.seconds * 1000);
+      if (typeof value === "number") return new Date(value);
+      if (typeof value === "string") {
+        const parsed = new Date(value);
+        return Number.isNaN(parsed.getTime()) ? null : parsed;
+      }
+      return null;
+    }
+    function formatTimelineTime(value, fallback) {
+      const date = statusDate(value);
+      if (date) return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      return value ? String(value) : fallback;
+    }
+    function setTimelineState(item, stateName) {
+      if (!item) return;
+      item.classList.remove("done", "active", "todo", "result-updated");
+      item.classList.add(stateName);
+    }
+    function timelineTextParts(item) {
+      const content = item && item.querySelector(":scope > div");
+      return {
+        title: content && content.querySelector("b"),
+        body: content && content.querySelector("span"),
+        time: item && item.querySelector(".timeline-time")
+      };
+    }
+    function setPartText(part, value) {
+      if (part) part.textContent = value;
+    }
+    function renderTimeline(booking) {
+      const paymentItem = $(".stage-payment") && $(".stage-payment").closest(".timeline-item");
+      const callItem = $(".stage-call") && $(".stage-call").closest(".timeline-item");
+      const resultItem = $(".stage-result") && $(".stage-result").closest(".timeline-item");
+      const paymentParts = timelineTextParts(paymentItem);
+      const callParts = timelineTextParts(callItem);
+      const resultParts = timelineTextParts(resultItem);
+      const progress = bookingProgress(booking);
+      setPartText(paymentParts.title, ui("payment"));
+      setPartText(callParts.title, ui("callWaiting"));
+      setPartText(callParts.body, ui("callWaitingSub"));
+      setPartText(callParts.time, ui("done"));
+      setPartText(resultParts.title, ui("resultPending"));
+      setPartText(resultParts.body, ui("resultPendingSub"));
+      setPartText(resultParts.time, t("next"));
+      setTimelineState(callItem, "active");
+      setTimelineState(resultItem, "todo");
+      $("#resultNote").hidden = true;
+
+      if (progress.callDone) {
+        setTimelineState(callItem, "done");
+        setPartText(callParts.title, ui("callDone"));
+        setPartText(callParts.body, ui("callDoneSub"));
+        setPartText(callParts.time, formatTimelineTime(booking.callCompletedAt || booking.calledAt || booking.updatedAtClient || booking.updatedAtISO, ui("done")));
+        setTimelineState(resultItem, "active");
+        setPartText(resultParts.body, ui("resultWaitingSub"));
+        setPartText(resultParts.time, ui("updated"));
+      }
+      if (progress.resultUpdated) {
+        setTimelineState(resultItem, "active");
+        resultItem.classList.add("result-updated");
+        const message = bookingResultMessage(booking);
+        setPartText(resultParts.body, message);
+        setPartText(resultParts.time, formatTimelineTime(booking.resultUpdatedAt || booking.resultCompletedAt || booking.updatedAtClient || booking.updatedAtISO, ui("updated")));
+        $("#resultNote").hidden = false;
+        $("#resultNoteLabel").textContent = ui("resultLabel");
+        $("#resultMessage").textContent = message;
+      }
+      $("#statusPillText").textContent = progress.resultUpdated ? ui("statusResultUpdated") : progress.callDone ? ui("statusCallDone") : ui("statusReceived");
+    }
+    function receiptStatusText(booking) {
+      const progress = bookingProgress(booking);
+      if (progress.resultUpdated) return ui("statusResultUpdated");
+      if (progress.callDone) return ui("statusCallDone");
+      return t("receiptStatusValue");
     }
 
     function renderBooking() {
@@ -2048,6 +2359,7 @@
       $("#tlTime1").textContent = booking.createdAt;
       $("#tlTime2").textContent = booking.createdAt;
       $("#lookupInput").value = booking.bookingNo;
+      renderTimeline(booking);
     }
 
     async function copyBookingNumber(show = true) {
@@ -2065,14 +2377,40 @@
         if (show) toast(t("toastCopied"));
       }
     }
-    function lookupBooking() {
+    async function fetchBookingRemote(bookingNo) {
+      await firebase.ready;
+      if (!firebase.db) return null;
+      const bookingRef = firebase.doc(firebase.db, BOOKINGS_COLLECTION, bookingNo);
+      const snapshot = await firebase.getDoc(bookingRef);
+      return snapshot.exists() ? { ...snapshot.data(), bookingNo: snapshot.id } : null;
+    }
+    async function lookupBooking() {
       const no = $("#lookupInput").value.trim().toUpperCase();
-      const list = JSON.parse(localStorage.getItem("kallBookings") || "{}");
-      if (list[no]) {
-        state.booking = list[no];
+      if (!no) return;
+      const lookupButton = $("#lookupBtn");
+      setButtonBusy(lookupButton, true, ui("checkingBooking"));
+      try {
+        const remoteBooking = await fetchBookingRemote(no);
+        const list = readStoredBookings();
+        const foundBooking = remoteBooking || list[no];
+        if (!foundBooking) {
+          toast(t("toastNotFound"));
+          return;
+        }
+        state.booking = foundBooking;
+        saveBookingLocal(foundBooking);
         renderBooking();
-      } else {
-        toast(t("toastNotFound"));
+      } catch (error) {
+        console.warn("Firebase lookup failed. Falling back to local storage.", error);
+        const list = readStoredBookings();
+        if (list[no]) {
+          state.booking = list[no];
+          renderBooking();
+        } else {
+          toast(t("toastNotFound"));
+        }
+      } finally {
+        setButtonBusy(lookupButton, false);
       }
     }
 
@@ -2112,7 +2450,7 @@
               [t("paymentSummaryPlan"), planName(b.plan)],
               [t("paymentSummaryPlace"), b.placeName],
               [t("receiptPaidWith"), b.payMethod],
-              [t("receiptStatusLabel"), t("receiptStatusValue")]
+              [t("receiptStatusLabel"), receiptStatusText(b)]
             ])}
             <div class="receipt-total"><span>${t("paymentSummaryTotal")}</span><b>${formatMoney(b.priceUsd)}</b></div>
           </div>`;
