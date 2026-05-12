@@ -365,26 +365,66 @@
 
     .steps { display: grid; gap: 10px; }
     .step-card {
-      min-height: 78px;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      min-height: 82px;
       display: grid;
-      grid-template-columns: 40px 1fr;
+      grid-template-columns: 44px 1fr;
       align-items: center;
       gap: 12px;
       border-radius: 20px;
       padding: 13px;
-      background: #fff;
+      background: linear-gradient(135deg, #fff 0%, #f8fbff 100%);
       border: 1px solid rgba(17,24,39,.06);
       box-shadow: 0 10px 24px rgba(15,23,42,.07);
     }
+    .step-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(circle at 26px 28px, rgba(37,99,255,.14), transparent 44%);
+      opacity: .42;
+    }
+    .step-card::after {
+      content: "";
+      position: absolute;
+      left: 35px;
+      top: 60px;
+      bottom: -16px;
+      width: 2px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(37,99,255,.45), rgba(31,182,165,.08));
+    }
+    .step-card:last-child::after { display: none; }
+    .step-card:nth-child(1) { --step-a: #2563ff; --step-b: #1fb6a5; --step-delay: 0s; }
+    .step-card:nth-child(2) { --step-a: #7c3aed; --step-b: #38bdf8; --step-delay: 1.15s; }
+    .step-card:nth-child(3) { --step-a: #0f9f74; --step-b: #2563ff; --step-delay: 2.3s; }
     .step-no {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       display: grid;
       place-items: center;
-      border-radius: 14px;
+      border-radius: 16px;
       color: #fff;
-      background: var(--blue);
+      background: linear-gradient(135deg, var(--step-a), var(--step-b));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.42), 0 10px 22px rgba(37,99,255,.22);
       font-weight: 950;
+      animation: stepLight 4.8s ease-in-out infinite;
+      animation-delay: var(--step-delay);
+    }
+    @keyframes stepLight {
+      0%, 22%, 100% {
+        transform: translateY(0) scale(1);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.42), 0 10px 22px rgba(37,99,255,.18);
+        filter: saturate(1);
+      }
+      9% {
+        transform: translateY(-1px) scale(1.04);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.62), 0 0 0 6px rgba(37,99,255,.11), 0 16px 30px rgba(37,99,255,.32);
+        filter: saturate(1.2);
+      }
     }
     .step-card b { display: block; font-size: 14px; line-height: 1.22; font-weight: 920; }
     .step-card span { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.38; font-weight: 740; }
@@ -414,16 +454,28 @@
       display: grid;
       place-items: center;
       flex: 0 0 auto;
-      border-radius: 0;
-      background: transparent;
-      border: 0;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid rgba(17,24,39,.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
       overflow: hidden;
     }
     .logo-box img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      border-radius: 11px;
+    }
+    .logo-box.wechat {
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
+    }
+    .logo-box.wechat img {
       width: 34px;
       height: 34px;
-      object-fit: contain;
-      border-radius: 10px;
+      border-radius: 12px;
+      object-fit: cover;
     }
     .messenger b { display: block; font-size: 11px; line-height: 1; font-weight: 920; }
     .messenger span { display: block; margin-top: 5px; color: var(--muted); font-size: 9.5px; line-height: 1.22; font-weight: 760; }
@@ -530,16 +582,26 @@
       background: linear-gradient(180deg, #fff, #f7faff);
     }
     .choice-icon {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
       width: 42px;
       height: 42px;
       display: grid;
       place-items: center;
-      border-radius: 15px;
+      border-radius: 16px;
       color: #fff;
       box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 9px 18px rgba(15,23,42,.12);
-      transform: rotateX(10deg) rotateY(-10deg);
     }
-    .choice-icon svg { width: 29px; height: 29px; }
+    .choice-icon::after {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      z-index: -1;
+      border-radius: 15px;
+      background: linear-gradient(145deg, rgba(255,255,255,.28), rgba(255,255,255,0) 54%);
+    }
+    .choice-icon svg { width: 30px; height: 30px; }
     .bg-orange { background: linear-gradient(135deg, #fb923c, #f97316); }
     .bg-pink { background: linear-gradient(135deg, #f9a8d4, #ec4899); }
     .bg-green { background: linear-gradient(135deg, #34d399, #0f9f74); }
@@ -833,6 +895,11 @@
       font-weight: 880;
     }
     .support-chip img { width: 25px; height: 25px; object-fit: contain; }
+    .support-chip.wechat img {
+      padding: 0;
+      border-radius: 9px;
+      object-fit: cover;
+    }
 
     .receipt-paper {
       position: relative;
@@ -1222,18 +1289,18 @@
         <div class="pricing">
           <article class="price-card" data-select-plan="Basic Booking" role="button" tabindex="0">
             <div class="price-top"><h3 data-i18n="planBasicName">Basic Booking</h3><div class="price" data-price-plan="Basic Booking">$3.99</div></div>
-            <p data-i18n="planBasicDesc">📞 One place, one request, up to five Korean call attempts every 10 minutes.</p>
+            <p data-i18n="planBasicDesc">📞 One place, one request, up to five Korean call attempts every 10 minutes</p>
             <div class="tag-row"><span class="tag" data-i18n="tagAttempts">5 attempts</span><span class="tag" data-i18n="tagInterval">10 min interval</span></div>
           </article>
           <article class="price-card featured" data-select-plan="Plus Booking" role="button" tabindex="0">
             <div class="price-top"><h3 data-i18n="planPlusName">Plus Booking</h3><div class="price" data-price-plan="Plus Booking">$7.99</div></div>
-            <p data-i18n="planPlusDesc">🗓️ Backup date or time coordination if the first choice is full.</p>
-            <div class="tag-row"><span class="tag" data-i18n="tagBackup">Backup options</span><span class="tag" data-i18n="tagPopular">Most popular</span></div>
+            <p data-i18n="planPlusDesc">🗓️ Backup date or time coordination if the first choice is full</p>
+            <div class="tag-row"><span class="tag" data-i18n="tagBackup">Backup options</span><span class="tag" data-i18n="tagPopular">Most popular</span><span class="tag" data-i18n="tagAttempts">5 attempts</span><span class="tag" data-i18n="tagInterval">10 min interval</span></div>
           </article>
           <article class="price-card" data-select-plan="Rush Booking" role="button" tabindex="0">
             <div class="price-top"><h3 data-i18n="planRushName">Rush Booking</h3><div class="price" data-price-plan="Rush Booking">$14.99</div></div>
-            <p data-i18n="planRushDesc">⚡ Priority handling for same-day restaurant, beauty, clinic, or special requests.</p>
-            <div class="tag-row"><span class="tag" data-i18n="tagPriority">Priority</span><span class="tag" data-i18n="tagSameDay">Same day</span></div>
+            <p data-i18n="planRushDesc">⚡ Priority handling for same-day restaurant, beauty, clinic, or special requests</p>
+            <div class="tag-row"><span class="tag" data-i18n="tagPriority">Priority</span><span class="tag" data-i18n="tagSameDay">Same day</span><span class="tag" data-i18n="tagBackup">Backup options</span><span class="tag" data-i18n="tagAttempts">5 attempts</span><span class="tag" data-i18n="tagInterval">10 min interval</span></div>
           </article>
         </div>
       </section>
@@ -1251,7 +1318,7 @@
         <div class="section-head"><div><div class="kicker" data-i18n="messengerKicker">Messenger updates</div><h2 data-i18n="messengerTitle">Receive updates where you already chat.</h2></div></div>
         <div class="messenger-grid">
           <div class="messenger"><div class="logo-box"><img alt="WhatsApp logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/WhatsApp.svg"></div><div><b>WhatsApp</b><span data-i18n="waDesc">Global updates</span></div></div>
-          <div class="messenger"><div class="logo-box"><img alt="WeChat logo" src="https://static.cdnlogo.com/logos/w/79/wechat.svg"></div><div><b>WeChat</b><span data-i18n="wechatDesc">China updates</span></div></div>
+          <div class="messenger"><div class="logo-box wechat"><img alt="WeChat logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUjoJXtOYY-rGZj-o4qzcvlEvdgHazFcvrLQ&s"></div><div><b>WeChat</b><span data-i18n="wechatDesc">China updates</span></div></div>
           <div class="messenger"><div class="logo-box"><img alt="LINE logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/LINE_logo.svg"></div><div><b>LINE</b><span data-i18n="lineDesc">Japan and Taiwan</span></div></div>
           <div class="messenger"><div class="logo-box"><img alt="KakaoTalk logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/KakaoTalk_logo.svg"></div><div><b>KakaoTalk</b><span data-i18n="kakaoDesc">Useful in Korea</span></div></div>
         </div>
@@ -1279,25 +1346,25 @@
                 <h2 data-i18n="stepPlanTitle">Choose plan and service type</h2>
                 <p class="copy" data-i18n="stepPlanCopy">Prices are shown in your selected language's currency.</p>
                 <div class="plan-options">
-                  <label class="plan-option"><span><b data-plan-label="Basic Booking">Basic Booking · $3.99</b><span data-i18n="planBasicShort">1 place, 5 call attempts, every 10 minutes.</span></span><span class="plan-price-pill" data-price-plan="Basic Booking">$3.99</span><input type="radio" name="plan" value="Basic Booking" data-price-usd="3.99"></label>
-                  <label class="plan-option"><span><b data-plan-label="Plus Booking">Plus Booking · $7.99</b><span data-i18n="planPlusShort">Backup time/date coordination included.</span></span><span class="plan-price-pill" data-price-plan="Plus Booking">$7.99</span><input type="radio" name="plan" value="Plus Booking" data-price-usd="7.99" checked></label>
-                  <label class="plan-option"><span><b data-plan-label="Rush Booking">Rush Booking · $14.99</b><span data-i18n="planRushShort">Priority same-day handling when available.</span></span><span class="plan-price-pill" data-price-plan="Rush Booking">$14.99</span><input type="radio" name="plan" value="Rush Booking" data-price-usd="14.99"></label>
+                  <label class="plan-option"><span><b data-plan-label="Basic Booking">Basic Booking · $3.99</b><span data-i18n="planBasicShort">1 place, 5 call attempts, every 10 minutes</span></span><span class="plan-price-pill" data-price-plan="Basic Booking">$3.99</span><input type="radio" name="plan" value="Basic Booking" data-price-usd="3.99"></label>
+                  <label class="plan-option"><span><b data-plan-label="Plus Booking">Plus Booking · $7.99</b><span data-i18n="planPlusShort">Backup date/time plus Basic included</span></span><span class="plan-price-pill" data-price-plan="Plus Booking">$7.99</span><input type="radio" name="plan" value="Plus Booking" data-price-usd="7.99" checked></label>
+                  <label class="plan-option"><span><b data-plan-label="Rush Booking">Rush Booking · $14.99</b><span data-i18n="planRushShort">Same-day priority plus Plus included</span></span><span class="plan-price-pill" data-price-plan="Rush Booking">$14.99</span><input type="radio" name="plan" value="Rush Booking" data-price-usd="14.99"></label>
                 </div>
                 <div class="choice-grid" aria-label="Service type">
                   <button class="choice selected" type="button" data-category="Restaurant">
-                    <div class="choice-icon bg-orange" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M10 9v10c0 3 2 5 5 5v8" stroke="white" stroke-width="3" stroke-linecap="round"/><path d="M15 9v23M21 10v22M27 9c3 5 3 11 0 16v7" stroke="white" stroke-width="3" stroke-linecap="round"/></svg></div>
+                    <div class="choice-icon bg-orange" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10.8" stroke="white" stroke-width="3.2" opacity=".95"/><circle cx="24" cy="24" r="4.2" fill="white" opacity=".26"/><path d="M12 12v9M16 12v9M20 12v9M12 21c0 3.2 2.1 5.3 4 5.3V36" stroke="white" stroke-width="2.8" stroke-linecap="round"/><path d="M34.5 12c3 4.9 3 10.9 0 15.3V36" stroke="white" stroke-width="2.8" stroke-linecap="round"/></svg></div>
                     <div><b data-i18n="catRestaurant">Restaurant</b><span data-i18n="catRestaurantDesc">Dining, cafes, bars</span></div>
                   </button>
                   <button class="choice" type="button" data-category="Beauty">
-                    <div class="choice-icon bg-pink" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 7l2.7 7.5L30 17l-7.3 2.6L20 27l-2.7-7.4L10 17l7.3-2.5L20 7Z" fill="white"/><path d="M29 25l1.2 3.2 3.1 1.1-3.1 1.1L29 34l-1.2-3.6-3.1-1.1 3.1-1.1L29 25Z" fill="white" opacity=".8"/></svg></div>
+                    <div class="choice-icon bg-pink" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M15 24c0-6.2 4.1-11 9.3-11 5.5 0 9.7 4.8 9.7 11s-4.2 11-9.7 11C19.1 35 15 30.2 15 24Z" fill="white" opacity=".24"/><path d="M16.5 22.5c2.7-3.8 5.7-5.7 10.1-5.4 3.8.3 6.3 2.1 7.2 5.4M20 28.5c2.4 2.1 6.4 2.1 8.8 0" stroke="white" stroke-width="2.7" stroke-linecap="round"/><path d="M35 10l1.5 4.2 4 1.5-4 1.4L35 21l-1.5-3.9-4-1.4 4-1.5L35 10Z" fill="white"/></svg></div>
                     <div><b data-i18n="catBeauty">Beauty</b><span data-i18n="catBeautyDesc">Hair, skin, spa</span></div>
                   </button>
                   <button class="choice" type="button" data-category="Clinic">
-                    <div class="choice-icon bg-green" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M17 9h6v8h8v6h-8v8h-6v-8H9v-6h8V9Z" fill="white"/><path d="M10 32h20" stroke="white" stroke-width="3" stroke-linecap="round" opacity=".55"/></svg></div>
+                    <div class="choice-icon bg-green" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M21 10h6v8h8v6h-8v8h-6v-8h-8v-6h8v-8Z" fill="white"/><path d="M14 31c1.9 3.2 5.5 5.2 10 5.2 5.3 0 9-3.1 9-8v-3" stroke="white" stroke-width="2.8" stroke-linecap="round" opacity=".72"/><circle cx="33" cy="24.5" r="3" stroke="white" stroke-width="2.4" opacity=".72"/></svg></div>
                     <div><b data-i18n="catClinic">Clinic</b><span data-i18n="catClinicDesc">Treatment, consult</span></div>
                   </button>
                   <button class="choice" type="button" data-category="Other">
-                    <div class="choice-icon bg-violet" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M20 7 31 13.5v13L20 33 9 26.5v-13L20 7Z" fill="white" opacity=".92"/><path d="m9.5 14 10.5 6 10.5-6M20 20v12" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <div class="choice-icon bg-violet" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><rect x="12" y="13" width="10" height="10" rx="3" fill="white" opacity=".95"/><rect x="26" y="13" width="10" height="10" rx="3" fill="white" opacity=".72"/><rect x="12" y="27" width="10" height="10" rx="3" fill="white" opacity=".72"/><path d="M31 27l1.6 4 4.4 1.6-4.4 1.6L31 38l-1.6-3.8-4.4-1.6 4.4-1.6L31 27Z" fill="white"/></svg></div>
                     <div><b data-i18n="catOther">Other</b><span data-i18n="catOtherDesc">Lost item, event, stock</span></div>
                   </button>
                 </div>
@@ -1317,38 +1384,38 @@
                 <h2 data-i18n="stepDetailTitle">Reservation details</h2>
                 <p class="copy" data-i18n="stepDetailCopy">Preferred and backup dates cannot be in the past.</p>
                 <div class="two-col">
-                  <div class="field"><label for="date1" data-i18n="date1Label">Preferred date</label><input id="date1" name="date1" type="date" data-required data-future-date><span class="field-help" data-i18n="dateHelp">Choose today or a future date.</span></div>
+                  <div class="field"><label for="date1" data-i18n="date1Label">Preferred date</label><input id="date1" name="date1" type="text" inputmode="numeric" data-date-input data-required data-future-date data-i18n-placeholder="datePlaceholder" placeholder="YYYY-MM-DD"><span class="field-help" data-i18n="dateHelp">Choose today or a future date</span></div>
                   <div class="field"><label for="time1" data-i18n="time1Label">Preferred time</label><input id="time1" name="time1" type="time" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                 </div>
-                <div class="two-col">
-                  <div class="field"><label for="date2" data-i18n="date2Label">Backup date</label><input id="date2" name="date2" type="date" data-required data-future-date><span class="field-help" data-i18n="dateHelp">Choose today or a future date.</span></div>
+                <div class="two-col" data-backup-fields>
+                  <div class="field"><label for="date2" data-i18n="date2Label">Backup date</label><input id="date2" name="date2" type="text" inputmode="numeric" data-date-input data-required data-future-date data-i18n-placeholder="datePlaceholder" placeholder="YYYY-MM-DD"><span class="field-help" data-i18n="dateHelp">Choose today or a future date</span></div>
                   <div class="field"><label for="time2" data-i18n="time2Label">Backup time</label><input id="time2" name="time2" type="time" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                 </div>
 
                 <div data-category-fields="Restaurant">
                   <div class="two-col">
                     <div class="field"><label for="people" data-i18n="peopleLabel">People</label><input id="people" name="people" inputmode="numeric" value="2" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
-                    <div class="field"><label for="reservationName" data-i18n="reservationNameLabel">Name for booking</label><input id="reservationName" name="reservationName" autocomplete="name" placeholder="John Smith" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                    <div class="field"><label for="reservationName" data-i18n="reservationNameLabel">Name for booking</label><input id="reservationName" name="reservationName" autocomplete="name" data-i18n-placeholder="reservationNamePlaceholder" placeholder="John" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                   </div>
-                  <div class="field"><label for="note" data-i18n="noteLabel">Requests to tell the venue</label><textarea id="note" name="note" data-i18n-placeholder="notePlaceholder" placeholder="Window seat if possible. Please check deposit and cancellation policy."></textarea></div>
+                  <div class="field"><label for="note" data-i18n="noteLabel">Requests to tell the venue</label><textarea id="note" name="note" data-i18n-placeholder="notePlaceholder" placeholder="Window seat if possible, please check deposit and cancellation policy"></textarea></div>
                 </div>
 
                 <div data-category-fields="Beauty Clinic" hidden>
                   <div class="field"><label for="fullName" data-i18n="fullNameLabel">Full name as shown on passport</label><input id="fullName" name="fullName" autocomplete="name" placeholder="JOHN SMITH" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                   <div class="two-col">
                     <div class="field"><label for="passportNo" data-i18n="passportNoLabel">Passport number</label><input id="passportNo" name="passportNo" placeholder="M12345678" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
-                    <div class="field"><label for="birthDate" data-i18n="birthDateLabel">Date of birth</label><input id="birthDate" name="birthDate" type="date" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                    <div class="field"><label for="birthDate" data-i18n="birthDateLabel">Date of birth</label><input id="birthDate" name="birthDate" type="text" inputmode="numeric" data-date-input data-i18n-placeholder="birthDatePlaceholder" placeholder="YYYY-MM-DD" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                   </div>
                   <div class="two-col">
                     <div class="field"><label for="gender" data-i18n="genderLabel">Gender</label><select id="gender" name="gender" data-required><option value="" data-i18n="selectOne">Select</option><option data-i18n="genderFemale">Female</option><option data-i18n="genderMale">Male</option><option data-i18n="genderOther">Other</option></select><span class="field-help" data-i18n="requiredHelp">Required</span></div>
-                    <div class="field"><label for="procedureName" data-i18n="procedureNameLabel">Needed treatment name</label><input id="procedureName" name="procedureName" placeholder="Skin consultation, haircut..." data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                    <div class="field"><label for="procedureName" data-i18n="procedureNameLabel">Needed treatment name</label><input id="procedureName" name="procedureName" data-i18n-placeholder="procedureNamePlaceholder" placeholder="Skin consultation, haircut" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                   </div>
-                  <div class="field"><label for="symptoms" data-i18n="symptomsLabel">Symptoms or request</label><textarea id="symptoms" name="symptoms" placeholder="Describe symptoms or the treatment you want." data-required></textarea><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  <div class="field"><label for="symptoms" data-i18n="symptomsLabel">Symptoms or request</label><textarea id="symptoms" name="symptoms" data-i18n-placeholder="symptomsPlaceholder" placeholder="Describe symptoms or the treatment you want" data-required></textarea><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                 </div>
 
                 <div data-category-fields="Other" hidden>
-                  <div class="field"><label for="requestTitle" data-i18n="requestTitleLabel">What should we ask?</label><input id="requestTitle" name="requestTitle" placeholder="Lost item, event ticket, product stock..." data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
-                  <div class="field"><label for="otherNote" data-i18n="otherNoteLabel">Request details</label><textarea id="otherNote" name="otherNote" placeholder="Share the exact question or outcome you need." data-required></textarea><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  <div class="field"><label for="requestTitle" data-i18n="requestTitleLabel">What should we ask?</label><input id="requestTitle" name="requestTitle" data-i18n-placeholder="requestTitlePlaceholder" placeholder="Lost item, event ticket, product stock" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  <div class="field"><label for="otherNote" data-i18n="otherNoteLabel">Request details</label><textarea id="otherNote" name="otherNote" data-i18n-placeholder="otherNotePlaceholder" placeholder="Share the exact question or outcome you need" data-required></textarea><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                 </div>
 
                 <div class="two-col">
@@ -1481,7 +1548,7 @@
             <p class="copy" data-i18n="supportCopy">If you change your mind within 10 minutes after payment, contact support through WhatsApp, WeChat, LINE, or KakaoTalk.</p>
             <div class="support-grid">
               <a class="support-chip" href="https://wa.me/" target="_blank" rel="noreferrer"><img alt="WhatsApp logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/WhatsApp.svg"><span>WhatsApp</span></a>
-              <a class="support-chip" href="https://www.wechat.com/" target="_blank" rel="noreferrer"><img alt="WeChat logo" src="https://static.cdnlogo.com/logos/w/79/wechat.svg"><span>WeChat</span></a>
+              <a class="support-chip wechat" href="https://www.wechat.com/" target="_blank" rel="noreferrer"><img alt="WeChat logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUjoJXtOYY-rGZj-o4qzcvlEvdgHazFcvrLQ&s"><span>WeChat</span></a>
               <a class="support-chip" href="https://line.me/" target="_blank" rel="noreferrer"><img alt="LINE logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/LINE_logo.svg"><span>LINE</span></a>
               <a class="support-chip" href="https://www.kakaocorp.com/page/service/service/KakaoTalk" target="_blank" rel="noreferrer"><img alt="KakaoTalk logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/KakaoTalk_logo.svg"><span>KakaoTalk</span></a>
             </div>
@@ -1493,7 +1560,7 @@
 
   <nav class="bottom-nav" aria-label="Main navigation">
     <div class="nav-inner">
-      <button class="nav-btn active" type="button" data-nav="intro"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12 12 5l8 7v7a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-7Z" stroke="currentColor" stroke-width="2.1"/></svg><span data-i18n="navIntro">Intro</span></button>
+      <button class="nav-btn active" type="button" data-nav="intro"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12 12 5l8 7v7a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-7Z" stroke="currentColor" stroke-width="2.1"/></svg><span data-i18n="navIntro">Home</span></button>
       <button class="nav-btn" type="button" data-nav="book"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12v16H6z" stroke="currentColor" stroke-width="2.1"/><path d="M9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span data-i18n="navBook">Book</span></button>
       <button class="nav-btn" type="button" data-nav="status"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5 10 17 19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M21 12a9 9 0 1 1-4.1-7.6" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span data-i18n="navStatus">Status</span></button>
     </div>
@@ -1605,10 +1672,10 @@
         miniSubmitted: "Request sent", miniPayment: "Payment", miniCalling: "Calling venue", miniDone: "Done", miniLive: "Live",
         priceKicker: "Pricing first", priceTitle: "Pick the call support you need.",
         planBasicName: "Basic Booking", planPlusName: "Plus Booking", planRushName: "Rush Booking",
-        planBasicDesc: "📞 One place, one request, up to five Korean call attempts every 10 minutes.",
-        planPlusDesc: "🗓️ Backup date or time coordination if the first choice is full.",
-        planRushDesc: "⚡ Priority handling for same-day restaurant, beauty, clinic, or special requests.",
-        planBasicShort: "1 place, 5 call attempts, every 10 minutes.", planPlusShort: "Backup time/date coordination included.", planRushShort: "Priority same-day handling when available.",
+        planBasicDesc: "📞 One place, one request, up to five Korean call attempts every 10 minutes",
+        planPlusDesc: "🗓️ Backup date or time coordination if the first choice is full",
+        planRushDesc: "⚡ Priority handling for same-day restaurant, beauty, clinic, or special requests",
+        planBasicShort: "1 place, 5 call attempts, every 10 minutes", planPlusShort: "Backup date/time plus Basic included", planRushShort: "Same-day priority plus Plus included",
         tagAttempts: "5 attempts", tagInterval: "10 min interval", tagBackup: "Backup options", tagPopular: "Most popular", tagPriority: "Priority", tagSameDay: "Same day",
         howKicker: "How it works", howTitle: "Three steps, no Korean phone needed.",
         step1Title: "Choose a plan and type", step1Desc: "Start with the price, then select restaurant, beauty, clinic, or other.",
@@ -1625,10 +1692,13 @@
         continueDetails: "Continue to details", stepDetailTitle: "Reservation details", stepDetailCopy: "Preferred and backup dates cannot be in the past.",
         peopleLabel: "People", reservationNameLabel: "Name for booking", date1Label: "Preferred date", time1Label: "Preferred time",
         date2Label: "Backup date", time2Label: "Backup time", noteLabel: "Requests to tell the venue",
-        notePlaceholder: "Window seat if possible. Please check deposit and cancellation policy.",
+        datePlaceholder: "YYYY-MM-DD", birthDatePlaceholder: "YYYY-MM-DD", reservationNamePlaceholder: "John",
+        notePlaceholder: "Window seat if possible, please check deposit and cancellation policy",
         fullNameLabel: "Full name as shown on passport", passportNoLabel: "Passport number", birthDateLabel: "Date of birth", genderLabel: "Gender",
         selectOne: "Select", genderFemale: "Female", genderMale: "Male", genderOther: "Other", procedureNameLabel: "Needed treatment name", symptomsLabel: "Symptoms or request",
+        procedureNamePlaceholder: "Skin consultation, haircut", symptomsPlaceholder: "Describe symptoms or the treatment you want",
         requestTitleLabel: "What should we ask?", otherNoteLabel: "Request details",
+        requestTitlePlaceholder: "Lost item, event ticket, product stock", otherNotePlaceholder: "Share the exact question or outcome you need",
         messengerLabel: "Messenger", messengerIdLabel: "Messenger ID or number", back: "Back", checkout: "Checkout",
         statusKicker: "My booking", statusTitle: "Check your Kall request.", lookupTitle: "Find by booking number", lookupCopy: "Enter your Kall number to show the saved request details below.", lookupBtn: "Check",
         emptyTitle: "No booking yet", emptyCopy: "Make a request first. After checkout, your Kall booking number will appear here.", startBooking: "Start booking",
@@ -1636,7 +1706,7 @@
         tlRequest: "Request submitted", tlRequestSub: "Tap to review submitted details", tlPayment: "Payment",
         tlQueue: "Waiting for call", tlQueueSub: "Kall will call during Korean business hours", tlResult: "Result update", tlResultSub: "Confirmed, full, no answer, or backup needed", soon: "Soon", next: "Next",
         supportTitle: "Want to change something?", supportCopy: "If you change your mind within 10 minutes after payment, contact support through WhatsApp, WeChat, LINE, or KakaoTalk.",
-        navIntro: "Intro", navBook: "Book", navStatus: "Status", paymentTitle: "Complete payment", paymentSummaryPlan: "Plan", paymentSummaryPlace: "Place",
+        navIntro: "Home", navBook: "Book", navStatus: "Status", paymentTitle: "Complete payment", paymentSummaryPlan: "Plan", paymentSummaryPlace: "Place",
         policy1: "I understand Kall provides call support, not a guaranteed reservation.", policy2: "Please ask me before confirming any deposit, cancellation fee, or major change.",
         payNow: "Pay and get booking number", requiredHelp: "Required", dateHelp: "Choose today or a future date.",
         toastRequired: "Please complete the required fields.", toastDate: "Preferred and backup dates cannot be in the past.", toastPolicy: "Please agree to both payment confirmations.", toastCreated: "Booking number created.", toastCopied: "Booking number copied.", toastNotFound: "No booking found on this device.",
@@ -1648,45 +1718,48 @@
         languageTitle: "언어 선택",
         languageDesc: "국기를 선택해 계속하세요.",
         startApp: "Kall 시작하기",
-        heroTitle: "한국 전화 예약이 필요하신가요?",
-        heroLead: "장소, 시간, 필요한 정보를 알려주세요. Kall이 한국어로 전화하고 결과를 메신저로 보내드립니다.",
+        heroTitle: "한국 전화 예약, Kall이 대신 챙겨드릴게요",
+        heroLead: "장소와 시간만 알려주세요. Kall이 한국어로 확인하고 결과는 쓰던 메신저로 바로 보내드려요.",
         ctaBook: "예약 요청하기", ctaTrack: "예약 조회", chipConfirmed: "정보 접수", screenBadge: "전화 중",
         screenTitle: "서울 저녁 예약", screenText: "5월 12일 · 오후 7:30 · 2명 · 차선 시간 준비",
         miniSubmitted: "요청 접수", miniPayment: "결제", miniCalling: "가게 전화", miniDone: "완료", miniLive: "진행 중",
-        priceKicker: "가격 먼저", priceTitle: "필요한 전화 지원을 선택하세요.",
+        priceKicker: "가격 먼저 확인", priceTitle: "필요한 만큼만 가볍게 선택하세요.",
         planBasicName: "베이직 예약", planPlusName: "플러스 예약", planRushName: "러시 예약",
-        planBasicDesc: "📞 한 곳, 예약 요청 1건, 10분 간격 최대 5회 전화.",
-        planPlusDesc: "🗓️ 첫 희망 시간이 어려울 때 차선 날짜나 시간 조율 포함.",
-        planRushDesc: "⚡ 당일 식당, 뷰티, 클리닉, 기타 요청 우선 처리.",
-        planBasicShort: "1곳, 10분 간격 최대 5회 전화.", planPlusShort: "차선 날짜/시간 조율 포함.", planRushShort: "가능 시 당일 우선 처리.",
+        planBasicDesc: "📞 한 곳, 예약 요청 1건, 10분 간격 최대 5회 전화",
+        planPlusDesc: "🗓️ 첫 시간이 어렵다면 차선 날짜와 시간까지 자연스럽게 조율",
+        planRushDesc: "⚡ 오늘 꼭 필요하면 가능한 범위에서 먼저 챙겨드려요",
+        planBasicShort: "1곳, 10분 간격 최대 5회 전화", planPlusShort: "차선 날짜/시간 조율 + 베이직 포함", planRushShort: "당일 우선 처리 + 플러스 포함",
         tagAttempts: "5회 전화", tagInterval: "10분 간격", tagBackup: "차선 옵션", tagPopular: "인기", tagPriority: "우선 처리", tagSameDay: "당일",
-        howKicker: "이용 방법", howTitle: "한국 전화번호 없이 3단계로 끝납니다.",
-        step1Title: "플랜과 유형 선택", step1Desc: "가격을 먼저 보고 식당, 뷰티, 클리닉, 기타를 선택하세요.",
-        step2Title: "필수 정보 입력", step2Desc: "과거 날짜는 선택할 수 없고 필수값이 비면 다음 단계로 갈 수 없습니다.",
-        step3Title: "결제 및 조회", step3Desc: "예약 번호, 접수 팝업, 종이 영수증 팝업을 확인하세요.",
-        messengerKicker: "메신저 알림", messengerTitle: "자주 쓰는 메신저로 진행 상황을 받아보세요.",
-        waDesc: "글로벌 업데이트", wechatDesc: "중국 여행자", lineDesc: "일본/대만 여행자", kakaoDesc: "한국 체류에 편리",
-        bookKicker: "예약 요청", bookTitle: "가격 먼저, 그다음 정보.", bookCopy: "필수 입력이 완료되어야 다음 단계로 넘어갑니다.",
+        howKicker: "이용 방법", howTitle: "한국 전화번호 없어도 3단계면 충분해요.",
+        step1Title: "플랜과 유형 고르기", step1Desc: "가격 먼저 확인하고 식당, 뷰티, 클리닉, 기타 중 필요한 걸 선택하세요.",
+        step2Title: "필요 정보만 채우기", step2Desc: "장소와 날짜처럼 꼭 필요한 정보만 담으면 다음 단계로 넘어가요.",
+        step3Title: "결제하고 바로 조회", step3Desc: "예약 번호로 접수 내용과 진행 상황을 편하게 확인하세요.",
+        messengerKicker: "메신저 알림", messengerTitle: "쓰던 메신저로 진행 상황을 편하게 받아보세요.",
+        waDesc: "해외에서도 편하게", wechatDesc: "중국권 여행자에게", lineDesc: "일본/대만 여행자에게", kakaoDesc: "국내 일정에 편리",
+        bookKicker: "예약 요청", bookTitle: "가격 확인하고, 필요한 정보만 쏙.", bookCopy: "필수 정보가 채워지면 다음 단계로 바로 넘어갈 수 있어요.",
         sumPlan: "플랜", sumType: "유형", sumPlace: "장소", sumTime: "시간", paymentSummaryTotal: "총액",
-        stepPlanTitle: "플랜과 서비스 유형 선택", stepPlanCopy: "선택한 언어 기준 통화로 가격이 표시됩니다.",
-        catRestaurant: "식당", catRestaurantDesc: "식사, 카페, 바", catBeauty: "뷰티", catBeautyDesc: "헤어, 피부, 스파", catClinic: "클리닉", catClinicDesc: "시술, 상담", catOther: "기타", catOtherDesc: "분실물, 이벤트, 재고",
-        continuePlace: "장소 입력", stepPlaceTitle: "가게 정보", stepPlaceCopy: "구글맵, 네이버지도, 인스타그램, 웹사이트 링크가 있으면 정확히 전화할 수 있습니다.",
+        stepPlanTitle: "플랜과 서비스 유형 고르기", stepPlanCopy: "선택한 언어의 통화 기준으로 가격을 보여드려요.",
+        catRestaurant: "식당", catRestaurantDesc: "식사, 카페, 술자리", catBeauty: "뷰티", catBeautyDesc: "헤어, 피부, 스파", catClinic: "클리닉", catClinicDesc: "시술, 상담, 검진", catOther: "기타", catOtherDesc: "분실물, 이벤트, 재고",
+        continuePlace: "장소 입력", stepPlaceTitle: "가게 정보", stepPlaceCopy: "구글맵, 네이버지도, 인스타그램, 웹사이트 링크가 있으면 더 정확하게 전화할 수 있어요.",
         placeNameLabel: "가게 이름", placeLinkLabel: "지도, 인스타그램, 웹사이트 링크", placePhoneLabel: "전화번호를 안다면 입력",
-        continueDetails: "예약 정보 입력", stepDetailTitle: "예약 상세 정보", stepDetailCopy: "희망일과 차선일은 과거 날짜를 선택할 수 없습니다.",
+        continueDetails: "예약 정보 입력", stepDetailTitle: "예약 상세 정보", stepDetailCopy: "희망일과 차선일은 오늘 이후 날짜로 골라주세요.",
         peopleLabel: "인원", reservationNameLabel: "예약자 이름", date1Label: "희망일", time1Label: "희망 시간",
         date2Label: "차선일", time2Label: "차선 시간", noteLabel: "가게에 전달할 요청",
-        notePlaceholder: "가능하면 창가 자리. 예약금과 취소 정책도 확인해 주세요.",
+        datePlaceholder: "연도-월-일", birthDatePlaceholder: "연도-월-일", reservationNamePlaceholder: "홍길동",
+        notePlaceholder: "가능하면 창가 자리, 예약금과 취소 정책도 확인해 주세요",
         fullNameLabel: "여권 기준 Full name", passportNoLabel: "여권 번호", birthDateLabel: "생년월일", genderLabel: "성별",
         selectOne: "선택", genderFemale: "여성", genderMale: "남성", genderOther: "기타", procedureNameLabel: "필요 시술 이름", symptomsLabel: "증상 또는 요청",
+        procedureNamePlaceholder: "피부 상담, 헤어컷", symptomsPlaceholder: "원하는 시술이나 증상을 적어주세요",
         requestTitleLabel: "무엇을 문의할까요?", otherNoteLabel: "요청 상세",
+        requestTitlePlaceholder: "분실물, 이벤트 티켓, 상품 재고", otherNotePlaceholder: "원하는 질문이나 필요한 결과를 자세히 적어주세요",
         messengerLabel: "메신저", messengerIdLabel: "메신저 ID 또는 번호", back: "뒤로", checkout: "결제하기",
-        statusKicker: "내 예약", statusTitle: "Kall 요청을 조회하세요.", lookupTitle: "예약 번호로 조회", lookupCopy: "Kall 예약 번호를 입력하면 아래에 접수 정보를 보여드립니다.", lookupBtn: "조회",
-        emptyTitle: "아직 예약이 없습니다", emptyCopy: "먼저 예약을 요청하세요. 결제 후 Kall 예약 번호가 여기에 표시됩니다.", startBooking: "예약 시작하기",
+        statusKicker: "내 예약", statusTitle: "Kall 요청을 바로 확인해보세요.", lookupTitle: "예약 번호로 조회", lookupCopy: "Kall 예약 번호를 입력하면 접수 정보를 아래에서 바로 확인할 수 있어요.", lookupBtn: "조회",
+        emptyTitle: "아직 예약이 없어요", emptyCopy: "먼저 예약을 요청해 주세요. 결제 후 Kall 예약 번호가 여기에 표시됩니다.", startBooking: "예약 시작하기",
         statusReceived: "접수 완료", copyBookingNo: "예약 번호 복사", viewReceipt: "영수증 보기",
         tlRequest: "요청 접수", tlRequestSub: "누르면 접수 정보를 확인합니다", tlPayment: "결제",
-        tlQueue: "전화 대기 중", tlQueueSub: "한국 영업시간에 맞춰 Kall이 전화합니다", tlResult: "결과 업데이트", tlResultSub: "확정, 만석, 미연결, 차선 필요 여부 안내", soon: "곧 진행", next: "다음",
-        supportTitle: "내용을 바꾸고 싶나요?", supportCopy: "결제 후 10분 이내 변심이 생기면 WhatsApp, WeChat, LINE, KakaoTalk으로 문의센터에 연결하세요.",
-        navIntro: "소개", navBook: "예약", navStatus: "조회", paymentTitle: "결제 완료하기", paymentSummaryPlan: "플랜", paymentSummaryPlace: "장소",
+        tlQueue: "전화 대기 중", tlQueueSub: "한국 영업시간에 맞춰 Kall이 전화할게요", tlResult: "결과 업데이트", tlResultSub: "확정, 만석, 미연결, 차선 필요 여부를 알려드려요", soon: "곧 진행", next: "다음",
+        supportTitle: "내용을 바꾸고 싶나요?", supportCopy: "결제 후 10분 이내라면 WhatsApp, WeChat, LINE, KakaoTalk으로 문의센터에 바로 연결하세요.",
+        navIntro: "홈", navBook: "예약", navStatus: "조회", paymentTitle: "결제 완료하기", paymentSummaryPlan: "플랜", paymentSummaryPlace: "장소",
         policy1: "Kall은 전화 지원 서비스이며 예약 성공을 보장하지 않는다는 점을 이해했습니다.", policy2: "예약금, 취소 수수료, 큰 변경은 확정 전 먼저 확인해 주세요.",
         payNow: "결제하고 예약 번호 받기", requiredHelp: "필수 입력", dateHelp: "오늘 또는 이후 날짜를 선택하세요.",
         toastRequired: "필수 정보를 입력해 주세요.", toastDate: "희망일과 차선일은 과거 날짜를 선택할 수 없습니다.", toastPolicy: "결제 확인 항목 2개에 동의해 주세요.", toastCreated: "예약 번호가 생성되었습니다.", toastCopied: "예약 번호를 복사했습니다.", toastNotFound: "이 기기에서 예약을 찾을 수 없습니다.",
@@ -1705,10 +1778,10 @@
         miniSubmitted: "依頼受付", miniPayment: "支払い", miniCalling: "店舗へ電話", miniDone: "完了", miniLive: "進行中",
         priceKicker: "料金から選択", priceTitle: "必要な電話サポートを選んでください。",
         planBasicName: "Basic予約", planPlusName: "Plus予約", planRushName: "Rush予約",
-        planBasicDesc: "📞 1店舗、1件の依頼、10分ごとに最大5回電話します。",
-        planPlusDesc: "🗓️ 第一希望が満席の場合、予備日程や時間の調整を含みます。",
-        planRushDesc: "⚡ 当日レストラン、美容、クリニック、特別依頼を優先対応。",
-        planBasicShort: "1店舗、10分ごとに最大5回電話。", planPlusShort: "予備日時の調整込み。", planRushShort: "可能な場合は当日優先対応。",
+        planBasicDesc: "📞 1店舗、1件の依頼、10分ごとに最大5回電話します",
+        planPlusDesc: "🗓️ 第一希望が満席の場合、予備日程や時間の調整を含みます",
+        planRushDesc: "⚡ 当日レストラン、美容、クリニック、特別依頼を優先対応",
+        planBasicShort: "1店舗、10分ごとに最大5回電話", planPlusShort: "予備日時調整 + Basic込み", planRushShort: "当日優先対応 + Plus込み",
         tagAttempts: "5回電話", tagInterval: "10分間隔", tagBackup: "予備オプション", tagPopular: "人気", tagPriority: "優先", tagSameDay: "当日",
         howKicker: "使い方", howTitle: "韓国の電話番号なしで3ステップ。",
         step1Title: "プランと種類を選択", step1Desc: "料金を確認して、レストラン、美容、クリニック、その他を選択。",
@@ -1725,10 +1798,13 @@
         continueDetails: "詳細入力へ", stepDetailTitle: "予約詳細", stepDetailCopy: "希望日と予備日は過去の日付を選択できません。",
         peopleLabel: "人数", reservationNameLabel: "予約名", date1Label: "希望日", time1Label: "希望時間",
         date2Label: "予備日", time2Label: "予備時間", noteLabel: "店舗へ伝える要望",
-        notePlaceholder: "可能であれば窓側席。予約金とキャンセル規定も確認してください。",
+        datePlaceholder: "年-月-日", birthDatePlaceholder: "年-月-日", reservationNamePlaceholder: "太郎",
+        notePlaceholder: "可能であれば窓側席、予約金とキャンセル規定も確認してください",
         fullNameLabel: "パスポート表記の氏名", passportNoLabel: "パスポート番号", birthDateLabel: "生年月日", genderLabel: "性別",
         selectOne: "選択", genderFemale: "女性", genderMale: "男性", genderOther: "その他", procedureNameLabel: "必要な施術名", symptomsLabel: "症状または要望",
+        procedureNamePlaceholder: "肌相談、ヘアカット", symptomsPlaceholder: "希望する施術や症状を入力してください",
         requestTitleLabel: "何を確認しますか？", otherNoteLabel: "依頼詳細",
+        requestTitlePlaceholder: "忘れ物、イベントチケット、商品の在庫", otherNotePlaceholder: "確認したい内容や希望する結果を入力してください",
         messengerLabel: "メッセンジャー", messengerIdLabel: "IDまたは番号", back: "戻る", checkout: "支払い",
         statusKicker: "予約確認", statusTitle: "Kallの依頼状況を確認。", lookupTitle: "予約番号で検索", lookupCopy: "Kall番号を入力すると、保存された依頼情報を下に表示します。", lookupBtn: "確認",
         emptyTitle: "予約はまだありません", emptyCopy: "先に依頼してください。支払い後、Kall予約番号がここに表示されます。", startBooking: "予約開始",
@@ -1736,7 +1812,7 @@
         tlRequest: "依頼受付", tlRequestSub: "タップして受付内容を確認", tlPayment: "支払い",
         tlQueue: "電話待ち", tlQueueSub: "韓国の営業時間にKallが電話します", tlResult: "結果更新", tlResultSub: "確定、満席、不通、予備案内など", soon: "まもなく", next: "次",
         supportTitle: "内容を変更しますか？", supportCopy: "支払い後10分以内なら、WhatsApp、WeChat、LINE、KakaoTalkからサポートへ連絡できます。",
-        navIntro: "紹介", navBook: "予約", navStatus: "状況", paymentTitle: "支払い完了", paymentSummaryPlan: "プラン", paymentSummaryPlace: "場所",
+        navIntro: "ホーム", navBook: "予約", navStatus: "状況", paymentTitle: "支払い完了", paymentSummaryPlan: "プラン", paymentSummaryPlace: "場所",
         policy1: "Kallは電話サポートであり、予約成功を保証しないことを理解しました。", policy2: "予約金、キャンセル料、大きな変更は確定前に確認してください。",
         payNow: "支払い、予約番号を取得", requiredHelp: "必須", dateHelp: "今日以降の日付を選択してください。",
         toastRequired: "必須項目を入力してください。", toastDate: "希望日と予備日は過去の日付を選択できません。", toastPolicy: "2つの確認に同意してください。", toastCreated: "予約番号を作成しました。", toastCopied: "予約番号をコピーしました。", toastNotFound: "この端末で予約が見つかりません。",
@@ -1755,10 +1831,10 @@
         miniSubmitted: "请求已提交", miniPayment: "付款", miniCalling: "联系商家", miniDone: "完成", miniLive: "进行中",
         priceKicker: "先看价格", priceTitle: "选择需要的电话支持。",
         planBasicName: "基础预约", planPlusName: "Plus 预约", planRushName: "加急预约",
-        planBasicDesc: "📞 一个地点，一次请求，每10分钟最多拨打5次。",
-        planPlusDesc: "🗓️ 首选时间不可用时，包含备用日期或时间协调。",
-        planRushDesc: "⚡ 当日餐厅、美容、诊所或特殊请求优先处理。",
-        planBasicShort: "1个地点，每10分钟最多5次电话。", planPlusShort: "包含备用日期/时间协调。", planRushShort: "可用时当日优先处理。",
+        planBasicDesc: "📞 一个地点，一次请求，每10分钟最多拨打5次",
+        planPlusDesc: "🗓️ 首选时间不可用时，包含备用日期或时间协调",
+        planRushDesc: "⚡ 当日餐厅、美容、诊所或特殊请求优先处理",
+        planBasicShort: "1个地点，每10分钟最多5次电话", planPlusShort: "备用日期/时间协调 + 含基础服务", planRushShort: "当日优先处理 + 含Plus服务",
         tagAttempts: "5次拨打", tagInterval: "10分钟间隔", tagBackup: "备用选项", tagPopular: "最受欢迎", tagPriority: "优先", tagSameDay: "当日",
         howKicker: "使用方式", howTitle: "三步完成，不需要韩国手机号。",
         step1Title: "选择套餐和类型", step1Desc: "先看价格，再选择餐厅、美容、诊所或其他。",
@@ -1775,10 +1851,13 @@
         continueDetails: "继续填写详情", stepDetailTitle: "预约详情", stepDetailCopy: "首选日和备用日不能选择过去日期。",
         peopleLabel: "人数", reservationNameLabel: "预约姓名", date1Label: "首选日期", time1Label: "首选时间",
         date2Label: "备用日期", time2Label: "备用时间", noteLabel: "需要转告商家的要求",
-        notePlaceholder: "如果可以，请安排靠窗座位。请确认订金和取消政策。",
+        datePlaceholder: "年-月-日", birthDatePlaceholder: "年-月-日", reservationNamePlaceholder: "王伟",
+        notePlaceholder: "如果可以，请安排靠窗座位，也请确认订金和取消政策",
         fullNameLabel: "护照上的完整姓名", passportNoLabel: "护照号码", birthDateLabel: "出生日期", genderLabel: "性别",
         selectOne: "选择", genderFemale: "女性", genderMale: "男性", genderOther: "其他", procedureNameLabel: "需要的项目名称", symptomsLabel: "症状或要求",
+        procedureNamePlaceholder: "皮肤咨询、剪发", symptomsPlaceholder: "请填写想做的项目或症状",
         requestTitleLabel: "需要我们询问什么？", otherNoteLabel: "请求详情",
+        requestTitlePlaceholder: "失物、活动票、商品库存", otherNotePlaceholder: "请填写想确认的问题或需要的结果",
         messengerLabel: "聊天软件", messengerIdLabel: "ID 或号码", back: "返回", checkout: "结账",
         statusKicker: "我的预约", statusTitle: "查看 Kall 请求。", lookupTitle: "用预约编号查询", lookupCopy: "输入 Kall 编号后，下方会显示保存的请求信息。", lookupBtn: "查询",
         emptyTitle: "还没有预约", emptyCopy: "请先提交请求。付款后，你的 Kall 预约编号会显示在这里。", startBooking: "开始预约",
@@ -1786,7 +1865,7 @@
         tlRequest: "请求已接收", tlRequestSub: "点击查看提交信息", tlPayment: "付款",
         tlQueue: "等待拨打电话", tlQueueSub: "Kall 会在韩国营业时间联系商家", tlResult: "结果更新", tlResultSub: "确认、满位、无人接听或需要备用方案", soon: "即将", next: "下一步",
         supportTitle: "想修改内容吗？", supportCopy: "付款后10分钟内如改变想法，可通过 WhatsApp、WeChat、LINE 或 KakaoTalk 联系客服。",
-        navIntro: "介绍", navBook: "预约", navStatus: "状态", paymentTitle: "完成付款", paymentSummaryPlan: "套餐", paymentSummaryPlace: "地点",
+        navIntro: "首页", navBook: "预约", navStatus: "状态", paymentTitle: "完成付款", paymentSummaryPlan: "套餐", paymentSummaryPlace: "地点",
         policy1: "我了解 Kall 提供电话沟通支持，但不保证一定预约成功。", policy2: "如有订金、取消费或重大变更，请在确认前先联系我。",
         payNow: "付款并获取预约编号", requiredHelp: "必填", dateHelp: "请选择今天或未来日期。",
         toastRequired: "请填写必填信息。", toastDate: "首选日和备用日不能选择过去日期。", toastPolicy: "请同意两个付款确认项。", toastCreated: "预约编号已生成。", toastCopied: "预约编号已复制。", toastNotFound: "此设备上未找到预约。",
@@ -1805,10 +1884,10 @@
         miniSubmitted: "Demande envoyée", miniPayment: "Paiement", miniCalling: "Appel du lieu", miniDone: "Terminé", miniLive: "En cours",
         priceKicker: "Prix d'abord", priceTitle: "Choisissez l'aide téléphonique nécessaire.",
         planBasicName: "Réservation Basic", planPlusName: "Réservation Plus", planRushName: "Réservation urgente",
-        planBasicDesc: "📞 Un lieu, une demande, jusqu'à cinq appels toutes les 10 minutes.",
-        planPlusDesc: "🗓️ Coordination d'une date ou heure de secours si le premier choix est complet.",
-        planRushDesc: "⚡ Traitement prioritaire pour restaurant, beauté, clinique ou demande spéciale le jour même.",
-        planBasicShort: "1 lieu, 5 appels toutes les 10 minutes.", planPlusShort: "Date/heure de secours incluse.", planRushShort: "Priorité le jour même si disponible.",
+        planBasicDesc: "📞 Un lieu, une demande, jusqu'à cinq appels toutes les 10 minutes",
+        planPlusDesc: "🗓️ Coordination d'une date ou heure de secours si le premier choix est complet",
+        planRushDesc: "⚡ Traitement prioritaire pour restaurant, beauté, clinique ou demande spéciale le jour même",
+        planBasicShort: "1 lieu, 5 appels toutes les 10 minutes", planPlusShort: "Date/heure de secours + Basic inclus", planRushShort: "Priorité le jour même + Plus inclus",
         tagAttempts: "5 appels", tagInterval: "Toutes les 10 min", tagBackup: "Options secours", tagPopular: "Populaire", tagPriority: "Prioritaire", tagSameDay: "Jour même",
         howKicker: "Comment ça marche", howTitle: "Trois étapes, sans numéro coréen.",
         step1Title: "Choisir formule et type", step1Desc: "Commencez par le prix, puis restaurant, beauté, clinique ou autre.",
@@ -1825,10 +1904,13 @@
         continueDetails: "Continuer", stepDetailTitle: "Détails de réservation", stepDetailCopy: "Les dates souhaitée et de secours ne peuvent pas être passées.",
         peopleLabel: "Personnes", reservationNameLabel: "Nom pour la réservation", date1Label: "Date souhaitée", time1Label: "Heure souhaitée",
         date2Label: "Date de secours", time2Label: "Heure de secours", noteLabel: "Demandes à transmettre",
-        notePlaceholder: "Table près de la fenêtre si possible. Merci de vérifier l'acompte et l'annulation.",
+        datePlaceholder: "AAAA-MM-JJ", birthDatePlaceholder: "AAAA-MM-JJ", reservationNamePlaceholder: "Marie",
+        notePlaceholder: "Table près de la fenêtre si possible, merci de vérifier l'acompte et l'annulation",
         fullNameLabel: "Nom complet sur le passeport", passportNoLabel: "Numéro de passeport", birthDateLabel: "Date de naissance", genderLabel: "Genre",
         selectOne: "Choisir", genderFemale: "Femme", genderMale: "Homme", genderOther: "Autre", procedureNameLabel: "Nom du soin demandé", symptomsLabel: "Symptômes ou demande",
+        procedureNamePlaceholder: "Consultation peau, coupe de cheveux", symptomsPlaceholder: "Décrivez le soin souhaité ou vos symptômes",
         requestTitleLabel: "Que devons-nous demander ?", otherNoteLabel: "Détails de la demande",
+        requestTitlePlaceholder: "Objet perdu, billet d'événement, stock produit", otherNotePlaceholder: "Indiquez la question ou le résultat attendu",
         messengerLabel: "Messagerie", messengerIdLabel: "ID ou numéro", back: "Retour", checkout: "Paiement",
         statusKicker: "Ma réservation", statusTitle: "Vérifiez votre demande Kall.", lookupTitle: "Rechercher par numéro", lookupCopy: "Entrez votre numéro Kall pour afficher les détails enregistrés ci-dessous.", lookupBtn: "Vérifier",
         emptyTitle: "Aucune réservation", emptyCopy: "Faites d'abord une demande. Après paiement, votre numéro Kall apparaîtra ici.", startBooking: "Commencer",
@@ -1836,7 +1918,7 @@
         tlRequest: "Demande envoyée", tlRequestSub: "Touchez pour revoir les détails", tlPayment: "Paiement",
         tlQueue: "En attente d'appel", tlQueueSub: "Kall appellera pendant les horaires d'ouverture en Corée", tlResult: "Mise à jour du résultat", tlResultSub: "Confirmé, complet, sans réponse ou secours requis", soon: "Bientôt", next: "Suivant",
         supportTitle: "Envie de modifier ?", supportCopy: "Si vous changez d'avis dans les 10 minutes après paiement, contactez le support via WhatsApp, WeChat, LINE ou KakaoTalk.",
-        navIntro: "Intro", navBook: "Réserver", navStatus: "Statut", paymentTitle: "Finaliser le paiement", paymentSummaryPlan: "Formule", paymentSummaryPlace: "Lieu",
+        navIntro: "Accueil", navBook: "Réserver", navStatus: "Statut", paymentTitle: "Finaliser le paiement", paymentSummaryPlan: "Formule", paymentSummaryPlace: "Lieu",
         policy1: "Je comprends que Kall fournit une aide par téléphone, sans garantir la réservation.", policy2: "Veuillez me demander avant de confirmer un acompte, des frais d'annulation ou un changement important.",
         payNow: "Payer et recevoir le numéro", requiredHelp: "Requis", dateHelp: "Choisissez aujourd'hui ou une date future.",
         toastRequired: "Veuillez compléter les champs requis.", toastDate: "Les dates ne peuvent pas être passées.", toastPolicy: "Veuillez accepter les deux confirmations.", toastCreated: "Numéro de réservation créé.", toastCopied: "Numéro copié.", toastNotFound: "Aucune réservation trouvée sur cet appareil.",
@@ -1854,7 +1936,15 @@
     };
     const $ = (selector) => document.querySelector(selector);
     const $$ = (selector) => Array.from(document.querySelectorAll(selector));
-    const t = (key) => (i18n[state.lang] && i18n[state.lang][key]) || i18n.en[key] || key;
+    function cleanCopy(value) {
+      if (typeof value !== "string") return value;
+      return value
+        .replace(/\.{3}/g, "")
+        .replace(/\.(?=\s|$)/g, "")
+        .replace(/。(?=\s|$)/g, "")
+        .trim();
+    }
+    const t = (key) => cleanCopy((i18n[state.lang] && i18n[state.lang][key]) || i18n.en[key] || key);
     const flowText = {
       en: {
         payment: "Payment",
@@ -1899,7 +1989,7 @@
         updated: "업데이트"
       }
     };
-    const ui = (key) => (flowText[state.lang] && flowText[state.lang][key]) || flowText.en[key] || key;
+    const ui = (key) => cleanCopy((flowText[state.lang] && flowText[state.lang][key]) || flowText.en[key] || key);
 
     function formatMoney(usd) {
       const config = currencies[state.lang] || currencies.en;
@@ -1921,6 +2011,13 @@
     function planLabel(name) {
       return `${planName(name)} · ${formatMoney(planPrices[name])}`;
     }
+    function selectedPlan() {
+      const plan = $("input[name='plan']:checked");
+      return plan ? plan.value : "Plus Booking";
+    }
+    function planHasBackup(plan = selectedPlan()) {
+      return plan === "Plus Booking" || plan === "Rush Booking";
+    }
 
     function applyLanguage(lang) {
       state.lang = lang;
@@ -1938,7 +2035,9 @@
       });
       $$(".lang-option").forEach((button) => button.classList.toggle("selected", button.dataset.lang === lang));
       updatePrices();
-      updateSummary();
+      refreshLocalizedDateInputs();
+      updateBackupFields();
+      setStep(state.step);
       renderBooking();
     }
 
@@ -1975,7 +2074,8 @@
       navigate("book");
       setStep(1);
       updateSummary();
-    }    function setStep(step) {
+    }
+    function setStep(step) {
       state.step = Math.max(1, Math.min(3, step));
       $$(".form-step").forEach((el) => el.classList.toggle("active", Number(el.dataset.step) === state.step));
       const percent = Math.round((state.step / 3) * 100);
@@ -1989,6 +2089,30 @@
       const d = new Date();
       d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
       return d.toISOString().slice(0, 10);
+    }
+    function isIsoDate(value) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return false;
+      const date = new Date(`${value}T00:00:00`);
+      return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+    }
+    function setDateInputMode(input) {
+      if (!input || !input.dataset.dateInput) return;
+      if (!input.value && document.activeElement !== input) {
+        input.type = "text";
+        input.placeholder = t(input.dataset.i18nPlaceholder || "datePlaceholder");
+      }
+    }
+    function refreshLocalizedDateInputs() {
+      $$("[data-date-input]").forEach(setDateInputMode);
+    }
+    function prepareDateInput(input) {
+      input.addEventListener("focus", () => {
+        input.type = "date";
+        if (input.id === "birthDate") input.max = todayISO();
+        else input.min = todayISO();
+      });
+      input.addEventListener("blur", () => setDateInputMode(input));
+      setDateInputMode(input);
     }
     function formatDate(value) {
       if (!value) return t("notAdded");
@@ -2005,8 +2129,24 @@
       return `${formatDate(date)} · ${formatTime(time) || "--:--"}`;
     }
 
+    function updateBackupFields() {
+      const group = $("[data-backup-fields]");
+      if (!group) return;
+      const active = planHasBackup();
+      group.hidden = !active;
+      group.querySelectorAll("[data-required]").forEach((field) => {
+        field.disabled = !active;
+        if (!active) {
+          field.value = "";
+          markField(field, false);
+          setDateInputMode(field);
+        }
+      });
+    }
+
     function getData() {
       const plan = $("input[name='plan']:checked");
+      const usesBackup = planHasBackup(plan.value);
       return {
         placeName: $("#placeName").value.trim(),
         placeLink: $("#placeLink").value.trim(),
@@ -2023,8 +2163,8 @@
         otherNote: $("#otherNote").value.trim(),
         date1: $("#date1").value,
         time1: $("#time1").value,
-        date2: $("#date2").value,
-        time2: $("#time2").value,
+        date2: usesBackup ? $("#date2").value : "",
+        time2: usesBackup ? $("#time2").value : "",
         note: $("#note").value.trim(),
         messenger: $("#messenger").value,
         messengerId: $("#messengerId").value.trim(),
@@ -2092,8 +2232,10 @@
       let valid = true;
       fieldsForCurrentStep().forEach((field) => {
         const missing = !String(field.value || "").trim();
-        const past = field.matches("[data-future-date]") && field.value && field.value < todayISO();
-        const invalid = missing || past;
+        const invalidDate = field.matches("[data-date-input]") && field.value && !isIsoDate(field.value);
+        const past = field.matches("[data-future-date]") && field.value && isIsoDate(field.value) && field.value < todayISO();
+        const futureBirthDate = field.id === "birthDate" && field.value && isIsoDate(field.value) && field.value > todayISO();
+        const invalid = missing || invalidDate || past || futureBirthDate;
         markField(field, invalid);
         if (invalid) valid = false;
       });
@@ -2171,7 +2313,7 @@
       const bookingRef = firebase.doc(firebase.db, BOOKINGS_COLLECTION, booking.bookingNo);
       const payload = sanitizeForFirestore({
         ...booking,
-        source: "index_v2",
+        source: "index_v4",
         firebasePath: `${BOOKINGS_COLLECTION}/${booking.bookingNo}`,
         updatedAtClient: new Date().toISOString()
       });
@@ -2419,9 +2561,11 @@
         [t("sumType"), categoryName(booking.category)],
         [t("sumPlace"), booking.placeName],
         [t("placeLinkLabel"), booking.placeLink],
-        [t("sumTime"), displayDateTime(booking.date1, booking.time1)],
-        [t("date2Label"), displayDateTime(booking.date2, booking.time2)]
+        [t("sumTime"), displayDateTime(booking.date1, booking.time1)]
       ];
+      if (planHasBackup(booking.plan) && (booking.date2 || booking.time2)) {
+        rows.push([t("date2Label"), displayDateTime(booking.date2, booking.time2)]);
+      }
       if (booking.category === "Restaurant") {
         rows.push([t("peopleLabel"), booking.people], [t("reservationNameLabel"), booking.reservationName], [t("noteLabel"), booking.note || t("notAdded")]);
       } else if (booking.category === "Beauty" || booking.category === "Clinic") {
@@ -2482,7 +2626,10 @@
       field.addEventListener("input", () => { markField(field, false); updateSummary(); });
       field.addEventListener("change", () => { markField(field, false); updateSummary(); });
     });
-    $$("input[name='plan']").forEach((field) => field.addEventListener("change", updateSummary));
+    $$("input[name='plan']").forEach((field) => field.addEventListener("change", () => {
+      updateBackupFields();
+      updateSummary();
+    }));
     $$(".pay-method").forEach((btn) => btn.addEventListener("click", () => { state.selectedPay = btn.dataset.pay; $$(".pay-method").forEach((item) => item.classList.remove("selected")); btn.classList.add("selected"); }));
     $("#checkoutBtn").addEventListener("click", openPayment);
     $("#closePayment").addEventListener("click", closePayment);
@@ -2494,10 +2641,7 @@
     $("#closeInfoModal").addEventListener("click", closeInfoModal);
     $("#infoModal").addEventListener("click", (e) => { if (e.target.id === "infoModal") closeInfoModal(); });
 
-    const minDate = todayISO();
-    $("#date1").min = minDate;
-    $("#date2").min = minDate;
-    $("#birthDate").max = minDate;
+    $$("[data-date-input]").forEach(prepareDateInput);
 
     try {
       const saved = JSON.parse(localStorage.getItem("kallLastBooking"));
