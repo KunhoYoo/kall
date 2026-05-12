@@ -480,6 +480,63 @@
     .messenger b { display: block; font-size: 11px; line-height: 1; font-weight: 920; }
     .messenger span { display: block; margin-top: 5px; color: var(--muted); font-size: 9.5px; line-height: 1.22; font-weight: 760; }
 
+    .notice-grid { display: grid; gap: 10px; }
+    .notice-card {
+      border-radius: 20px;
+      padding: 15px;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,.06);
+      box-shadow: 0 10px 24px rgba(15,23,42,.07);
+    }
+    .notice-card.refund {
+      background: linear-gradient(135deg, #fff 0%, #f7fbff 100%);
+      border-color: rgba(37,99,255,.16);
+    }
+    .notice-card h3 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.22;
+      font-weight: 940;
+    }
+    .notice-list {
+      display: grid;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .notice-list li {
+      position: relative;
+      padding-left: 18px;
+      color: var(--ink-2);
+      font-size: 12.5px;
+      line-height: 1.48;
+      font-weight: 720;
+    }
+    .notice-list li::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: .62em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563ff, #1fb6a5);
+      box-shadow: 0 0 0 4px rgba(37,99,255,.08);
+    }
+    .notice-fee {
+      margin-top: 12px;
+      border-radius: 16px;
+      padding: 11px 12px;
+      color: #1d4ed8;
+      background: rgba(37,99,255,.08);
+      border: 1px solid rgba(37,99,255,.12);
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 880;
+    }
+
     .book-shell { display: grid; gap: 14px; }
     .progress-card { padding: 15px; }
     .progress-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
@@ -1323,6 +1380,37 @@
           <div class="messenger"><div class="logo-box"><img alt="KakaoTalk logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/KakaoTalk_logo.svg"></div><div><b>KakaoTalk</b><span data-i18n="kakaoDesc">Useful in Korea</span></div></div>
         </div>
       </section>
+
+      <section class="section">
+        <div class="section-head"><div><div class="kicker" data-i18n="noticeKicker">Refunds and cautions</div><h2 data-i18n="noticeTitle">Please check before requesting.</h2></div></div>
+        <div class="notice-grid">
+          <article class="notice-card refund">
+            <h3 data-i18n="refundTitle">Refund policy</h3>
+            <ul class="notice-list">
+              <li data-i18n="refundRule1">After your request is received, contact support within 10 minutes if you want to cancel.</li>
+              <li data-i18n="refundRule2">After 10 minutes, call preparation and staff assignment begin, so payment is processed normally.</li>
+              <li data-i18n="refundRule3">After that window, refunds are not available regardless of the reservation result.</li>
+            </ul>
+          </article>
+          <article class="notice-card">
+            <h3 data-i18n="cautionTitle">Requests that need extra review</h3>
+            <ul class="notice-list">
+              <li data-i18n="cautionRule1">Restaurants with deposits or cancellation fees are not handled through the standard flow.</li>
+              <li data-i18n="cautionRule2">Omakase, Michelin-listed, and similar deposit-based restaurants require 1:1 support first.</li>
+              <li data-i18n="cautionRule3">If Kall pays the deposit on your behalf, a 10% handling fee is added to the deposit amount.</li>
+            </ul>
+            <div class="notice-fee" data-i18n="cautionExample">Example: a ₩200,000 deposit becomes ₩220,000 including the fee</div>
+          </article>
+          <article class="notice-card">
+            <h3 data-i18n="noShowTitle">No-show notice</h3>
+            <ul class="notice-list">
+              <li data-i18n="noShowRule1">If you cannot visit on the day of the reservation or the day before, contact Kall as soon as possible.</li>
+              <li data-i18n="noShowRule2">A no-show directly harms the business that held the seat or time for you.</li>
+              <li data-i18n="noShowRule3">If you need cancellation or changes, tell us early so we can call the business in time.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
     </section>
 
     <section class="view" id="view-book">
@@ -1683,6 +1771,10 @@
         step3Title: "Pay and track", step3Desc: "Get a booking number, request popup, and paper-style receipt.",
         messengerKicker: "Messenger updates", messengerTitle: "Receive updates where you already chat.",
         waDesc: "Global updates", wechatDesc: "China updates", lineDesc: "Japan and Taiwan", kakaoDesc: "Useful in Korea",
+        noticeKicker: "Refunds and cautions", noticeTitle: "Please check before requesting.",
+        refundTitle: "Refund policy", refundRule1: "After your request is received, contact support within 10 minutes if you want to cancel", refundRule2: "After 10 minutes, call preparation and staff assignment begin, so payment is processed normally", refundRule3: "After that window, refunds are not available regardless of the reservation result",
+        cautionTitle: "Requests that need extra review", cautionRule1: "Restaurants with deposits or cancellation fees are not handled through the standard flow", cautionRule2: "Omakase, Michelin-listed, and similar deposit-based restaurants require 1:1 support first", cautionRule3: "If Kall pays the deposit on your behalf, a 10% handling fee is added to the deposit amount", cautionExample: "Example: a ₩200,000 deposit becomes ₩220,000 including the fee",
+        noShowTitle: "No-show notice", noShowRule1: "If you cannot visit on the day of the reservation or the day before, contact Kall as soon as possible", noShowRule2: "A no-show directly harms the business that held the seat or time for you", noShowRule3: "If you need cancellation or changes, tell us early so we can call the business in time",
         bookKicker: "Reservation request", bookTitle: "Plan first, then details.", bookCopy: "Required fields must be complete before the next step.",
         sumPlan: "Plan", sumType: "Type", sumPlace: "Place", sumTime: "Time", paymentSummaryTotal: "Total",
         stepPlanTitle: "Choose plan and service type", stepPlanCopy: "Prices are shown in your selected language's currency.",
@@ -1736,6 +1828,10 @@
         step3Title: "결제하고 바로 조회", step3Desc: "예약 번호로 접수 내용과 진행 상황을 편하게 확인하세요.",
         messengerKicker: "메신저 알림", messengerTitle: "쓰던 메신저로 진행 상황을 편하게 받아보세요.",
         waDesc: "해외에서도 편하게", wechatDesc: "중국권 여행자에게", lineDesc: "일본/대만 여행자에게", kakaoDesc: "국내 일정에 편리",
+        noticeKicker: "환불규정 및 주의사항", noticeTitle: "요청 전 꼭 확인해 주세요",
+        refundTitle: "환불규정", refundRule1: "접수 후 10분 이내에 문의센터로 취소 의사를 보내주세요", refundRule2: "접수 후 10분이 지나면 통화 준비와 담당자 배정이 시작되어 정상 결제 처리됩니다", refundRule3: "10분 이후에는 예약 성공 여부와 관계없이 환불이 불가합니다",
+        cautionTitle: "진행이 어려운 요청", cautionRule1: "예약금이나 취소료가 있는 식당은 기본 진행이 어렵습니다", cautionRule2: "오마카세, 미슐랭 식당 등 보증금 정책이 있는 곳은 사전 1대1 문의가 필요합니다", cautionRule3: "예약금을 Kall이 대신 입금하는 경우 진행 가능하며 예약금에 10% 대행 수수료가 붙습니다", cautionExample: "예: 예약금 20만원이면 수수료 포함 22만원 결제",
+        noShowTitle: "노쇼 관련 안내", noShowRule1: "당일 또는 전날 방문이 어려워진 경우 반드시 Kall에 연락해 주세요", noShowRule2: "노쇼로 생기는 피해는 그대로 업체가 부담하게 됩니다", noShowRule3: "예약 취소나 변경이 필요하면 최대한 빨리 알려주세요",
         bookKicker: "예약 요청", bookTitle: "가격 확인하고, 필요한 정보만 쏙.", bookCopy: "필수 정보가 채워지면 다음 단계로 바로 넘어갈 수 있어요.",
         sumPlan: "플랜", sumType: "유형", sumPlace: "장소", sumTime: "시간", paymentSummaryTotal: "총액",
         stepPlanTitle: "플랜과 서비스 유형 고르기", stepPlanCopy: "선택한 언어의 통화 기준으로 가격을 보여드려요.",
@@ -1789,6 +1885,10 @@
         step3Title: "支払いと確認", step3Desc: "予約番号、受付ポップアップ、紙風の領収書を確認。",
         messengerKicker: "メッセンジャー通知", messengerTitle: "普段使うメッセンジャーで更新を受信。",
         waDesc: "グローバル更新", wechatDesc: "中国向け", lineDesc: "日本・台湾向け", kakaoDesc: "韓国滞在に便利",
+        noticeKicker: "返金規定と注意事項", noticeTitle: "依頼前に必ずご確認ください",
+        refundTitle: "返金規定", refundRule1: "受付後10分以内にキャンセル希望をサポートへご連絡ください", refundRule2: "10分を過ぎると通話準備と担当者手配が始まり、通常決済として処理されます", refundRule3: "10分後は予約結果に関係なく返金できません",
+        cautionTitle: "追加確認が必要な依頼", cautionRule1: "予約金やキャンセル料がある店舗は通常フローでは対応できません", cautionRule2: "おまかせ、ミシュラン掲載店など予約金が必要な店舗は事前に1対1問い合わせが必要です", cautionRule3: "Kallが予約金を代わりに入金する場合は進行可能で、予約金に10%の代行手数料が加算されます", cautionExample: "例: 予約金20万ウォンの場合、手数料込みで22万ウォン決済",
+        noShowTitle: "無断キャンセルについて", noShowRule1: "当日または前日に来店できなくなった場合は必ずKallへご連絡ください", noShowRule2: "無断キャンセルによる損害はそのまま店舗が負担します", noShowRule3: "キャンセルや変更が必要な場合はできるだけ早くお知らせください",
         bookKicker: "予約依頼", bookTitle: "料金を先に、詳細は後で。", bookCopy: "必須項目を完了すると次へ進めます。",
         sumPlan: "プラン", sumType: "種類", sumPlace: "場所", sumTime: "時間", paymentSummaryTotal: "合計",
         stepPlanTitle: "プランとサービス種類を選択", stepPlanCopy: "選択した言語の通貨で料金を表示します。",
@@ -1842,6 +1942,10 @@
         step3Title: "付款并查询", step3Desc: "获取预约编号，查看请求弹窗和纸质收据样式。",
         messengerKicker: "聊天软件更新", messengerTitle: "在常用聊天软件接收进度。",
         waDesc: "全球更新", wechatDesc: "中国旅客", lineDesc: "日本和台湾", kakaoDesc: "在韩国很方便",
+        noticeKicker: "退款规则和注意事项", noticeTitle: "提交前请务必确认",
+        refundTitle: "退款规则", refundRule1: "请求接收后，如需取消请在10分钟内联系支持", refundRule2: "超过10分钟后会开始电话准备和人员安排，并按正常付款处理", refundRule3: "超过10分钟后，无论预约结果如何均不可退款",
+        cautionTitle: "需要额外确认的请求", cautionRule1: "需要订金或取消费的餐厅不能走标准流程", cautionRule2: "Omakase、米其林餐厅等需要订金的场所，必须先进行1对1咨询", cautionRule3: "如由 Kall 代付订金，可继续处理，但订金金额需加收10%代办手续费", cautionExample: "例：订金20万韩元时，含手续费共需支付22万韩元",
+        noShowTitle: "关于No-show", noShowRule1: "如当天或前一天无法到店，请务必联系 Kall", noShowRule2: "No-show 造成的损失会直接由商家承担", noShowRule3: "如需取消或变更，请尽早告知我们",
         bookKicker: "预约请求", bookTitle: "先选价格，再填详情。", bookCopy: "必填项完成后才能进入下一步。",
         sumPlan: "套餐", sumType: "类型", sumPlace: "地点", sumTime: "时间", paymentSummaryTotal: "总计",
         stepPlanTitle: "选择套餐和服务类型", stepPlanCopy: "价格会按所选语言显示对应货币。",
@@ -1895,6 +1999,10 @@
         step3Title: "Payer et suivre", step3Desc: "Recevez un numéro, une popup de demande et un reçu papier.",
         messengerKicker: "Notifications", messengerTitle: "Recevez les mises à jour dans votre messagerie.",
         waDesc: "Mises à jour globales", wechatDesc: "Voyageurs chinois", lineDesc: "Japon et Taïwan", kakaoDesc: "Pratique en Corée",
+        noticeKicker: "Remboursements et précautions", noticeTitle: "À vérifier avant la demande",
+        refundTitle: "Règle de remboursement", refundRule1: "Après réception de la demande, contactez le support dans les 10 minutes si vous souhaitez annuler", refundRule2: "Après 10 minutes, la préparation de l'appel et l'affectation de l'équipe commencent, le paiement est donc traité normalement", refundRule3: "Après ce délai, aucun remboursement n'est possible quel que soit le résultat de la réservation",
+        cautionTitle: "Demandes nécessitant une vérification", cautionRule1: "Les restaurants avec acompte ou frais d'annulation ne passent pas par le flux standard", cautionRule2: "Les restaurants omakase, Michelin ou similaires avec acompte nécessitent d'abord un contact 1:1", cautionRule3: "Si Kall verse l'acompte pour vous, des frais de traitement de 10% sont ajoutés au montant de l'acompte", cautionExample: "Exemple : pour un acompte de ₩200,000, le paiement total avec frais est de ₩220,000",
+        noShowTitle: "Avis sur les no-shows", noShowRule1: "Si vous ne pouvez pas venir le jour même ou la veille, contactez impérativement Kall", noShowRule2: "Un no-show cause un préjudice direct à l'établissement qui a gardé le créneau", noShowRule3: "Si une annulation ou une modification est nécessaire, prévenez-nous le plus tôt possible",
         bookKicker: "Demande", bookTitle: "Le prix d'abord, les détails ensuite.", bookCopy: "Les champs requis doivent être complétés avant l'étape suivante.",
         sumPlan: "Formule", sumType: "Type", sumPlace: "Lieu", sumTime: "Heure", paymentSummaryTotal: "Total",
         stepPlanTitle: "Choisir formule et type de service", stepPlanCopy: "Les prix s'affichent dans la devise de votre langue.",
@@ -2313,7 +2421,7 @@
       const bookingRef = firebase.doc(firebase.db, BOOKINGS_COLLECTION, booking.bookingNo);
       const payload = sanitizeForFirestore({
         ...booking,
-        source: "index_v4",
+        source: "index_v5",
         firebasePath: `${BOOKINGS_COLLECTION}/${booking.bookingNo}`,
         updatedAtClient: new Date().toISOString()
       });
