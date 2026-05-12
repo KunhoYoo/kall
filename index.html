@@ -1691,37 +1691,37 @@
 
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyCcWWLiYxvKB8_9gaahW5fwyBavgO-AZQ8",
-      authDomain: "equipment-a6a8c.firebaseapp.com",
-      databaseURL: "https://equipment-a6a8c-default-rtdb.firebaseio.com",
-      projectId: "equipment-a6a8c",
-      storageBucket: "equipment-a6a8c.firebasestorage.app",
-      messagingSenderId: "816613863838",
-      appId: "1:816613863838:web:48dcd792f528e1c53a268f"
+      apiKey: "AIzaSyAryJmkrF3wWJRymP41pmjFpPLTYGzZXBg",
+      authDomain: "kall-yellowknife.firebaseapp.com",
+      projectId: "kall-yellowknife",
+      storageBucket: "kall-yellowknife.firebasestorage.app",
+      messagingSenderId: "988921015756",
+      appId: "1:988921015756:web:e991407b592a75008b4169",
+      measurementId: "G-H5ZV5KFW33"
     };
     const BOOKINGS_COLLECTION = "reservations";
     const firebase = {
       app: null,
       db: null,
-      ref: null,
-      get: null,
-      set: null,
+      doc: null,
+      getDoc: null,
+      setDoc: null,
       serverTimestamp: null,
       ready: null
     };
 
     async function initFirebase() {
       try {
-        const [{ initializeApp }, databaseModule] = await Promise.all([
+        const [{ initializeApp }, firestoreModule] = await Promise.all([
           import("https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js"),
-          import("https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js")
+          import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js")
         ]);
         firebase.app = initializeApp(firebaseConfig);
-        firebase.db = databaseModule.getDatabase(firebase.app);
-        firebase.ref = databaseModule.ref;
-        firebase.get = databaseModule.get;
-        firebase.set = databaseModule.set;
-        firebase.serverTimestamp = databaseModule.serverTimestamp;
+        firebase.db = firestoreModule.getFirestore(firebase.app);
+        firebase.doc = firestoreModule.doc;
+        firebase.getDoc = firestoreModule.getDoc;
+        firebase.setDoc = firestoreModule.setDoc;
+        firebase.serverTimestamp = firestoreModule.serverTimestamp;
 
         import("https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js")
           .then(({ getAnalytics, isSupported }) => isSupported().then((supported) => {
@@ -2070,8 +2070,8 @@
         resultLabel: "Result",
         savingBooking: "Saving...",
         checkingBooking: "Checking...",
-        firebaseSaveFailed: "Could not save to Firebase. Please check Realtime Database rules or network and try again.",
-        firebaseUnavailable: "Firebase Realtime Database is not ready yet. Please try again in a moment.",
+        firebaseSaveFailed: "Could not save to Firebase. Please check Firestore rules or network and try again.",
+        firebaseUnavailable: "Firebase is not ready yet. Please try again in a moment.",
         done: "Done",
         updated: "Updated"
       },
@@ -2091,8 +2091,8 @@
         resultLabel: "결과",
         savingBooking: "저장 중...",
         checkingBooking: "조회 중...",
-        firebaseSaveFailed: "Firebase 저장에 실패했습니다. Realtime Database 규칙이나 네트워크를 확인한 뒤 다시 시도해 주세요.",
-        firebaseUnavailable: "Firebase Realtime Database 준비 중입니다. 잠시 뒤 다시 시도해 주세요.",
+        firebaseSaveFailed: "Firebase 저장에 실패했습니다. Firestore 규칙이나 네트워크를 확인한 뒤 다시 시도해 주세요.",
+        firebaseUnavailable: "Firebase 준비 중입니다. 잠시 뒤 다시 시도해 주세요.",
         done: "완료",
         updated: "업데이트"
       }
@@ -2118,9 +2118,6 @@
     }
     function planLabel(name) {
       return `${planName(name)} · ${formatMoney(planPrices[name])}`;
-    }
-    function currencyCode() {
-      return { en: "USD", ko: "KRW", ja: "JPY", zh: "CNY", fr: "EUR" }[state.lang] || "USD";
     }
     function selectedPlan() {
       const plan = $("input[name='plan']:checked");
@@ -2203,10 +2200,8 @@
     }
     function isIsoDate(value) {
       if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return false;
-      const [year, month, day] = value.split("-").map(Number);
-      if (month < 1 || month > 12) return false;
-      const lastDay = new Date(year, month, 0).getDate();
-      return day >= 1 && day <= lastDay;
+      const date = new Date(`${value}T00:00:00`);
+      return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
     }
     function setDateInputMode(input) {
       if (!input || !input.dataset.dateInput) return;
@@ -2388,6 +2383,13 @@
       const rand = Math.floor(1000 + Math.random() * 9000);
       return `KA-${yy}${mm}${dd}-${rand}`;
     }
+    function readStoredBookings() {
+      try {
+        return JSON.parse(localStorage.getItem("kallBookings") || "{}") || {};
+      } catch (error) {
+        return {};
+      }
+    }
     function toLocalBooking(booking) {
       return JSON.parse(JSON.stringify(booking, (key, value) => {
         if (value && typeof value.toDate === "function") return value.toDate().toISOString();
@@ -2397,41 +2399,40 @@
         return value;
       }));
     }
-    function withTimeout(promise, timeoutMs, message) {
-      return Promise.race([
-        promise,
-        new Promise((resolve, reject) => {
-          setTimeout(() => reject(new Error(message)), timeoutMs);
-        })
-      ]);
+    function saveBookingLocal(booking) {
+      const safeBooking = toLocalBooking(booking);
+      const list = readStoredBookings();
+      list[safeBooking.bookingNo] = safeBooking;
+      localStorage.setItem("kallBookings", JSON.stringify(list));
+      localStorage.setItem("kallLastBooking", JSON.stringify(safeBooking));
     }
-    function sanitizeForFirebase(value) {
-      if (Array.isArray(value)) return value.map(sanitizeForFirebase).filter((item) => item !== undefined);
+    function sanitizeForFirestore(value) {
+      if (Array.isArray(value)) return value.map(sanitizeForFirestore).filter((item) => item !== undefined);
       if (value && typeof value === "object") {
         return Object.fromEntries(Object.entries(value)
           .filter(([, item]) => item !== undefined && typeof item !== "function")
-          .map(([key, item]) => [key, sanitizeForFirebase(item)]));
+          .map(([key, item]) => [key, sanitizeForFirestore(item)]));
       }
       return value;
     }
     async function saveBookingRemote(booking) {
-      await withTimeout(firebase.ready, 12000, ui("firebaseUnavailable"));
+      await firebase.ready;
       if (!firebase.db) throw new Error(ui("firebaseUnavailable"));
-      const bookingPath = `${BOOKINGS_COLLECTION}/${booking.bookingNo}`;
-      const bookingRef = firebase.ref(firebase.db, bookingPath);
-      const payload = sanitizeForFirebase({
+      const bookingRef = firebase.doc(firebase.db, BOOKINGS_COLLECTION, booking.bookingNo);
+      const payload = sanitizeForFirestore({
         ...booking,
         source: "index_v5",
-        firebasePath: bookingPath,
+        firebasePath: `${BOOKINGS_COLLECTION}/${booking.bookingNo}`,
         updatedAtClient: new Date().toISOString()
       });
       payload.updatedAtServer = firebase.serverTimestamp();
-      await withTimeout(firebase.set(bookingRef, payload), 12000, ui("firebaseSaveFailed"));
+      await firebase.setDoc(bookingRef, payload, { merge: true });
       return payload;
     }
     async function saveBooking(booking) {
       const remoteBooking = await saveBookingRemote(booking);
       const syncedBooking = { ...booking, firebaseSynced: true, firebasePath: remoteBooking.firebasePath };
+      saveBookingLocal(syncedBooking);
       return syncedBooking;
     }
     function setButtonBusy(button, busy, label) {
@@ -2457,17 +2458,9 @@
       const booking = {
         ...data,
         bookingNo: generateBookingNumber(),
-        requestedLanguage: state.lang,
-        currency: currencyCode(),
-        priceDisplay: formatMoney(data.priceUsd),
-        planDisplay: planName(data.plan),
-        categoryDisplay: categoryName(data.category),
-        backupEnabled: planHasBackup(data.plan),
         payMethod: state.selectedPay,
-        paymentMode: "test_no_real_payment",
-        paymentCaptured: false,
         requestStatus: "submitted",
-        paymentStatus: "test_saved",
+        paymentStatus: "paid",
         callStatus: "waiting",
         resultStatus: "pending",
         status: "waiting_call",
@@ -2635,11 +2628,11 @@
       }
     }
     async function fetchBookingRemote(bookingNo) {
-      await withTimeout(firebase.ready, 12000, ui("firebaseUnavailable"));
+      await firebase.ready;
       if (!firebase.db) return null;
-      const bookingRef = firebase.ref(firebase.db, `${BOOKINGS_COLLECTION}/${bookingNo}`);
-      const snapshot = await withTimeout(firebase.get(bookingRef), 12000, t("toastNotFound"));
-      return snapshot.exists() ? { ...snapshot.val(), bookingNo } : null;
+      const bookingRef = firebase.doc(firebase.db, BOOKINGS_COLLECTION, bookingNo);
+      const snapshot = await firebase.getDoc(bookingRef);
+      return snapshot.exists() ? { ...snapshot.data(), bookingNo: snapshot.id } : null;
     }
     async function lookupBooking() {
       const no = $("#lookupInput").value.trim().toUpperCase();
@@ -2647,16 +2640,25 @@
       const lookupButton = $("#lookupBtn");
       setButtonBusy(lookupButton, true, ui("checkingBooking"));
       try {
-        const foundBooking = await fetchBookingRemote(no);
+        const remoteBooking = await fetchBookingRemote(no);
+        const list = readStoredBookings();
+        const foundBooking = remoteBooking || list[no];
         if (!foundBooking) {
           toast(t("toastNotFound"));
           return;
         }
         state.booking = foundBooking;
+        saveBookingLocal(foundBooking);
         renderBooking();
       } catch (error) {
-        console.warn("Firebase lookup failed.", error);
-        toast(t("toastNotFound"));
+        console.warn("Firebase lookup failed. Falling back to local storage.", error);
+        const list = readStoredBookings();
+        if (list[no]) {
+          state.booking = list[no];
+          renderBooking();
+        } else {
+          toast(t("toastNotFound"));
+        }
       } finally {
         setButtonBusy(lookupButton, false);
       }
@@ -2749,8 +2751,10 @@
 
     $$("[data-date-input]").forEach(prepareDateInput);
 
-    localStorage.removeItem("kallLastBooking");
-    localStorage.removeItem("kallBookings");
+    try {
+      const saved = JSON.parse(localStorage.getItem("kallLastBooking"));
+      if (saved && saved.bookingNo) state.booking = saved;
+    } catch (error) {}
     applyLanguage(state.lang);
     updateCategoryFields();
     setStep(1);
