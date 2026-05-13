@@ -325,30 +325,116 @@
       overflow: hidden;
     }
 
-    .pricing { display: grid; gap: 10px; }
+    .pricing { display: grid; gap: 12px; }
     .price-card {
       position: relative;
       overflow: hidden;
-      border-radius: 20px;
-      padding: 16px;
+      display: grid;
+      gap: 12px;
+      border-radius: 18px;
+      padding: 15px;
       background: #fff;
       border: 1px solid rgba(17,24,39,.06);
       box-shadow: 0 10px 24px rgba(15,23,42,.07);
       cursor: pointer;
       transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
+    .price-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--plan-accent, var(--blue));
+    }
+    .price-card.basic { --plan-accent: #2563ff; }
+    .price-card.standard { --plan-accent: #13b981; }
+    .price-card.rush { --plan-accent: #f97316; }
+    .price-card.special { --plan-accent: #7c3aed; }
     .price-card.featured {
-      color: #fff;
-      background: linear-gradient(135deg, #2563ff 0%, #174bd7 62%, #103072 100%);
-      box-shadow: 0 18px 42px rgba(37,99,255,.27);
+      color: var(--ink);
+      background: linear-gradient(135deg, #f7fffb 0%, #fff 58%, #f2fbff 100%);
+      border-color: rgba(19,185,129,.32);
+      box-shadow: 0 18px 42px rgba(19,185,129,.16);
     }
     .price-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
     .price { font-size: 28px; line-height: 1; font-weight: 950; white-space: nowrap; }
-    .price-card p { margin: 11px 0 0; color: var(--ink-2); font-size: 13px; line-height: 1.5; font-weight: 670; }
-    .price-card.featured h3, .price-card.featured .price { color: #fff; text-shadow: 0 1px 10px rgba(2,6,23,.18); }
-    .price-card.featured p { color: rgba(255,255,255,.88); }
+    .price-card p { margin: 0; color: var(--ink-2); font-size: 13px; line-height: 1.48; font-weight: 680; }
+    .price-card.featured h3, .price-card.featured .price { color: var(--ink); text-shadow: none; }
+    .price-card.featured p { color: var(--ink-2); }
     .price-card:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(15,23,42,.10); }
     .price-card:focus-visible { outline: 3px solid rgba(37,99,255,.25); outline-offset: 3px; }
+    .plan-kicker {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      color: color-mix(in srgb, var(--plan-accent, var(--blue)) 78%, #111827);
+      background: color-mix(in srgb, var(--plan-accent, var(--blue)) 12%, #fff);
+      font-size: 10.5px;
+      line-height: 1;
+      font-weight: 930;
+    }
+    .plan-purpose {
+      color: #1f2937;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 820;
+    }
+    .plan-section-title {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 10.5px;
+      line-height: 1.1;
+      font-weight: 930;
+      text-transform: uppercase;
+    }
+    .plan-feature-list {
+      display: grid;
+      gap: 5px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .plan-feature-list li {
+      position: relative;
+      padding-left: 14px;
+      color: var(--ink-2);
+      font-size: 12.2px;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+    .plan-feature-list li::before {
+      content: "";
+      position: absolute;
+      top: .55em;
+      left: 1px;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--plan-accent, var(--blue));
+    }
+    .plan-example {
+      border-radius: 14px;
+      padding: 10px;
+      color: #334155;
+      background: #f8fafc;
+      border: 1px solid rgba(17,24,39,.06);
+      font-size: 12px;
+      line-height: 1.42;
+      font-weight: 720;
+    }
+    .plan-limit-note {
+      border-radius: 13px;
+      padding: 9px 10px;
+      color: #9f1239;
+      background: #fff1f2;
+      border: 1px solid rgba(225,29,72,.16);
+      font-size: 11.5px;
+      line-height: 1.38;
+      font-weight: 760;
+    }
     .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
     .tag {
       min-height: 29px;
@@ -361,7 +447,7 @@
       font-size: 11px;
       font-weight: 870;
     }
-    .featured .tag { color: #fff; background: rgba(255,255,255,.18); }
+    .featured .tag { color: #0f766e; background: rgba(19,185,129,.12); }
 
     .steps { display: grid; gap: 10px; }
     .step-card {
@@ -671,10 +757,10 @@
       grid-template-columns: 1fr auto;
       align-items: center;
       gap: 10px;
-      border-radius: 19px;
+      border-radius: 17px;
       border: 1px solid rgba(17,24,39,.08);
       background: #fff;
-      padding: 13px;
+      padding: 12px;
       box-shadow: 0 9px 22px rgba(15,23,42,.06);
       cursor: pointer;
     }
@@ -698,6 +784,28 @@
       font-weight: 950;
       white-space: nowrap;
     }
+    .time-control {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+    .ampm-toggle {
+      height: 50px;
+      min-width: 58px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      color: #1d4ed8;
+      background: var(--blue-soft);
+      border: 1px solid rgba(37,99,255,.18);
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 940;
+      white-space: nowrap;
+    }
+    .ampm-toggle:active { transform: translateY(1px) scale(.99); }
     .form-actions { display: grid; grid-template-columns: .75fr 1fr; gap: 10px; margin-top: 4px; }
     .form-actions.single { grid-template-columns: 1fr; }
     .form-actions .btn { min-height: 51px; }
@@ -1337,27 +1445,41 @@
               </div>
             </div>
           </div>
-          <div class="float-chip float-right"><span class="chip-symbol blue">$</span><span id="chipPrice">From $3.99</span></div>
+          <div class="float-chip float-right"><span class="chip-symbol blue">$</span><span id="chipPrice">From $6</span></div>
         </div>
       </div>
 
       <section class="section">
         <div class="section-head"><div><div class="kicker" data-i18n="priceKicker">Pricing first</div><h2 data-i18n="priceTitle">Pick the call support you need.</h2></div></div>
         <div class="pricing">
-          <article class="price-card" data-select-plan="Basic Booking" role="button" tabindex="0">
-            <div class="price-top"><h3 data-i18n="planBasicName">Basic Booking</h3><div class="price" data-price-plan="Basic Booking">$3.99</div></div>
-            <p data-i18n="planBasicDesc">📞 One place, one request, up to five Korean call attempts every 10 minutes</p>
+          <article class="price-card basic" data-select-plan="Basic" role="button" tabindex="0">
+            <div class="price-top"><div><span class="plan-kicker" data-i18n="planBasicKicker">Inquiry</span><h3 data-i18n="planBasicName">Basic</h3></div><div class="price" data-price-plan="Basic">$6</div></div>
+            <p class="plan-purpose" data-i18n="planBasicDesc">Simple phone checks when you do not need a reservation.</p>
+            <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planBasicFeature1">Call 1 place up to 5 times</li><li data-i18n="planBasicFeature2">Retry every 10 minutes</li><li data-i18n="planBasicFeature3">Check hours, menu, parking, stock, lost items, or availability</li></ul></div>
+            <div class="plan-example" data-i18n="planBasicExample">Example: "Are you open today?" "Is parking available?"</div>
             <div class="tag-row"><span class="tag" data-i18n="tagAttempts">5 attempts</span><span class="tag" data-i18n="tagInterval">10 min interval</span></div>
           </article>
-          <article class="price-card featured" data-select-plan="Plus Booking" role="button" tabindex="0">
-            <div class="price-top"><h3 data-i18n="planPlusName">Plus Booking</h3><div class="price" data-price-plan="Plus Booking">$7.99</div></div>
-            <p data-i18n="planPlusDesc">🗓️ Backup date or time coordination if the first choice is full</p>
-            <div class="tag-row"><span class="tag" data-i18n="tagBackup">Backup options</span><span class="tag" data-i18n="tagPopular">Most popular</span><span class="tag" data-i18n="tagAttempts">5 attempts</span><span class="tag" data-i18n="tagInterval">10 min interval</span></div>
+          <article class="price-card featured standard" data-select-plan="Standard" role="button" tabindex="0">
+            <div class="price-top"><div><span class="plan-kicker" data-i18n="planStandardKicker">Main service</span><h3 data-i18n="planStandardName">Standard</h3></div><div class="price" data-price-plan="Standard">$12</div></div>
+            <p class="plan-purpose" data-i18n="planStandardDesc">Reservation and schedule coordination for restaurants, clinics, beauty, and salons.</p>
+            <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planStandardFeature1">Basic included</li><li data-i18n="planStandardFeature2">Send name, people, date, time, and request details</li><li data-i18n="planStandardFeature3">Ask alternative dates or times if the first choice is unavailable</li></ul></div>
+            <div class="plan-example" data-i18n="planStandardExample">Example: "Please book a restaurant for 2 people at 7 PM."</div>
+            <div class="tag-row"><span class="tag" data-i18n="tagBackup">Backup options</span><span class="tag" data-i18n="tagPopular">Most popular</span><span class="tag" data-i18n="tagAttempts">5 attempts</span></div>
           </article>
-          <article class="price-card" data-select-plan="Rush Booking" role="button" tabindex="0">
-            <div class="price-top"><h3 data-i18n="planRushName">Rush Booking</h3><div class="price" data-price-plan="Rush Booking">$14.99</div></div>
-            <p data-i18n="planRushDesc">⚡ Priority handling for same-day restaurant, beauty, clinic, or special requests</p>
-            <div class="tag-row"><span class="tag" data-i18n="tagPriority">Priority</span><span class="tag" data-i18n="tagSameDay">Same day</span><span class="tag" data-i18n="tagBackup">Backup options</span><span class="tag" data-i18n="tagAttempts">5 attempts</span><span class="tag" data-i18n="tagInterval">10 min interval</span></div>
+          <article class="price-card rush" data-select-plan="Rush" role="button" tabindex="0">
+            <div class="price-top"><div><span class="plan-kicker" data-i18n="planRushKicker">Same-day</span><h3 data-i18n="planRushName">Rush</h3></div><div class="price" data-price-plan="Rush">$22</div></div>
+            <p class="plan-purpose" data-i18n="planRushDesc">Fast handling for urgent requests needed today.</p>
+            <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planRushFeature1">Standard included</li><li data-i18n="planRushFeature2">Handled within 2 hours after payment confirmation</li><li data-i18n="planRushFeature3">Priority response for same-day booking or inquiry</li></ul></div>
+            <div class="plan-example" data-i18n="planRushExample">Example: "Please quickly check if a clinic appointment is possible today."</div>
+            <div class="tag-row"><span class="tag" data-i18n="tagPriority">Priority</span><span class="tag" data-i18n="tagSameDay">Same day</span><span class="tag" data-i18n="tagFastResult">Fast result</span></div>
+          </article>
+          <article class="price-card special" data-select-plan="Special" role="button" tabindex="0">
+            <div class="price-top"><div><span class="plan-kicker" data-i18n="planSpecialKicker">10-minute start</span><h3 data-i18n="planSpecialName">Special</h3></div><div class="price" data-price-plan="Special">$40</div></div>
+            <p class="plan-purpose" data-i18n="planSpecialDesc">Top-priority start for truly time-sensitive calls.</p>
+            <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planSpecialFeature1">Rush included</li><li data-i18n="planSpecialFeature2">Priority handling starts within 10 minutes after payment confirmation</li><li data-i18n="planSpecialFeature3">Airport pickup, last-minute booking, hospital appointment inquiry, or travel schedule issue checks</li></ul></div>
+            <div class="plan-example" data-i18n="planSpecialExample">Example: "Please contact the airport pickup driver right now."</div>
+            <div class="plan-limit-note" data-i18n="planSpecialLimit">Emergency medical, police, or legal issues are not handled. Clinic support is limited to appointment or basic inquiries.</div>
+            <div class="tag-row"><span class="tag" data-i18n="tagTopPriority">Top priority</span><span class="tag" data-i18n="tagTenMinute">10 min start</span><span class="tag" data-i18n="tagTravel">Travel support</span></div>
           </article>
         </div>
       </section>
@@ -1421,7 +1543,7 @@
             <div class="progress-top"><span class="progress-title" id="stepLabel">Step 1 of 3</span><span class="progress-percent" id="progressLabel">33%</span></div>
             <div class="progress-line"><div class="progress-fill" id="progressFill"></div></div>
             <div class="summary" style="margin-top:14px;">
-              <div class="summary-row"><span data-i18n="sumPlan">Plan</span><b id="sumPlan">Plus Booking · $7.99</b></div>
+              <div class="summary-row"><span data-i18n="sumPlan">Plan</span><b id="sumPlan">Standard · $12</b></div>
               <div class="summary-row"><span data-i18n="sumType">Type</span><b id="sumType">Restaurant</b></div>
               <div class="summary-row"><span data-i18n="sumPlace">Place</span><b id="sumPlace">Not added</b></div>
               <div class="summary-row"><span data-i18n="sumTime">Time</span><b id="sumTime">Not added</b></div>
@@ -1434,9 +1556,10 @@
                 <h2 data-i18n="stepPlanTitle">Choose plan and service type</h2>
                 <p class="copy" data-i18n="stepPlanCopy">Prices are shown in your selected language's currency.</p>
                 <div class="plan-options">
-                  <label class="plan-option"><span><b data-plan-label="Basic Booking">Basic Booking · $3.99</b><span data-i18n="planBasicShort">1 place, 5 call attempts, every 10 minutes</span></span><span class="plan-price-pill" data-price-plan="Basic Booking">$3.99</span><input type="radio" name="plan" value="Basic Booking" data-price-usd="3.99"></label>
-                  <label class="plan-option"><span><b data-plan-label="Plus Booking">Plus Booking · $7.99</b><span data-i18n="planPlusShort">Backup date/time plus Basic included</span></span><span class="plan-price-pill" data-price-plan="Plus Booking">$7.99</span><input type="radio" name="plan" value="Plus Booking" data-price-usd="7.99" checked></label>
-                  <label class="plan-option"><span><b data-plan-label="Rush Booking">Rush Booking · $14.99</b><span data-i18n="planRushShort">Same-day priority plus Plus included</span></span><span class="plan-price-pill" data-price-plan="Rush Booking">$14.99</span><input type="radio" name="plan" value="Rush Booking" data-price-usd="14.99"></label>
+                  <label class="plan-option"><span><b data-plan-label="Basic">Basic · $6</b><span data-i18n="planBasicShort">Simple inquiry, 1 place, up to 5 call attempts</span></span><span class="plan-price-pill" data-price-plan="Basic">$6</span><input type="radio" name="plan" value="Basic" data-price-usd="6"></label>
+                  <label class="plan-option"><span><b data-plan-label="Standard">Standard · $12</b><span data-i18n="planStandardShort">Reservation request plus alternative time coordination</span></span><span class="plan-price-pill" data-price-plan="Standard">$12</span><input type="radio" name="plan" value="Standard" data-price-usd="12" checked></label>
+                  <label class="plan-option"><span><b data-plan-label="Rush">Rush · $22</b><span data-i18n="planRushShort">Same-day priority, handled within 2 hours</span></span><span class="plan-price-pill" data-price-plan="Rush">$22</span><input type="radio" name="plan" value="Rush" data-price-usd="22"></label>
+                  <label class="plan-option"><span><b data-plan-label="Special">Special · $40</b><span data-i18n="planSpecialShort">10-minute priority start for urgent calls</span></span><span class="plan-price-pill" data-price-plan="Special">$40</span><input type="radio" name="plan" value="Special" data-price-usd="40"></label>
                 </div>
                 <div class="choice-grid" aria-label="Service type">
                   <button class="choice selected" type="button" data-category="Restaurant">
@@ -1473,11 +1596,11 @@
                 <p class="copy" data-i18n="stepDetailCopy">Preferred and backup dates cannot be in the past.</p>
                 <div class="two-col">
                   <div class="field"><label for="date1" data-i18n="date1Label">Preferred date</label><input id="date1" name="date1" type="text" inputmode="numeric" data-date-input data-required data-future-date data-i18n-placeholder="datePlaceholder" placeholder="YYYY-MM-DD"><span class="field-help" data-i18n="dateHelp">Choose today or a future date</span></div>
-                  <div class="field"><label for="time1" data-i18n="time1Label">Preferred time</label><input id="time1" name="time1" type="time" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  <div class="field"><label for="time1" data-i18n="time1Label">Preferred time</label><div class="time-control"><button class="ampm-toggle" type="button" data-time-toggle="time1">PM</button><input id="time1" name="time1" type="time" value="13:00" data-default-time="13:00" data-required></div><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                 </div>
                 <div class="two-col" data-backup-fields>
                   <div class="field"><label for="date2" data-i18n="date2Label">Backup date</label><input id="date2" name="date2" type="text" inputmode="numeric" data-date-input data-required data-future-date data-i18n-placeholder="datePlaceholder" placeholder="YYYY-MM-DD"><span class="field-help" data-i18n="dateHelp">Choose today or a future date</span></div>
-                  <div class="field"><label for="time2" data-i18n="time2Label">Backup time</label><input id="time2" name="time2" type="time" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                  <div class="field"><label for="time2" data-i18n="time2Label">Backup time</label><div class="time-control"><button class="ampm-toggle" type="button" data-time-toggle="time2">PM</button><input id="time2" name="time2" type="time" value="14:00" data-default-time="14:00" data-required></div><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                 </div>
 
                 <div data-category-fields="Restaurant">
@@ -1515,7 +1638,7 @@
                   <div class="summary-row"><span data-i18n="sumPlace">Place</span><b id="payPlace">Not added</b></div>
                   <div class="summary-row"><span data-i18n="sumTime">Time</span><b id="payTime">Not added</b></div>
                   <div class="summary-row"><span data-i18n="messengerLabel">Messenger</span><b id="payMessenger">WhatsApp</b></div>
-                  <div class="summary-row"><span data-i18n="paymentSummaryTotal">Total</span><b id="payTotal">$7.99</b></div>
+                  <div class="summary-row"><span data-i18n="paymentSummaryTotal">Total</span><b id="payTotal">$12</b></div>
                 </div>
                 <div class="form-actions"><button class="btn secondary" type="button" data-prev-step data-i18n="back">Back</button><button class="btn dark" type="button" id="checkoutBtn" data-i18n="checkout">Checkout</button></div>
               </div>
@@ -1659,9 +1782,9 @@
       <div class="sheet-handle"></div>
       <div class="sheet-head"><h2 id="paymentTitle" data-i18n="paymentTitle">Complete payment</h2><button class="icon-btn" type="button" id="closePayment" aria-label="Close payment"><svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg></button></div>
       <div class="summary">
-        <div class="summary-row"><span data-i18n="paymentSummaryPlan">Plan</span><b id="sheetPlan">Plus Booking</b></div>
+        <div class="summary-row"><span data-i18n="paymentSummaryPlan">Plan</span><b id="sheetPlan">Standard</b></div>
         <div class="summary-row"><span data-i18n="paymentSummaryPlace">Place</span><b id="sheetPlace">Mongtan Seoul</b></div>
-        <div class="summary-row"><span data-i18n="paymentSummaryTotal">Total</span><b id="sheetTotal">$7.99</b></div>
+        <div class="summary-row"><span data-i18n="paymentSummaryTotal">Total</span><b id="sheetTotal">$12</b></div>
       </div>
       <div class="pay-methods">
         <button class="pay-method selected" type="button" data-pay="WeChat Pay"><div class="pay-logo"><img alt="WeChat Pay logo" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/WeChat_Pay.png"></div><b>WeChat Pay</b></button>
@@ -1691,37 +1814,37 @@
 
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyAryJmkrF3wWJRymP41pmjFpPLTYGzZXBg",
-      authDomain: "kall-yellowknife.firebaseapp.com",
-      projectId: "kall-yellowknife",
-      storageBucket: "kall-yellowknife.firebasestorage.app",
-      messagingSenderId: "988921015756",
-      appId: "1:988921015756:web:e991407b592a75008b4169",
-      measurementId: "G-H5ZV5KFW33"
+      apiKey: "",
+      authDomain: "",
+      databaseURL: "",
+      projectId: "",
+      storageBucket: "",
+      messagingSenderId: "",
+      appId: ""
     };
     const BOOKINGS_COLLECTION = "reservations";
     const firebase = {
       app: null,
       db: null,
-      doc: null,
-      getDoc: null,
-      setDoc: null,
+      ref: null,
+      get: null,
+      set: null,
       serverTimestamp: null,
       ready: null
     };
 
     async function initFirebase() {
       try {
-        const [{ initializeApp }, firestoreModule] = await Promise.all([
+        const [{ initializeApp }, databaseModule] = await Promise.all([
           import("https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js"),
-          import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js")
+          import("https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js")
         ]);
         firebase.app = initializeApp(firebaseConfig);
-        firebase.db = firestoreModule.getFirestore(firebase.app);
-        firebase.doc = firestoreModule.doc;
-        firebase.getDoc = firestoreModule.getDoc;
-        firebase.setDoc = firestoreModule.setDoc;
-        firebase.serverTimestamp = firestoreModule.serverTimestamp;
+        firebase.db = databaseModule.getDatabase(firebase.app);
+        firebase.ref = databaseModule.ref;
+        firebase.get = databaseModule.get;
+        firebase.set = databaseModule.set;
+        firebase.serverTimestamp = databaseModule.serverTimestamp;
 
         import("https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js")
           .then(({ getAnalytics, isSupported }) => isSupported().then((supported) => {
@@ -1735,16 +1858,24 @@
     firebase.ready = initFirebase();
 
     const planPrices = {
-      "Basic Booking": 3.99,
-      "Plus Booking": 7.99,
-      "Rush Booking": 14.99
+      Basic: 6,
+      Standard: 12,
+      Rush: 22,
+      Special: 40
+    };
+    const planAliases = {
+      "Basic Booking": "Basic",
+      "Plus Booking": "Standard",
+      "Standard Booking": "Standard",
+      "Rush Booking": "Rush",
+      "Special Booking": "Special"
     };
     const currencies = {
-      en: { prefix: "$", values: { 3.99: 3.99, 7.99: 7.99, 14.99: 14.99 }, decimals: 2 },
-      ko: { suffix: "원", values: { 3.99: 5900, 7.99: 11900, 14.99: 21900 }, decimals: 0 },
-      ja: { prefix: "¥", values: { 3.99: 599, 7.99: 1199, 14.99: 2199 }, decimals: 0 },
-      zh: { suffix: "元", values: { 3.99: 29.99, 7.99: 59.99, 14.99: 109.99 }, decimals: 2 },
-      fr: { prefix: "€", values: { 3.99: 3.99, 7.99: 7.99, 14.99: 14.99 }, decimals: 2 }
+      en: { prefix: "$", values: { 6: 6, 12: 12, 22: 22, 40: 40 }, decimals: 0 },
+      ko: { suffix: "\uC6D0", values: { 6: 8900, 12: 17900, 22: 32900, 40: 59900 }, decimals: 0 },
+      ja: { prefix: "\u00A5", values: { 6: 900, 12: 1800, 22: 3300, 40: 6000 }, decimals: 0 },
+      zh: { suffix: "\u5143", values: { 6: 43, 12: 86, 22: 158, 40: 288 }, decimals: 0 },
+      fr: { prefix: "\u20AC", values: { 6: 6, 12: 12, 22: 22, 40: 40 }, decimals: 0 }
     };
 
     const i18n = {
@@ -2035,6 +2166,130 @@
       }
     };
 
+    const planI18n = {
+      en: {
+        priceTitle: "Pick the call support you need.",
+        planIncludesTitle: "Includes",
+        planBasicName: "Basic", planStandardName: "Standard", planPlusName: "Standard", planRushName: "Rush", planSpecialName: "Special",
+        planBasicKicker: "Inquiry", planStandardKicker: "Main service", planRushKicker: "Same-day", planSpecialKicker: "10-minute start",
+        planBasicDesc: "Simple phone checks when you do not need a reservation.",
+        planStandardDesc: "Reservation and schedule coordination for restaurants, clinics, beauty, and salons.",
+        planRushDesc: "Fast handling for urgent requests needed today.",
+        planSpecialDesc: "Top-priority start for truly time-sensitive calls.",
+        planBasicFeature1: "Call 1 place up to 5 times", planBasicFeature2: "Retry every 10 minutes", planBasicFeature3: "Check hours, menu, parking, stock, lost items, or availability",
+        planStandardFeature1: "Basic included", planStandardFeature2: "Send name, people, date, time, and request details", planStandardFeature3: "Ask alternative dates or times if the first choice is unavailable",
+        planRushFeature1: "Standard included", planRushFeature2: "Handled within 2 hours after payment confirmation", planRushFeature3: "Priority response for same-day booking or inquiry",
+        planSpecialFeature1: "Rush included", planSpecialFeature2: "Priority handling starts within 10 minutes after payment confirmation", planSpecialFeature3: "Airport pickup, last-minute booking, hospital appointment inquiry, or travel schedule issue checks",
+        planBasicExample: "Example: \"Are you open today?\" \"Is parking available?\" \"Do you have this menu?\"",
+        planStandardExample: "Example: \"Please book a restaurant for 2 people at 7 PM.\"",
+        planRushExample: "Example: \"Please quickly check if a clinic appointment is possible today.\"",
+        planSpecialExample: "Example: \"Please contact the airport pickup driver right now.\"",
+        planSpecialLimit: "Emergency medical, police, or legal issues are not handled. Clinic support is limited to appointment or basic inquiries.",
+        planBasicShort: "Simple inquiry, 1 place, up to 5 call attempts", planStandardShort: "Reservation request plus alternative time coordination", planPlusShort: "Reservation request plus alternative time coordination", planRushShort: "Same-day priority, handled within 2 hours", planSpecialShort: "10-minute priority start for urgent calls",
+        tagFastResult: "Fast result", tagTopPriority: "Top priority", tagTenMinute: "10 min start", tagTravel: "Travel support",
+        step1Desc: "Choose from 4 plans, then select restaurant, beauty, clinic, or other.",
+        stepPlanTitle: "Choose one of 4 plans and service type", stepPlanCopy: "Basic is for simple inquiries. Standard, Rush, and Special support reservation coordination.",
+        timeAm: "AM", timePm: "PM"
+      },
+      ko: {
+        priceTitle: "필요한 전화 지원 플랜을 선택하세요.",
+        planIncludesTitle: "해주는 것",
+        planBasicName: "Basic", planStandardName: "Standard", planPlusName: "Standard", planRushName: "Rush", planSpecialName: "Special",
+        planBasicKicker: "단순 문의", planStandardKicker: "메인 예약", planRushKicker: "당일 긴급", planSpecialKicker: "10분 내 시작",
+        planBasicDesc: "고객이 원하는 게 예약이 아니라 단순 확인일 때 사용하는 서비스입니다.",
+        planStandardDesc: "예약 요청과 대체 날짜/시간 조율이 들어가는 메인 서비스입니다.",
+        planRushDesc: "오늘 일정 때문에 빨리 처리해야 할 때 쓰는 당일 긴급 요청 서비스입니다.",
+        planSpecialDesc: "진짜 급한 고객을 위한 10분 내 우선 처리 시작 서비스입니다.",
+        planBasicFeature1: "1개 장소에 전화", planBasicFeature2: "최대 5회, 10분 간격으로 재시도", planBasicFeature3: "영업시간, 메뉴, 주차, 재고, 분실물, 가능 여부 확인",
+        planStandardFeature1: "Basic 포함", planStandardFeature2: "고객 이름, 인원, 날짜, 시간, 요청사항 전달", planStandardFeature3: "희망 시간이 안 되면 대체 날짜/시간 확인",
+        planRushFeature1: "Standard 포함", planRushFeature2: "결제 확인 후 2시간 내 처리", planRushFeature3: "당일 예약/문의 우선 처리 및 빠른 결과 전달",
+        planSpecialFeature1: "Rush 포함", planSpecialFeature2: "결제 확인 후 10분 내 우선 처리 시작", planSpecialFeature3: "공항 픽업, 막판 예약, 병원 예약 문의, 여행 일정 문제 빠른 확인",
+        planBasicExample: "예시: \"오늘 영업하나요?\" \"주차 가능한가요?\" \"이 메뉴 있나요?\"",
+        planStandardExample: "예시: \"오늘 저녁 7시에 식당 2명 예약해주세요.\"",
+        planRushExample: "예시: \"오늘 병원 예약 가능한지 빨리 확인해주세요.\"",
+        planSpecialExample: "예시: \"공항 픽업 기사에게 지금 연락해주세요.\"",
+        planSpecialLimit: "응급 의료, 경찰, 법률 문제는 처리 대상이 아닙니다. 병원 관련은 예약/기본 문의까지만 가능합니다.",
+        planBasicShort: "단순 문의, 1곳, 최대 5회 전화", planStandardShort: "예약 요청 + 대체 날짜/시간 조율", planPlusShort: "예약 요청 + 대체 날짜/시간 조율", planRushShort: "당일 우선 처리, 2시간 내 처리", planSpecialShort: "긴급 요청 10분 내 우선 시작",
+        tagFastResult: "빠른 결과", tagTopPriority: "최우선", tagTenMinute: "10분 내 시작", tagTravel: "여행 지원",
+        step1Desc: "4개 플랜 중 하나를 고르고 식당, 뷰티, 병원, 기타 유형을 선택하세요.",
+        stepPlanTitle: "4개 플랜과 서비스 유형 선택", stepPlanCopy: "Basic은 단순 문의용입니다. Standard, Rush, Special은 예약 조율까지 지원합니다.",
+        timeAm: "오전", timePm: "오후"
+      },
+      ja: {
+        priceTitle: "必要な電話サポートを選んでください。",
+        planIncludesTitle: "含まれる内容",
+        planBasicName: "Basic", planStandardName: "Standard", planPlusName: "Standard", planRushName: "Rush", planSpecialName: "Special",
+        planBasicKicker: "問い合わせ", planStandardKicker: "予約調整", planRushKicker: "当日急ぎ", planSpecialKicker: "10分以内開始",
+        planBasicDesc: "予約ではなく、営業時間や在庫などを確認したい時のサービスです。",
+        planStandardDesc: "予約依頼と代替日時の調整を行う基本の予約サービスです。",
+        planRushDesc: "今日中に急いで確認や予約調整が必要な時のサービスです。",
+        planSpecialDesc: "本当に時間が限られている依頼を最優先で開始するサービスです。",
+        planBasicFeature1: "1か所に電話", planBasicFeature2: "最大5回、10分間隔で再試行", planBasicFeature3: "営業時間、メニュー、駐車場、在庫、忘れ物、可否を確認",
+        planStandardFeature1: "Basicを含む", planStandardFeature2: "名前、人数、日付、時間、要望を伝達", planStandardFeature3: "希望時間が不可の場合は代替日時を確認",
+        planRushFeature1: "Standardを含む", planRushFeature2: "支払い確認後2時間以内に対応", planRushFeature3: "当日の予約や問い合わせを優先対応",
+        planSpecialFeature1: "Rushを含む", planSpecialFeature2: "支払い確認後10分以内に優先対応開始", planSpecialFeature3: "空港送迎、直前予約、病院予約問い合わせ、旅行日程問題を急ぎ確認",
+        planBasicExample: "例:「今日は営業していますか？」「駐車できますか？」",
+        planStandardExample: "例:「今日19時に2名でレストランを予約してください。」",
+        planRushExample: "例:「今日病院予約が可能か急いで確認してください。」",
+        planSpecialExample: "例:「空港送迎ドライバーに今すぐ連絡してください。」",
+        planSpecialLimit: "緊急医療、警察、法律問題は対象外です。病院関連は予約または基本問い合わせのみ対応します。",
+        planBasicShort: "簡単な問い合わせ、1か所、最大5回電話", planStandardShort: "予約依頼 + 代替日時調整", planPlusShort: "予約依頼 + 代替日時調整", planRushShort: "当日優先、2時間以内対応", planSpecialShort: "急ぎの電話を10分以内に優先開始",
+        tagFastResult: "早い結果", tagTopPriority: "最優先", tagTenMinute: "10分開始", tagTravel: "旅行サポート",
+        step1Desc: "4つのプランから選び、レストラン、美容、クリニック、その他を選択します。",
+        stepPlanTitle: "4つのプランとサービス種別を選択", stepPlanCopy: "Basicは簡単な問い合わせ用です。Standard、Rush、Specialは予約調整まで対応します。",
+        timeAm: "AM", timePm: "PM"
+      },
+      zh: {
+        priceTitle: "选择你需要的电话协助。",
+        planIncludesTitle: "包含内容",
+        planBasicName: "Basic", planStandardName: "Standard", planPlusName: "Standard", planRushName: "Rush", planSpecialName: "Special",
+        planBasicKicker: "简单咨询", planStandardKicker: "主要预约", planRushKicker: "当天加急", planSpecialKicker: "10分钟内开始",
+        planBasicDesc: "不需要预约，只想确认营业、库存或可否时使用。",
+        planStandardDesc: "用于预约请求，并在首选时间不可用时协调替代时间。",
+        planRushDesc: "当天需要快速确认或预约时使用。",
+        planSpecialDesc: "为真正紧急的请求提供最高优先级开始处理。",
+        planBasicFeature1: "致电1个地点", planBasicFeature2: "最多5次，每10分钟重试", planBasicFeature3: "确认营业时间、菜单、停车、库存、遗失物或可否",
+        planStandardFeature1: "包含Basic", planStandardFeature2: "传达姓名、人数、日期、时间和要求", planStandardFeature3: "首选时间不行时确认替代日期/时间",
+        planRushFeature1: "包含Standard", planRushFeature2: "付款确认后2小时内处理", planRushFeature3: "当天预约或咨询优先处理",
+        planSpecialFeature1: "包含Rush", planSpecialFeature2: "付款确认后10分钟内优先开始", planSpecialFeature3: "机场接送、临时预约、医院预约咨询、旅行日程问题快速确认",
+        planBasicExample: "例：“今天营业吗？”“可以停车吗？”",
+        planStandardExample: "例：“请帮我预约今晚7点2人的餐厅。”",
+        planRushExample: "例：“请快速确认今天能否预约医院。”",
+        planSpecialExample: "例：“请现在联系机场接送司机。”",
+        planSpecialLimit: "不处理紧急医疗、警察或法律问题。医院相关仅限预约或基本咨询。",
+        planBasicShort: "简单咨询，1个地点，最多5次电话", planStandardShort: "预约请求 + 替代时间协调", planPlusShort: "预约请求 + 替代时间协调", planRushShort: "当天优先，2小时内处理", planSpecialShort: "紧急电话10分钟内优先开始",
+        tagFastResult: "快速结果", tagTopPriority: "最高优先", tagTenMinute: "10分钟开始", tagTravel: "旅行协助",
+        step1Desc: "从4个套餐中选择，然后选择餐厅、美容、诊所或其他类型。",
+        stepPlanTitle: "选择4个套餐之一和服务类型", stepPlanCopy: "Basic用于简单咨询。Standard、Rush、Special支持预约协调。",
+        timeAm: "AM", timePm: "PM"
+      },
+      fr: {
+        priceTitle: "Choisissez l'aide téléphonique nécessaire.",
+        planIncludesTitle: "Inclus",
+        planBasicName: "Basic", planStandardName: "Standard", planPlusName: "Standard", planRushName: "Rush", planSpecialName: "Special",
+        planBasicKicker: "Question simple", planStandardKicker: "Réservation", planRushKicker: "Urgent le jour même", planSpecialKicker: "Départ en 10 min",
+        planBasicDesc: "Pour vérifier une information quand vous n'avez pas besoin d'une réservation.",
+        planStandardDesc: "Pour demander une réservation et coordonner une autre date ou heure si besoin.",
+        planRushDesc: "Pour une demande urgente à traiter rapidement aujourd'hui.",
+        planSpecialDesc: "Démarrage prioritaire pour les appels vraiment sensibles au temps.",
+        planBasicFeature1: "Appel à 1 lieu", planBasicFeature2: "Jusqu'à 5 tentatives, toutes les 10 minutes", planBasicFeature3: "Horaires, menu, parking, stock, objet perdu ou disponibilité",
+        planStandardFeature1: "Basic inclus", planStandardFeature2: "Transmission du nom, nombre de personnes, date, heure et demandes", planStandardFeature3: "Vérification d'autres dates/heures si le premier choix est indisponible",
+        planRushFeature1: "Standard inclus", planRushFeature2: "Traitement sous 2 heures après confirmation du paiement", planRushFeature3: "Priorité pour réservation ou question le jour même",
+        planSpecialFeature1: "Rush inclus", planSpecialFeature2: "Démarrage prioritaire sous 10 minutes après paiement", planSpecialFeature3: "Pickup aéroport, réservation de dernière minute, clinique ou problème d'itinéraire",
+        planBasicExample: "Exemple : « Êtes-vous ouvert aujourd'hui ? » « Y a-t-il un parking ? »",
+        planStandardExample: "Exemple : « Réservez un restaurant pour 2 personnes à 19 h. »",
+        planRushExample: "Exemple : « Vérifiez vite si une clinique est disponible aujourd'hui. »",
+        planSpecialExample: "Exemple : « Contactez maintenant le chauffeur de pickup aéroport. »",
+        planSpecialLimit: "Les urgences médicales, policières ou juridiques ne sont pas traitées. Pour les cliniques, aide limitée aux réservations et questions simples.",
+        planBasicShort: "Question simple, 1 lieu, jusqu'à 5 appels", planStandardShort: "Réservation + coordination d'un autre créneau", planPlusShort: "Réservation + coordination d'un autre créneau", planRushShort: "Priorité le jour même, sous 2 heures", planSpecialShort: "Départ prioritaire sous 10 minutes",
+        tagFastResult: "Résultat rapide", tagTopPriority: "Priorité max", tagTenMinute: "Départ 10 min", tagTravel: "Aide voyage",
+        step1Desc: "Choisissez parmi 4 formules, puis restaurant, beauté, clinique ou autre.",
+        stepPlanTitle: "Choisir une des 4 formules et le type", stepPlanCopy: "Basic sert aux questions simples. Standard, Rush et Special incluent la coordination de réservation.",
+        timeAm: "AM", timePm: "PM"
+      }
+    };
+    Object.keys(planI18n).forEach((lang) => Object.assign(i18n[lang] || (i18n[lang] = {}), planI18n[lang]));
+
     const state = {
       lang: localStorage.getItem("kallLang") || "en",
       step: 1,
@@ -2070,8 +2325,8 @@
         resultLabel: "Result",
         savingBooking: "Saving...",
         checkingBooking: "Checking...",
-        firebaseSaveFailed: "Could not save to Firebase. Please check Firestore rules or network and try again.",
-        firebaseUnavailable: "Firebase is not ready yet. Please try again in a moment.",
+        firebaseSaveFailed: "Could not save to Firebase. Please check Realtime Database rules or network and try again.",
+        firebaseUnavailable: "Firebase Realtime Database is not ready yet. Please try again in a moment.",
         done: "Done",
         updated: "Updated"
       },
@@ -2091,8 +2346,8 @@
         resultLabel: "결과",
         savingBooking: "저장 중...",
         checkingBooking: "조회 중...",
-        firebaseSaveFailed: "Firebase 저장에 실패했습니다. Firestore 규칙이나 네트워크를 확인한 뒤 다시 시도해 주세요.",
-        firebaseUnavailable: "Firebase 준비 중입니다. 잠시 뒤 다시 시도해 주세요.",
+        firebaseSaveFailed: "Firebase 저장에 실패했습니다. Realtime Database 규칙이나 네트워크를 확인한 뒤 다시 시도해 주세요.",
+        firebaseUnavailable: "Firebase Realtime Database 준비 중입니다. 잠시 뒤 다시 시도해 주세요.",
         done: "완료",
         updated: "업데이트"
       }
@@ -2108,23 +2363,33 @@
       });
       return `${config.prefix || ""}${formatted}${config.suffix || ""}`;
     }
+    function normalizePlanName(name) {
+      return planAliases[name] || name || "Standard";
+    }
     function planName(name) {
+      const normalized = normalizePlanName(name);
       const key = {
-        "Basic Booking": "planBasicName",
-        "Plus Booking": "planPlusName",
-        "Rush Booking": "planRushName"
-      }[name];
-      return key ? t(key) : name;
+        Basic: "planBasicName",
+        Standard: "planStandardName",
+        Rush: "planRushName",
+        Special: "planSpecialName"
+      }[normalized];
+      return key ? t(key) : normalized;
     }
     function planLabel(name) {
-      return `${planName(name)} · ${formatMoney(planPrices[name])}`;
+      const normalized = normalizePlanName(name);
+      const price = planPrices[normalized];
+      return price ? `${planName(normalized)} · ${formatMoney(price)}` : planName(normalized);
+    }
+    function currencyCode() {
+      return { en: "USD", ko: "KRW", ja: "JPY", zh: "CNY", fr: "EUR" }[state.lang] || "USD";
     }
     function selectedPlan() {
       const plan = $("input[name='plan']:checked");
-      return plan ? plan.value : "Plus Booking";
+      return plan ? plan.value : "Standard";
     }
     function planHasBackup(plan = selectedPlan()) {
-      return plan === "Plus Booking" || plan === "Rush Booking";
+      return ["Standard", "Rush", "Special"].includes(normalizePlanName(plan));
     }
 
     function applyLanguage(lang) {
@@ -2144,6 +2409,7 @@
       $$(".lang-option").forEach((button) => button.classList.toggle("selected", button.dataset.lang === lang));
       updatePrices();
       refreshLocalizedDateInputs();
+      updateTimeToggles();
       updateBackupFields();
       setStep(state.step);
       renderBooking();
@@ -2151,12 +2417,13 @@
 
     function updatePrices() {
       $$("[data-price-plan]").forEach((el) => {
-        el.textContent = formatMoney(planPrices[el.dataset.pricePlan]);
+        const plan = normalizePlanName(el.dataset.pricePlan);
+        el.textContent = formatMoney(planPrices[plan]);
       });
       $$("[data-plan-label]").forEach((el) => {
         el.textContent = planLabel(el.dataset.planLabel);
       });
-      $("#chipPrice").textContent = `From ${formatMoney(planPrices["Basic Booking"])}`;
+      $("#chipPrice").textContent = `From ${formatMoney(planPrices.Basic)}`;
     }
 
     function openLanguage() {
@@ -2200,26 +2467,35 @@
     }
     function isIsoDate(value) {
       if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return false;
-      const date = new Date(`${value}T00:00:00`);
-      return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+      const [year, month, day] = value.split("-").map(Number);
+      if (month < 1 || month > 12) return false;
+      const lastDay = new Date(year, month, 0).getDate();
+      return day >= 1 && day <= lastDay;
     }
     function setDateInputMode(input) {
       if (!input || !input.dataset.dateInput) return;
-      if (!input.value && document.activeElement !== input) {
-        input.type = "text";
-        input.placeholder = t(input.dataset.i18nPlaceholder || "datePlaceholder");
-      }
+      input.type = "text";
+      input.inputMode = "numeric";
+      input.maxLength = 10;
+      input.placeholder = t(input.dataset.i18nPlaceholder || "datePlaceholder");
     }
     function refreshLocalizedDateInputs() {
       $$("[data-date-input]").forEach(setDateInputMode);
     }
+    function maskDateValue(value) {
+      const digits = String(value || "").replace(/\D/g, "").slice(0, 8);
+      if (digits.length <= 4) return digits;
+      if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
+      return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
+    }
     function prepareDateInput(input) {
-      input.addEventListener("focus", () => {
-        input.type = "date";
-        if (input.id === "birthDate") input.max = todayISO();
-        else input.min = todayISO();
+      setDateInputMode(input);
+      input.addEventListener("input", () => {
+        input.value = maskDateValue(input.value);
       });
-      input.addEventListener("blur", () => setDateInputMode(input));
+      input.addEventListener("paste", () => {
+        requestAnimationFrame(() => { input.value = maskDateValue(input.value); });
+      });
       setDateInputMode(input);
     }
     function formatDate(value) {
@@ -2229,12 +2505,41 @@
       if (state.lang === "fr") return `${day}/${month}/${year}`;
       return `${year}/${month}/${day}`;
     }
+    function parseTimeParts(value) {
+      const match = /^(\d{2}):(\d{2})$/.exec(value || "");
+      if (!match) return null;
+      return { hour: Number(match[1]), minute: match[2] };
+    }
     function formatTime(value) {
-      return value || "";
+      const parts = parseTimeParts(value);
+      if (!parts) return "";
+      const suffix = parts.hour >= 12 ? t("timePm") : t("timeAm");
+      const hour12 = parts.hour % 12 || 12;
+      return state.lang === "ko" ? `${suffix} ${hour12}:${parts.minute}` : `${hour12}:${parts.minute} ${suffix}`;
     }
     function displayDateTime(date, time) {
       if (!date && !time) return t("notAdded");
       return `${formatDate(date)} · ${formatTime(time) || "--:--"}`;
+    }
+    function setTimeMeridiem(input, usePm) {
+      const parts = parseTimeParts(input.value) || parseTimeParts(input.dataset.defaultTime) || { hour: usePm ? 13 : 9, minute: "00" };
+      let hour = parts.hour % 12;
+      if (usePm) hour += 12;
+      if (!usePm && hour === 12) hour = 0;
+      input.value = `${String(hour).padStart(2, "0")}:${parts.minute}`;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    function updateTimeToggles() {
+      $$("[data-time-toggle]").forEach((button) => {
+        const input = $(`#${button.dataset.timeToggle}`);
+        const parts = input ? parseTimeParts(input.value) : null;
+        button.textContent = parts && parts.hour < 12 ? t("timeAm") : t("timePm");
+      });
+    }
+    function prepareTimeInput(input) {
+      if (!input.value) input.value = input.dataset.defaultTime || "13:00";
+      input.addEventListener("input", updateTimeToggles);
+      input.addEventListener("change", updateTimeToggles);
     }
 
     function updateBackupFields() {
@@ -2248,13 +2553,17 @@
           field.value = "";
           markField(field, false);
           setDateInputMode(field);
+        } else if (field.type === "time" && !field.value) {
+          field.value = field.dataset.defaultTime || "14:00";
         }
       });
+      updateTimeToggles();
     }
 
     function getData() {
       const plan = $("input[name='plan']:checked");
-      const usesBackup = planHasBackup(plan.value);
+      const normalizedPlan = normalizePlanName(plan && plan.value);
+      const usesBackup = planHasBackup(normalizedPlan);
       return {
         placeName: $("#placeName").value.trim(),
         placeLink: $("#placeLink").value.trim(),
@@ -2276,8 +2585,8 @@
         note: $("#note").value.trim(),
         messenger: $("#messenger").value,
         messengerId: $("#messengerId").value.trim(),
-        plan: plan.value,
-        priceUsd: Number(plan.dataset.priceUsd),
+        plan: normalizedPlan,
+        priceUsd: planPrices[normalizedPlan],
         category: state.category
       };
     }
@@ -2383,13 +2692,6 @@
       const rand = Math.floor(1000 + Math.random() * 9000);
       return `KA-${yy}${mm}${dd}-${rand}`;
     }
-    function readStoredBookings() {
-      try {
-        return JSON.parse(localStorage.getItem("kallBookings") || "{}") || {};
-      } catch (error) {
-        return {};
-      }
-    }
     function toLocalBooking(booking) {
       return JSON.parse(JSON.stringify(booking, (key, value) => {
         if (value && typeof value.toDate === "function") return value.toDate().toISOString();
@@ -2399,40 +2701,41 @@
         return value;
       }));
     }
-    function saveBookingLocal(booking) {
-      const safeBooking = toLocalBooking(booking);
-      const list = readStoredBookings();
-      list[safeBooking.bookingNo] = safeBooking;
-      localStorage.setItem("kallBookings", JSON.stringify(list));
-      localStorage.setItem("kallLastBooking", JSON.stringify(safeBooking));
+    function withTimeout(promise, timeoutMs, message) {
+      return Promise.race([
+        promise,
+        new Promise((resolve, reject) => {
+          setTimeout(() => reject(new Error(message)), timeoutMs);
+        })
+      ]);
     }
-    function sanitizeForFirestore(value) {
-      if (Array.isArray(value)) return value.map(sanitizeForFirestore).filter((item) => item !== undefined);
+    function sanitizeForFirebase(value) {
+      if (Array.isArray(value)) return value.map(sanitizeForFirebase).filter((item) => item !== undefined);
       if (value && typeof value === "object") {
         return Object.fromEntries(Object.entries(value)
           .filter(([, item]) => item !== undefined && typeof item !== "function")
-          .map(([key, item]) => [key, sanitizeForFirestore(item)]));
+          .map(([key, item]) => [key, sanitizeForFirebase(item)]));
       }
       return value;
     }
     async function saveBookingRemote(booking) {
-      await firebase.ready;
+      await withTimeout(firebase.ready, 12000, ui("firebaseUnavailable"));
       if (!firebase.db) throw new Error(ui("firebaseUnavailable"));
-      const bookingRef = firebase.doc(firebase.db, BOOKINGS_COLLECTION, booking.bookingNo);
-      const payload = sanitizeForFirestore({
+      const bookingPath = `${BOOKINGS_COLLECTION}/${booking.bookingNo}`;
+      const bookingRef = firebase.ref(firebase.db, bookingPath);
+      const payload = sanitizeForFirebase({
         ...booking,
-        source: "index_v5",
-        firebasePath: `${BOOKINGS_COLLECTION}/${booking.bookingNo}`,
+        source: "index_v2",
+        firebasePath: bookingPath,
         updatedAtClient: new Date().toISOString()
       });
       payload.updatedAtServer = firebase.serverTimestamp();
-      await firebase.setDoc(bookingRef, payload, { merge: true });
+      await withTimeout(firebase.set(bookingRef, payload), 12000, ui("firebaseSaveFailed"));
       return payload;
     }
     async function saveBooking(booking) {
       const remoteBooking = await saveBookingRemote(booking);
       const syncedBooking = { ...booking, firebaseSynced: true, firebasePath: remoteBooking.firebasePath };
-      saveBookingLocal(syncedBooking);
       return syncedBooking;
     }
     function setButtonBusy(button, busy, label) {
@@ -2458,9 +2761,17 @@
       const booking = {
         ...data,
         bookingNo: generateBookingNumber(),
+        requestedLanguage: state.lang,
+        currency: currencyCode(),
+        priceDisplay: formatMoney(data.priceUsd),
+        planDisplay: planName(data.plan),
+        categoryDisplay: categoryName(data.category),
+        backupEnabled: planHasBackup(data.plan),
         payMethod: state.selectedPay,
+        paymentMode: "test_no_real_payment",
+        paymentCaptured: false,
         requestStatus: "submitted",
-        paymentStatus: "paid",
+        paymentStatus: "test_saved",
         callStatus: "waiting",
         resultStatus: "pending",
         status: "waiting_call",
@@ -2628,11 +2939,11 @@
       }
     }
     async function fetchBookingRemote(bookingNo) {
-      await firebase.ready;
+      await withTimeout(firebase.ready, 12000, ui("firebaseUnavailable"));
       if (!firebase.db) return null;
-      const bookingRef = firebase.doc(firebase.db, BOOKINGS_COLLECTION, bookingNo);
-      const snapshot = await firebase.getDoc(bookingRef);
-      return snapshot.exists() ? { ...snapshot.data(), bookingNo: snapshot.id } : null;
+      const bookingRef = firebase.ref(firebase.db, `${BOOKINGS_COLLECTION}/${bookingNo}`);
+      const snapshot = await withTimeout(firebase.get(bookingRef), 12000, t("toastNotFound"));
+      return snapshot.exists() ? { ...snapshot.val(), bookingNo } : null;
     }
     async function lookupBooking() {
       const no = $("#lookupInput").value.trim().toUpperCase();
@@ -2640,25 +2951,16 @@
       const lookupButton = $("#lookupBtn");
       setButtonBusy(lookupButton, true, ui("checkingBooking"));
       try {
-        const remoteBooking = await fetchBookingRemote(no);
-        const list = readStoredBookings();
-        const foundBooking = remoteBooking || list[no];
+        const foundBooking = await fetchBookingRemote(no);
         if (!foundBooking) {
           toast(t("toastNotFound"));
           return;
         }
         state.booking = foundBooking;
-        saveBookingLocal(foundBooking);
         renderBooking();
       } catch (error) {
-        console.warn("Firebase lookup failed. Falling back to local storage.", error);
-        const list = readStoredBookings();
-        if (list[no]) {
-          state.booking = list[no];
-          renderBooking();
-        } else {
-          toast(t("toastNotFound"));
-        }
+        console.warn("Firebase lookup failed.", error);
+        toast(t("toastNotFound"));
       } finally {
         setButtonBusy(lookupButton, false);
       }
@@ -2739,6 +3041,14 @@
       updateSummary();
     }));
     $$(".pay-method").forEach((btn) => btn.addEventListener("click", () => { state.selectedPay = btn.dataset.pay; $$(".pay-method").forEach((item) => item.classList.remove("selected")); btn.classList.add("selected"); }));
+    $$("[data-time-toggle]").forEach((btn) => btn.addEventListener("click", () => {
+      const input = $(`#${btn.dataset.timeToggle}`);
+      const parts = input ? parseTimeParts(input.value) : null;
+      if (!input) return;
+      setTimeMeridiem(input, !(parts && parts.hour >= 12));
+      updateTimeToggles();
+      updateSummary();
+    }));
     $("#checkoutBtn").addEventListener("click", openPayment);
     $("#closePayment").addEventListener("click", closePayment);
     $("#paymentSheet").addEventListener("click", (e) => { if (e.target.id === "paymentSheet") closePayment(); });
@@ -2750,11 +3060,10 @@
     $("#infoModal").addEventListener("click", (e) => { if (e.target.id === "infoModal") closeInfoModal(); });
 
     $$("[data-date-input]").forEach(prepareDateInput);
+    $$("input[type='time']").forEach(prepareTimeInput);
 
-    try {
-      const saved = JSON.parse(localStorage.getItem("kallLastBooking"));
-      if (saved && saved.bookingNo) state.booking = saved;
-    } catch (error) {}
+    localStorage.removeItem("kallLastBooking");
+    localStorage.removeItem("kallBookings");
     applyLanguage(state.lang);
     updateCategoryFields();
     setStep(1);
