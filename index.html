@@ -282,28 +282,28 @@
       z-index: 2;
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 9px 11px;
+      gap: 6px;
+      padding: 7px 9px;
       border-radius: 999px;
       background: rgba(255,255,255,.95);
       border: 1px solid rgba(255,255,255,.85);
-      box-shadow: 0 14px 32px rgba(15,23,42,.13);
+      box-shadow: 0 10px 22px rgba(15,23,42,.11);
       backdrop-filter: blur(12px);
-      font-size: 12px;
+      font-size: 10.5px;
       font-weight: 920;
       transform: translateZ(60px);
     }
-    .float-left { left: 0; top: 66px; }
-    .float-right { right: -2px; bottom: 68px; }
+    .float-left { left: 10px; top: 78px; }
+    .float-right { right: 10px; bottom: 54px; }
     .chip-symbol {
-      width: 26px;
-      height: 26px;
+      width: 22px;
+      height: 22px;
       display: grid;
       place-items: center;
-      border-radius: 10px;
+      border-radius: 8px;
       color: #fff;
       background: var(--green);
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 950;
     }
     .chip-symbol.blue { background: var(--blue); }
@@ -325,17 +325,50 @@
       overflow: hidden;
     }
 
-    .pricing { display: grid; gap: 12px; }
+    .pricing-frame {
+      border: 1px solid rgba(37,99,255,.10);
+      border-radius: 22px;
+      padding: 11px 10px;
+      background: linear-gradient(180deg, #f8fbff 0%, #fff 100%);
+      overflow: visible;
+      box-shadow: 0 14px 32px rgba(37,99,255,.07);
+    }
+    .pricing-frame::-webkit-scrollbar { height: 0; }
+    .pricing-section .section-head { margin-bottom: 9px; }
+    .pricing-section .section-head h2 { font-size: 21px; line-height: 1.14; }
+    .pricing-section .kicker { font-size: 11px; margin-bottom: 4px; }
+    .plan-board-title {
+      margin: 0 0 9px;
+      text-align: center;
+      color: #0f172a;
+      font-size: 17px;
+      line-height: 1.12;
+      font-weight: 950;
+    }
+    .plan-board-title span { color: #1f2a44; }
+    .pricing {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: stretch;
+      gap: 9px;
+      min-width: 0;
+    }
     .price-card {
+      --plan-accent: #2563ff;
+      --plan-accent-dark: #1d4ed8;
+      --plan-tint: #eff6ff;
       position: relative;
       overflow: hidden;
       display: grid;
-      gap: 12px;
+      grid-template-columns: minmax(84px, 96px) 1fr;
+      grid-auto-rows: auto;
+      gap: 6px 11px;
+      min-height: 0;
       border-radius: 18px;
-      padding: 15px;
-      background: #fff;
-      border: 1px solid rgba(17,24,39,.06);
-      box-shadow: 0 10px 24px rgba(15,23,42,.07);
+      padding: 11px 12px 11px 14px;
+      background: linear-gradient(135deg, #fff 0%, #fbfdff 100%);
+      border: 1px solid rgba(15,23,42,.07);
+      box-shadow: 0 8px 18px rgba(37,99,255,.055);
       cursor: pointer;
       transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
@@ -346,43 +379,80 @@
       width: 4px;
       background: var(--plan-accent, var(--blue));
     }
-    .price-card.basic { --plan-accent: #2563ff; }
-    .price-card.standard { --plan-accent: #13b981; }
-    .price-card.rush { --plan-accent: #f97316; }
-    .price-card.special { --plan-accent: #7c3aed; }
+    .price-card.basic { --plan-accent: #2563ff; --plan-accent-dark: #1d4ed8; --plan-tint: #eff6ff; }
+    .price-card.standard { --plan-accent: #0ea5e9; --plan-accent-dark: #0284c7; --plan-tint: #f0f9ff; }
+    .price-card.rush { --plan-accent: #6366f1; --plan-accent-dark: #4f46e5; --plan-tint: #eef2ff; }
+    .price-card.special { --plan-accent: #7c3aed; --plan-accent-dark: #6d28d9; --plan-tint: #f5f3ff; }
     .price-card.featured {
       color: var(--ink);
-      background: linear-gradient(135deg, #f7fffb 0%, #fff 58%, #f2fbff 100%);
-      border-color: rgba(19,185,129,.32);
-      box-shadow: 0 18px 42px rgba(19,185,129,.16);
+      background: linear-gradient(180deg, #f8fcff 0%, #fff 54%);
+      border-color: rgba(0,150,255,.42);
+      box-shadow: 0 14px 30px rgba(0,150,255,.16), 0 0 0 1px rgba(0,150,255,.08);
+      animation: standardGlow 2.8s ease-in-out infinite;
     }
-    .price-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-    .price { font-size: 28px; line-height: 1; font-weight: 950; white-space: nowrap; }
-    .price-card p { margin: 0; color: var(--ink-2); font-size: 13px; line-height: 1.48; font-weight: 680; }
+    .price-card.featured::after {
+      content: none;
+    }
+    .price-top {
+      grid-column: 1;
+      grid-row: 1 / span 3;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 7px;
+      min-width: 0;
+      margin: 0;
+      text-align: left;
+    }
+    .price-top h3 {
+      min-height: 0;
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      max-width: 100%;
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: var(--plan-accent-dark);
+      background: var(--plan-tint);
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 930;
+    }
+    .price {
+      margin: 0;
+      color: #0f172a;
+      font-size: 21px;
+      line-height: .98;
+      font-weight: 950;
+      white-space: nowrap;
+      word-break: keep-all;
+    }
+    @keyframes standardGlow {
+      0%, 100% { box-shadow: 0 12px 24px rgba(0,150,255,.11), 0 0 0 1px rgba(0,150,255,.08); }
+      50% { box-shadow: 0 16px 34px rgba(0,150,255,.22), 0 0 0 2px rgba(0,150,255,.16); }
+    }
+    .price-card p { margin: 0; color: var(--ink-2); font-size: 9.2px; line-height: 1.24; font-weight: 680; }
     .price-card.featured h3, .price-card.featured .price { color: var(--ink); text-shadow: none; }
+    .price-card.featured h3 { color: var(--plan-accent-dark); background: var(--plan-tint); }
+    .price-card.featured .price { color: #0f172a; }
     .price-card.featured p { color: var(--ink-2); }
     .price-card:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(15,23,42,.10); }
     .price-card:focus-visible { outline: 3px solid rgba(37,99,255,.25); outline-offset: 3px; }
     .plan-kicker {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      min-height: 24px;
-      padding: 0 9px;
-      border-radius: 999px;
-      color: color-mix(in srgb, var(--plan-accent, var(--blue)) 78%, #111827);
-      background: color-mix(in srgb, var(--plan-accent, var(--blue)) 12%, #fff);
-      font-size: 10.5px;
-      line-height: 1;
-      font-weight: 930;
+      display: none;
     }
     .plan-purpose {
+      grid-column: 2;
+      grid-row: 1;
       color: #1f2937;
-      font-size: 14px;
-      line-height: 1.45;
+      font-size: 9.6px;
+      line-height: 1.24;
       font-weight: 820;
+      padding-right: 34px;
     }
     .plan-section-title {
+      display: none;
       margin-bottom: 6px;
       color: var(--muted);
       font-size: 10.5px;
@@ -392,50 +462,149 @@
     }
     .plan-feature-list {
       display: grid;
-      gap: 5px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 7px;
       margin: 0;
       padding: 0;
       list-style: none;
     }
     .plan-feature-list li {
       position: relative;
-      padding-left: 14px;
-      color: var(--ink-2);
-      font-size: 12.2px;
-      line-height: 1.4;
-      font-weight: 700;
+      padding-left: 13px;
+      color: #172033;
+      font-size: 8.2px;
+      line-height: 1.16;
+      font-weight: 730;
     }
     .plan-feature-list li::before {
+      content: "\2713";
+      position: absolute;
+      top: .02em;
+      left: 0;
+      width: 9px;
+      height: 9px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      color: #fff;
+      background: #475569;
+      font-size: 6px;
+      line-height: 1;
+      font-weight: 950;
+    }
+    .plan-feature-list li.plan-diff {
+      color: var(--plan-accent-dark);
+      font-weight: 900;
+    }
+    .plan-feature-list li.plan-diff::before {
+      background: var(--plan-accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--plan-accent) 15%, transparent);
+    }
+    .plan-feature-list li.plan-diff-current {
+      font-weight: 950;
+    }
+    .plan-feature-list li.plan-diff-current::before {
+      background: linear-gradient(135deg, var(--plan-accent), var(--plan-accent-dark));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--plan-accent) 22%, transparent);
+    }
+    .plan-example {
+      grid-column: 2;
+      display: block;
+      border-radius: 10px;
+      padding: 6px 8px;
+      color: #334155;
+      background: #f8fafc;
+      border: 1px solid rgba(15,23,42,.07);
+      font-size: 8.6px;
+      line-height: 1.25;
+      font-weight: 760;
+      max-height: 34px;
+      overflow: hidden;
+    }
+    .plan-local {
+      display: none;
+    }
+    .plan-local b {
+      display: block;
+      color: var(--plan-accent-dark);
+      font-size: 20px;
+      line-height: 1.05;
+      font-weight: 950;
+    }
+    .plan-local strong {
+      display: block;
+      margin-top: 2px;
+      color: #111827;
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 950;
+    }
+    .plan-local ul {
+      display: grid;
+      gap: 5px;
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+      text-align: left;
+    }
+    .plan-local li {
+      position: relative;
+      padding-left: 14px;
+      color: #1f2937;
+      font-size: 10px;
+      line-height: 1.28;
+      font-weight: 730;
+    }
+    .plan-local li::before {
       content: "";
       position: absolute;
-      top: .55em;
+      top: .45em;
       left: 1px;
       width: 6px;
       height: 6px;
       border-radius: 999px;
-      background: var(--plan-accent, var(--blue));
-    }
-    .plan-example {
-      border-radius: 14px;
-      padding: 10px;
-      color: #334155;
-      background: #f8fafc;
-      border: 1px solid rgba(17,24,39,.06);
-      font-size: 12px;
-      line-height: 1.42;
-      font-weight: 720;
+      border: 1.5px solid #475569;
     }
     .plan-limit-note {
-      border-radius: 13px;
-      padding: 9px 10px;
+      grid-column: 2;
+      border-radius: 9px;
+      padding: 4px 5px;
       color: #9f1239;
       background: #fff1f2;
       border: 1px solid rgba(225,29,72,.16);
-      font-size: 11.5px;
-      line-height: 1.38;
+      font-size: 7.2px;
+      line-height: 1.14;
       font-weight: 760;
+      max-height: 34px;
+      overflow: hidden;
     }
-    .tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
+    .popular-ribbon {
+      position: absolute;
+      top: 4px;
+      right: 5px;
+      width: auto;
+      min-width: 26px;
+      height: 14px;
+      padding: 0 5px;
+      display: grid;
+      place-items: center;
+      transform: none;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(120deg, #ff3b5c 0%, #ff7a45 42%, #ff3b5c 72%);
+      background-size: 220% 100%;
+      font-size: 6.5px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: 0;
+      box-shadow: 0 6px 14px rgba(255,59,92,.24);
+      animation: popularShine 2.1s ease-in-out infinite;
+    }
+    @keyframes popularShine {
+      0%, 100% { background-position: 0% 50%; opacity: .92; transform: translateY(0); }
+      50% { background-position: 100% 50%; opacity: 1; transform: translateY(-1px); }
+    }
+    .tag-row { display: none; flex-wrap: wrap; gap: 7px; margin-top: 13px; }
     .tag {
       min-height: 29px;
       display: inline-flex;
@@ -448,6 +617,27 @@
       font-weight: 870;
     }
     .featured .tag { color: #0f766e; background: rgba(19,185,129,.12); }
+    @media (max-width: 370px) {
+      .price-card {
+        grid-template-columns: 78px 1fr;
+        gap: 6px 8px;
+        padding: 10px 10px 10px 13px;
+      }
+      .price { font-size: 18px; }
+      .price-top h3 { font-size: 11px; padding: 5px 7px; }
+      .plan-purpose { padding-right: 28px; font-size: 8.8px; }
+      .plan-feature-list {
+        grid-template-columns: 1fr;
+        gap: 3px;
+      }
+      .plan-feature-list li { font-size: 8px; }
+      .plan-example {
+        font-size: 8px;
+        padding: 5px 7px;
+        max-height: 32px;
+      }
+      .popular-ribbon { right: 4px; font-size: 6px; padding: 0 4px; }
+    }
 
     .steps { display: grid; gap: 10px; }
     .step-card {
@@ -701,8 +891,71 @@
       background: #fff7f7;
       box-shadow: 0 0 0 4px rgba(239,68,68,.10);
     }
-    .field-help { display: none; color: var(--red); font-size: 11px; font-weight: 800; }
+    .field { position: relative; }
+    .field-help {
+      display: none;
+      position: absolute;
+      top: 25px;
+      right: 10px;
+      z-index: 3;
+      max-width: calc(100% - 22px);
+      padding: 2px 6px;
+      border-radius: 999px;
+      color: var(--red);
+      background: rgba(255,247,247,.94);
+      font-size: 9.5px;
+      line-height: 1.2;
+      font-weight: 850;
+      pointer-events: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .field.invalid .field-help { display: block; }
+    .date-control {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 44px;
+      align-items: center;
+    }
+    .date-control input[data-date-input] {
+      grid-column: 1 / -1;
+      padding-right: 48px;
+    }
+    .date-picker-btn {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      z-index: 2;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      transform: translateY(-50%);
+      border-radius: 13px;
+      color: #1d4ed8;
+      background: rgba(37,99,255,.08);
+      border: 1px solid rgba(37,99,255,.10);
+    }
+    .date-picker-btn svg {
+      width: 19px;
+      height: 19px;
+    }
+    .date-picker-native {
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      width: 40px !important;
+      min-height: 40px !important;
+      height: 40px;
+      padding: 0 !important;
+      opacity: 0;
+      transform: translateY(-50%);
+      pointer-events: none;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
     .choice {
@@ -1449,38 +1702,46 @@
         </div>
       </div>
 
-      <section class="section">
+      <section class="section pricing-section">
         <div class="section-head"><div><div class="kicker" data-i18n="priceKicker">Pricing first</div><h2 data-i18n="priceTitle">Pick the call support you need.</h2></div></div>
-        <div class="pricing">
-          <article class="price-card basic" data-select-plan="Basic" role="button" tabindex="0">
-            <div class="price-top"><div><span class="plan-kicker" data-i18n="planBasicKicker">Inquiry</span><h3 data-i18n="planBasicName">Basic</h3></div><div class="price" data-price-plan="Basic">$6</div></div>
-            <p class="plan-purpose" data-i18n="planBasicDesc">Simple phone checks when you do not need a reservation.</p>
-            <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planBasicFeature1">Call 1 place up to 5 times</li><li data-i18n="planBasicFeature2">Retry every 10 minutes</li><li data-i18n="planBasicFeature3">Check hours, menu, parking, stock, lost items, or availability</li></ul></div>
-            <div class="plan-example" data-i18n="planBasicExample">Example: "Are you open today?" "Is parking available?"</div>
-            <div class="tag-row"><span class="tag" data-i18n="tagAttempts">5 attempts</span><span class="tag" data-i18n="tagInterval">10 min interval</span></div>
-          </article>
+        <div class="pricing-frame" aria-label="Service plans">
+          <div class="plan-board-title" data-i18n="planBoardTitle">Service plans</div>
+          <div class="pricing">
+            <article class="price-card basic" data-select-plan="Basic" role="button" tabindex="0">
+              <div class="price-top"><div><span class="plan-kicker" data-i18n="planBasicKicker">Inquiry</span><h3 data-i18n="planBasicName">Basic</h3></div><div class="price" data-price-plan="Basic">$6</div></div>
+              <p class="plan-purpose" data-i18n="planBasicDesc">Simple phone checks when you do not need a reservation.</p>
+              <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planBasicCard1">1 location, up to 5 calls</li><li data-i18n="planBasicCard2">10 min apart</li><li data-i18n="planBasicCard3">Simple checks: hours, menu, parking, stock, lost items</li></ul></div>
+              <div class="plan-local"><b>기초 서비스</b><strong>$6</strong><ul><li>1개 장소</li><li>최대 5회 전화 시도</li><li>10분 간격 재시도</li><li>영업시간, 메뉴, 주차, 재고, 분실물 확인</li></ul></div>
+              <div class="plan-example" data-i18n="planBasicExample">Example: "Are you open today?" "Is parking available?"</div>
+              <div class="tag-row"><span class="tag" data-i18n="tagAttempts">5 attempts</span><span class="tag" data-i18n="tagInterval">10 min interval</span></div>
+            </article>
           <article class="price-card featured standard" data-select-plan="Standard" role="button" tabindex="0">
-            <div class="price-top"><div><span class="plan-kicker" data-i18n="planStandardKicker">Main service</span><h3 data-i18n="planStandardName">Standard</h3></div><div class="price" data-price-plan="Standard">$12</div></div>
-            <p class="plan-purpose" data-i18n="planStandardDesc">Reservation and schedule coordination for restaurants, clinics, beauty, and salons.</p>
-            <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planStandardFeature1">Basic included</li><li data-i18n="planStandardFeature2">Send name, people, date, time, and request details</li><li data-i18n="planStandardFeature3">Ask alternative dates or times if the first choice is unavailable</li></ul></div>
-            <div class="plan-example" data-i18n="planStandardExample">Example: "Please book a restaurant for 2 people at 7 PM."</div>
-            <div class="tag-row"><span class="tag" data-i18n="tagBackup">Backup options</span><span class="tag" data-i18n="tagPopular">Most popular</span><span class="tag" data-i18n="tagAttempts">5 attempts</span></div>
-          </article>
-          <article class="price-card rush" data-select-plan="Rush" role="button" tabindex="0">
-            <div class="price-top"><div><span class="plan-kicker" data-i18n="planRushKicker">Same-day</span><h3 data-i18n="planRushName">Rush</h3></div><div class="price" data-price-plan="Rush">$22</div></div>
-            <p class="plan-purpose" data-i18n="planRushDesc">Fast handling for urgent requests needed today.</p>
-            <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planRushFeature1">Standard included</li><li data-i18n="planRushFeature2">Handled within 2 hours after payment confirmation</li><li data-i18n="planRushFeature3">Priority response for same-day booking or inquiry</li></ul></div>
-            <div class="plan-example" data-i18n="planRushExample">Example: "Please quickly check if a clinic appointment is possible today."</div>
-            <div class="tag-row"><span class="tag" data-i18n="tagPriority">Priority</span><span class="tag" data-i18n="tagSameDay">Same day</span><span class="tag" data-i18n="tagFastResult">Fast result</span></div>
-          </article>
-          <article class="price-card special" data-select-plan="Special" role="button" tabindex="0">
-            <div class="price-top"><div><span class="plan-kicker" data-i18n="planSpecialKicker">10-minute start</span><h3 data-i18n="planSpecialName">Special</h3></div><div class="price" data-price-plan="Special">$40</div></div>
-            <p class="plan-purpose" data-i18n="planSpecialDesc">Top-priority start for truly time-sensitive calls.</p>
-            <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planSpecialFeature1">Rush included</li><li data-i18n="planSpecialFeature2">Priority handling starts within 10 minutes after payment confirmation</li><li data-i18n="planSpecialFeature3">Airport pickup, last-minute booking, hospital appointment inquiry, or travel schedule issue checks</li></ul></div>
-            <div class="plan-example" data-i18n="planSpecialExample">Example: "Please contact the airport pickup driver right now."</div>
-            <div class="plan-limit-note" data-i18n="planSpecialLimit">Emergency medical, police, or legal issues are not handled. Clinic support is limited to appointment or basic inquiries.</div>
-            <div class="tag-row"><span class="tag" data-i18n="tagTopPriority">Top priority</span><span class="tag" data-i18n="tagTenMinute">10 min start</span><span class="tag" data-i18n="tagTravel">Travel support</span></div>
-          </article>
+              <span class="popular-ribbon" data-i18n="tagPopular">Most popular</span>
+              <div class="price-top"><div><span class="plan-kicker" data-i18n="planStandardKicker">Main service</span><h3 data-i18n="planStandardName">Standard</h3></div><div class="price" data-price-plan="Standard">$12</div></div>
+              <p class="plan-purpose" data-i18n="planStandardDesc">Reservation and schedule coordination for restaurants, clinics, beauty, and salons.</p>
+              <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planStandardCard1">1 location, up to 5 calls</li><li data-i18n="planStandardCard2">10 min apart</li><li data-i18n="planStandardCard3">Simple checks: hours, menu, parking, stock, lost items</li><li class="plan-diff plan-diff-current" data-i18n="planStandardDiff1">Added: reservation request</li><li class="plan-diff plan-diff-current" data-i18n="planStandardDiff2">Added: alternative date/time coordination</li></ul></div>
+              <div class="plan-local"><b>표준 서비스</b><strong>$12</strong><ul><li>Basic 포함</li><li>예약 요청 전달</li><li>희망 시간이 어려우면 대체 날짜/시간 확인</li></ul></div>
+              <div class="plan-example" data-i18n="planStandardExample">Example: "Please book a restaurant for 2 people at 7 PM."</div>
+              <div class="tag-row"><span class="tag" data-i18n="tagBackup">Backup options</span><span class="tag" data-i18n="tagPopular">Most popular</span><span class="tag" data-i18n="tagAttempts">5 attempts</span></div>
+            </article>
+            <article class="price-card rush" data-select-plan="Rush" role="button" tabindex="0">
+              <div class="price-top"><div><span class="plan-kicker" data-i18n="planRushKicker">Same-day</span><h3 data-i18n="planRushName">Rush</h3></div><div class="price" data-price-plan="Rush">$22</div></div>
+              <p class="plan-purpose" data-i18n="planRushDesc">Fast handling for urgent requests needed today.</p>
+              <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planRushCard1">1 location, up to 5 calls</li><li data-i18n="planRushCard2">10 min apart</li><li data-i18n="planRushCard3">Simple checks: hours, menu, parking, stock, lost items</li><li class="plan-diff" data-i18n="planStandardDiff1">Added: reservation request</li><li class="plan-diff" data-i18n="planStandardDiff2">Added: alternative date/time coordination</li><li class="plan-diff plan-diff-current" data-i18n="planRushDiff1">Added: processed within 2 hours</li><li class="plan-diff plan-diff-current" data-i18n="planRushDiff2">Added: same-day urgent booking/inquiry</li></ul></div>
+              <div class="plan-local"><b>가속 서비스</b><strong>$22</strong><ul><li>Standard 포함</li><li>2시간 내 처리</li><li>당일 긴급 예약/문의 우선 대응</li></ul></div>
+              <div class="plan-example" data-i18n="planRushExample">Example: "Please quickly check if a clinic appointment is possible today."</div>
+              <div class="tag-row"><span class="tag" data-i18n="tagPriority">Priority</span><span class="tag" data-i18n="tagSameDay">Same day</span><span class="tag" data-i18n="tagFastResult">Fast result</span></div>
+            </article>
+            <article class="price-card special" data-select-plan="Special" role="button" tabindex="0">
+              <div class="price-top"><div><span class="plan-kicker" data-i18n="planSpecialKicker">10-minute start</span><h3 data-i18n="planSpecialName">Special</h3></div><div class="price" data-price-plan="Special">$40</div></div>
+              <p class="plan-purpose" data-i18n="planSpecialDesc">Top-priority start for truly time-sensitive calls.</p>
+              <div><div class="plan-section-title" data-i18n="planIncludesTitle">Includes</div><ul class="plan-feature-list"><li data-i18n="planSpecialCard1">1 location, up to 5 calls</li><li data-i18n="planSpecialCard2">10 min apart</li><li data-i18n="planSpecialCard3">Simple checks: hours, menu, parking, stock, lost items</li><li class="plan-diff" data-i18n="planStandardDiff1">Added: reservation request</li><li class="plan-diff" data-i18n="planStandardDiff2">Added: alternative date/time coordination</li><li class="plan-diff" data-i18n="planRushDiff1">Added: processed within 2 hours</li><li class="plan-diff" data-i18n="planRushDiff2">Added: same-day urgent booking/inquiry</li><li class="plan-diff plan-diff-current" data-i18n="planSpecialDiff1">Added: start within 10 minutes</li><li class="plan-diff plan-diff-current" data-i18n="planSpecialDiff2">Added: pickup, clinic, travel issue</li></ul></div>
+              <div class="plan-local"><b>특별 가속</b><strong>$40</strong><ul><li>Rush 포함</li><li>10분 내 우선 처리 시작</li><li>공항 픽업, 막판 예약, 병원 예약 문의, 여행 일정 확인</li></ul></div>
+              <div class="plan-example" data-i18n="planSpecialExample">Example: "Please contact the airport pickup driver right now."</div>
+              <div class="plan-limit-note" data-i18n="planSpecialLimit">Emergency medical, police, or legal issues are not handled. Clinic support is limited to appointment or basic inquiries.</div>
+              <div class="tag-row"><span class="tag" data-i18n="tagTopPriority">Top priority</span><span class="tag" data-i18n="tagTenMinute">10 min start</span><span class="tag" data-i18n="tagTravel">Travel support</span></div>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -1556,10 +1817,10 @@
                 <h2 data-i18n="stepPlanTitle">Choose plan and service type</h2>
                 <p class="copy" data-i18n="stepPlanCopy">Prices are shown in your selected language's currency.</p>
                 <div class="plan-options">
-                  <label class="plan-option"><span><b data-plan-label="Basic">Basic · $6</b><span data-i18n="planBasicShort">Simple inquiry, 1 place, up to 5 call attempts</span></span><span class="plan-price-pill" data-price-plan="Basic">$6</span><input type="radio" name="plan" value="Basic" data-price-usd="6"></label>
-                  <label class="plan-option"><span><b data-plan-label="Standard">Standard · $12</b><span data-i18n="planStandardShort">Reservation request plus alternative time coordination</span></span><span class="plan-price-pill" data-price-plan="Standard">$12</span><input type="radio" name="plan" value="Standard" data-price-usd="12" checked></label>
-                  <label class="plan-option"><span><b data-plan-label="Rush">Rush · $22</b><span data-i18n="planRushShort">Same-day priority, handled within 2 hours</span></span><span class="plan-price-pill" data-price-plan="Rush">$22</span><input type="radio" name="plan" value="Rush" data-price-usd="22"></label>
-                  <label class="plan-option"><span><b data-plan-label="Special">Special · $40</b><span data-i18n="planSpecialShort">10-minute priority start for urgent calls</span></span><span class="plan-price-pill" data-price-plan="Special">$40</span><input type="radio" name="plan" value="Special" data-price-usd="40"></label>
+                  <label class="plan-option"><span><b data-plan-label="Basic">Basic</b><span data-i18n="planBasicShort">Simple inquiry, 1 place, up to 5 call attempts</span></span><span class="plan-price-pill" data-price-plan="Basic">$6</span><input type="radio" name="plan" value="Basic" data-price-usd="6"></label>
+                  <label class="plan-option"><span><b data-plan-label="Standard">Standard</b><span data-i18n="planStandardShort">Reservation request plus alternative time coordination</span></span><span class="plan-price-pill" data-price-plan="Standard">$12</span><input type="radio" name="plan" value="Standard" data-price-usd="12" checked></label>
+                  <label class="plan-option"><span><b data-plan-label="Rush">Rush</b><span data-i18n="planRushShort">Same-day priority, handled within 2 hours</span></span><span class="plan-price-pill" data-price-plan="Rush">$22</span><input type="radio" name="plan" value="Rush" data-price-usd="22"></label>
+                  <label class="plan-option"><span><b data-plan-label="Special">Special</b><span data-i18n="planSpecialShort">10-minute priority start for urgent calls</span></span><span class="plan-price-pill" data-price-plan="Special">$40</span><input type="radio" name="plan" value="Special" data-price-usd="40"></label>
                 </div>
                 <div class="choice-grid" aria-label="Service type">
                   <button class="choice selected" type="button" data-category="Restaurant">
@@ -1595,11 +1856,11 @@
                 <h2 data-i18n="stepDetailTitle">Reservation details</h2>
                 <p class="copy" data-i18n="stepDetailCopy">Preferred and backup dates cannot be in the past.</p>
                 <div class="two-col">
-                  <div class="field"><label for="date1" data-i18n="date1Label">Preferred date</label><input id="date1" name="date1" type="text" inputmode="numeric" data-date-input data-required data-future-date data-i18n-placeholder="datePlaceholder" placeholder="YYYY-MM-DD"><span class="field-help" data-i18n="dateHelp">Choose today or a future date</span></div>
+                  <div class="field"><label for="date1" data-i18n="date1Label">Preferred date</label><div class="date-control"><input id="date1" name="date1" type="text" inputmode="numeric" data-date-input data-required data-future-date data-i18n-placeholder="datePlaceholder" placeholder="YYYY-MM-DD"><button class="date-picker-btn" type="button" data-date-picker-button="date1" aria-label="Open calendar"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 3v4M16 3v4M4 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><input class="date-picker-native" type="date" data-date-picker-for="date1" tabindex="-1" aria-hidden="true"></div><span class="field-help" data-i18n="dateHelp">Choose today or a future date</span></div>
                   <div class="field"><label for="time1" data-i18n="time1Label">Preferred time</label><div class="time-control"><button class="ampm-toggle" type="button" data-time-toggle="time1">PM</button><input id="time1" name="time1" type="time" value="13:00" data-default-time="13:00" data-required></div><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                 </div>
                 <div class="two-col" data-backup-fields>
-                  <div class="field"><label for="date2" data-i18n="date2Label">Backup date</label><input id="date2" name="date2" type="text" inputmode="numeric" data-date-input data-required data-future-date data-i18n-placeholder="datePlaceholder" placeholder="YYYY-MM-DD"><span class="field-help" data-i18n="dateHelp">Choose today or a future date</span></div>
+                  <div class="field"><label for="date2" data-i18n="date2Label">Backup date</label><div class="date-control"><input id="date2" name="date2" type="text" inputmode="numeric" data-date-input data-required data-future-date data-i18n-placeholder="datePlaceholder" placeholder="YYYY-MM-DD"><button class="date-picker-btn" type="button" data-date-picker-button="date2" aria-label="Open calendar"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 3v4M16 3v4M4 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><input class="date-picker-native" type="date" data-date-picker-for="date2" tabindex="-1" aria-hidden="true"></div><span class="field-help" data-i18n="dateHelp">Choose today or a future date</span></div>
                   <div class="field"><label for="time2" data-i18n="time2Label">Backup time</label><div class="time-control"><button class="ampm-toggle" type="button" data-time-toggle="time2">PM</button><input id="time2" name="time2" type="time" value="14:00" data-default-time="14:00" data-required></div><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                 </div>
 
@@ -1615,7 +1876,7 @@
                   <div class="field"><label for="fullName" data-i18n="fullNameLabel">Full name as shown on passport</label><input id="fullName" name="fullName" autocomplete="name" placeholder="JOHN SMITH" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                   <div class="two-col">
                     <div class="field"><label for="passportNo" data-i18n="passportNoLabel">Passport number</label><input id="passportNo" name="passportNo" placeholder="M12345678" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
-                    <div class="field"><label for="birthDate" data-i18n="birthDateLabel">Date of birth</label><input id="birthDate" name="birthDate" type="text" inputmode="numeric" data-date-input data-i18n-placeholder="birthDatePlaceholder" placeholder="YYYY-MM-DD" data-required><span class="field-help" data-i18n="requiredHelp">Required</span></div>
+                    <div class="field"><label for="birthDate" data-i18n="birthDateLabel">Date of birth</label><div class="date-control"><input id="birthDate" name="birthDate" type="text" inputmode="numeric" data-date-input data-i18n-placeholder="birthDatePlaceholder" placeholder="YYYY-MM-DD" data-required><button class="date-picker-btn" type="button" data-date-picker-button="birthDate" aria-label="Open calendar"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 3v4M16 3v4M4 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><input class="date-picker-native" type="date" data-date-picker-for="birthDate" tabindex="-1" aria-hidden="true"></div><span class="field-help" data-i18n="requiredHelp">Required</span></div>
                   </div>
                   <div class="two-col">
                     <div class="field"><label for="gender" data-i18n="genderLabel">Gender</label><select id="gender" name="gender" data-required><option value="" data-i18n="selectOne">Select</option><option data-i18n="genderFemale">Female</option><option data-i18n="genderMale">Male</option><option data-i18n="genderOther">Other</option></select><span class="field-help" data-i18n="requiredHelp">Required</span></div>
@@ -2189,6 +2450,11 @@
         tagFastResult: "Fast result", tagTopPriority: "Top priority", tagTenMinute: "10 min start", tagTravel: "Travel support",
         step1Desc: "Choose from 4 plans, then select restaurant, beauty, clinic, or other.",
         stepPlanTitle: "Choose one of 4 plans and service type", stepPlanCopy: "Basic is for simple inquiries. Standard, Rush, and Special support reservation coordination.",
+        planBoardTitle: "Service plans",
+        planBasicCard1: "1 location", planBasicCard2: "Up to 5 call attempts", planBasicCard3: "10 min apart", planBasicCard4: "Hours, menu, parking, stock, lost items",
+        planStandardCard1: "Basic included", planStandardCard2: "Reservation request", planStandardCard3: "Alternative date/time coordination",
+        planRushCard1: "Standard included", planRushCard2: "Processed within 2 hours", planRushCard3: "Same-day urgent booking or inquiry",
+        planSpecialCard1: "Rush included", planSpecialCard2: "Priority start within 10 minutes", planSpecialCard3: "Pickup, last-minute booking, clinic inquiry, travel issue",
         timeAm: "AM", timePm: "PM"
       },
       ko: {
@@ -2213,6 +2479,11 @@
         tagFastResult: "빠른 결과", tagTopPriority: "최우선", tagTenMinute: "10분 내 시작", tagTravel: "여행 지원",
         step1Desc: "4개 플랜 중 하나를 고르고 식당, 뷰티, 병원, 기타 유형을 선택하세요.",
         stepPlanTitle: "4개 플랜과 서비스 유형 선택", stepPlanCopy: "Basic은 단순 문의용입니다. Standard, Rush, Special은 예약 조율까지 지원합니다.",
+        planBoardTitle: "서비스 플랜",
+        planBasicCard1: "1개 장소", planBasicCard2: "최대 5회 전화", planBasicCard3: "10분 간격 재시도", planBasicCard4: "영업시간, 메뉴, 주차, 재고, 분실물 확인",
+        planStandardCard1: "기초 서비스 포함", planStandardCard2: "예약 요청 전달", planStandardCard3: "대체 날짜/시간 조율",
+        planRushCard1: "표준 서비스 포함", planRushCard2: "2시간 내 처리", planRushCard3: "당일 긴급 예약/문의 우선 대응",
+        planSpecialCard1: "긴급 서비스 포함", planSpecialCard2: "10분 내 우선 시작", planSpecialCard3: "공항 픽업, 막판 예약, 병원 문의, 여행 문제",
         timeAm: "오전", timePm: "오후"
       },
       ja: {
@@ -2237,6 +2508,11 @@
         tagFastResult: "早い結果", tagTopPriority: "最優先", tagTenMinute: "10分開始", tagTravel: "旅行サポート",
         step1Desc: "4つのプランから選び、レストラン、美容、クリニック、その他を選択します。",
         stepPlanTitle: "4つのプランとサービス種別を選択", stepPlanCopy: "Basicは簡単な問い合わせ用です。Standard、Rush、Specialは予約調整まで対応します。",
+        planBoardTitle: "サービスプラン",
+        planBasicCard1: "1か所", planBasicCard2: "最大5回電話", planBasicCard3: "10分間隔で再試行", planBasicCard4: "営業時間、メニュー、駐車場、在庫、忘れ物確認",
+        planStandardCard1: "基本サービス込み", planStandardCard2: "予約依頼を伝達", planStandardCard3: "代替日時を調整",
+        planRushCard1: "標準サービス込み", planRushCard2: "2時間以内に対応", planRushCard3: "当日急ぎの予約・問い合わせ優先",
+        planSpecialCard1: "急ぎサービス込み", planSpecialCard2: "10分以内に優先開始", planSpecialCard3: "空港送迎、直前予約、病院問い合わせ、旅行問題",
         timeAm: "AM", timePm: "PM"
       },
       zh: {
@@ -2261,6 +2537,11 @@
         tagFastResult: "快速结果", tagTopPriority: "最高优先", tagTenMinute: "10分钟开始", tagTravel: "旅行协助",
         step1Desc: "从4个套餐中选择，然后选择餐厅、美容、诊所或其他类型。",
         stepPlanTitle: "选择4个套餐之一和服务类型", stepPlanCopy: "Basic用于简单咨询。Standard、Rush、Special支持预约协调。",
+        planBoardTitle: "服务套餐",
+        planBasicCard1: "1个地点", planBasicCard2: "最多5次电话", planBasicCard3: "每10分钟重试", planBasicCard4: "营业时间、菜单、停车、库存、遗失物确认",
+        planStandardCard1: "包含基础服务", planStandardCard2: "传达预约请求", planStandardCard3: "协调替代日期/时间",
+        planRushCard1: "包含标准服务", planRushCard2: "2小时内处理", planRushCard3: "当天紧急预约/咨询优先",
+        planSpecialCard1: "包含加急服务", planSpecialCard2: "10分钟内优先开始", planSpecialCard3: "机场接送、临时预约、医院咨询、旅行问题",
         timeAm: "AM", timePm: "PM"
       },
       fr: {
@@ -2285,10 +2566,195 @@
         tagFastResult: "Résultat rapide", tagTopPriority: "Priorité max", tagTenMinute: "Départ 10 min", tagTravel: "Aide voyage",
         step1Desc: "Choisissez parmi 4 formules, puis restaurant, beauté, clinique ou autre.",
         stepPlanTitle: "Choisir une des 4 formules et le type", stepPlanCopy: "Basic sert aux questions simples. Standard, Rush et Special incluent la coordination de réservation.",
+        planBoardTitle: "Formules",
+        planBasicCard1: "1 lieu", planBasicCard2: "Jusqu'à 5 appels", planBasicCard3: "Toutes les 10 min", planBasicCard4: "Horaires, menu, parking, stock, objet perdu",
+        planStandardCard1: "Service Basic inclus", planStandardCard2: "Demande de réservation", planStandardCard3: "Coordination autre date/heure",
+        planRushCard1: "Service Standard inclus", planRushCard2: "Traitement sous 2 heures", planRushCard3: "Réservation ou question urgente le jour même",
+        planSpecialCard1: "Service Rush inclus", planSpecialCard2: "Départ prioritaire sous 10 min", planSpecialCard3: "Pickup, dernière minute, clinique, problème voyage",
         timeAm: "AM", timePm: "PM"
       }
     };
     Object.keys(planI18n).forEach((lang) => Object.assign(i18n[lang] || (i18n[lang] = {}), planI18n[lang]));
+    const compactPlanI18n = {
+      en: {
+        priceTitle: "Choose a call plan.",
+        planBoardTitle: "Service plans",
+        tagPopular: "Popular",
+        planBasicDesc: "Simple phone checks only.",
+        planStandardDesc: "Booking and schedule coordination.",
+        planRushDesc: "Fast same-day handling.",
+        planSpecialDesc: "Top-priority urgent start.",
+        planBasicCard1: "1 location", planBasicCard2: "Up to 5 calls", planBasicCard3: "10 min apart", planBasicCard4: "Hours, menu, parking, stock, lost items",
+        planStandardCard1: "Basic included", planStandardCard2: "Reservation request", planStandardCard3: "Alternative date/time coordination",
+        planRushCard1: "Standard included", planRushCard2: "Within 2 hours", planRushCard3: "Same-day urgent booking or inquiry",
+        planSpecialCard1: "Rush included", planSpecialCard2: "Start within 10 minutes", planSpecialCard3: "Pickup, last-minute booking, clinic, travel issue"
+      },
+      ko: {
+        priceTitle: "전화 지원 플랜 선택",
+        planBoardTitle: "서비스 플랜",
+        tagPopular: "인기",
+        planBasicDesc: "예약이 아닌 단순 확인용.",
+        planStandardDesc: "예약 요청과 일정 조율.",
+        planRushDesc: "당일 빠른 처리.",
+        planSpecialDesc: "긴급 요청 최우선 시작.",
+        planBasicCard1: "1개 장소", planBasicCard2: "최대 5회 전화", planBasicCard3: "10분 간격 재시도", planBasicCard4: "영업시간, 메뉴, 주차, 재고, 분실물 확인",
+        planStandardCard1: "기초 서비스 포함", planStandardCard2: "예약 요청 전달", planStandardCard3: "대체 날짜/시간 조율",
+        planRushCard1: "표준 서비스 포함", planRushCard2: "2시간 내 처리", planRushCard3: "당일 긴급 예약/문의 우선 대응",
+        planSpecialCard1: "긴급 서비스 포함", planSpecialCard2: "10분 내 우선 시작", planSpecialCard3: "공항 픽업, 막판 예약, 병원 문의, 여행 문제"
+      },
+      ja: {
+        priceTitle: "電話サポートを選択",
+        planBoardTitle: "サービスプラン",
+        tagPopular: "人気",
+        planBasicDesc: "簡単な確認向け。",
+        planStandardDesc: "予約依頼と日程調整。",
+        planRushDesc: "当日急ぎ対応。",
+        planSpecialDesc: "緊急依頼を最優先開始。",
+        planBasicCard1: "1か所", planBasicCard2: "最大5回電話", planBasicCard3: "10分間隔で再試行", planBasicCard4: "営業時間、メニュー、駐車場、在庫、忘れ物確認",
+        planStandardCard1: "基本サービス込み", planStandardCard2: "予約依頼を伝達", planStandardCard3: "代替日時を調整",
+        planRushCard1: "標準サービス込み", planRushCard2: "2時間以内に対応", planRushCard3: "当日急ぎの予約・問い合わせ優先",
+        planSpecialCard1: "急ぎサービス込み", planSpecialCard2: "10分以内に優先開始", planSpecialCard3: "空港送迎、直前予約、病院問い合わせ、旅行問題"
+      },
+      zh: {
+        priceTitle: "选择电话支持套餐",
+        planBoardTitle: "服务套餐",
+        tagPopular: "热门",
+        planBasicDesc: "用于简单确认。",
+        planStandardDesc: "预约请求和时间协调。",
+        planRushDesc: "当天快速处理。",
+        planSpecialDesc: "紧急请求最高优先开始。",
+        planBasicCard1: "1个地点", planBasicCard2: "最多5次电话", planBasicCard3: "每10分钟重试", planBasicCard4: "营业时间、菜单、停车、库存、遗失物确认",
+        planStandardCard1: "包含基础服务", planStandardCard2: "传达预约请求", planStandardCard3: "协调替代日期/时间",
+        planRushCard1: "包含标准服务", planRushCard2: "2小时内处理", planRushCard3: "当天紧急预约/咨询优先",
+        planSpecialCard1: "包含加急服务", planSpecialCard2: "10分钟内优先开始", planSpecialCard3: "机场接送、临时预约、医院咨询、旅行问题"
+      },
+      fr: {
+        priceTitle: "Choisir une formule",
+        planBoardTitle: "Formules",
+        tagPopular: "Populaire",
+        planBasicDesc: "Questions simples seulement.",
+        planStandardDesc: "Réservation et coordination.",
+        planRushDesc: "Traitement rapide le jour même.",
+        planSpecialDesc: "Départ prioritaire urgent.",
+        planBasicCard1: "1 lieu", planBasicCard2: "Jusqu'à 5 appels", planBasicCard3: "Toutes les 10 min", planBasicCard4: "Horaires, menu, parking, stock, objet perdu",
+        planStandardCard1: "Service Basic inclus", planStandardCard2: "Demande de réservation", planStandardCard3: "Coordination autre date/heure",
+        planRushCard1: "Service Standard inclus", planRushCard2: "Sous 2 heures", planRushCard3: "Demande urgente le jour même",
+        planSpecialCard1: "Service Rush inclus", planSpecialCard2: "Départ sous 10 min", planSpecialCard3: "Pickup, dernière minute, clinique, voyage"
+      }
+    };
+    Object.keys(compactPlanI18n).forEach((lang) => Object.assign(i18n[lang] || (i18n[lang] = {}), compactPlanI18n[lang]));
+    const finalPlanI18n = {
+      en: { fromLabel: "From" },
+      ko: {
+        fromLabel: "\uCD5C\uC800",
+        priceTitle: "전화 지원 플랜 선택",
+        planBoardTitle: "서비스 플랜",
+        tagPopular: "인기",
+        planIncludesTitle: "\uD3EC\uD568 \uC0AC\uD56D",
+        planBasicDesc: "예약이 아닌 단순 확인용.",
+        planStandardDesc: "예약 요청과 일정 조율.",
+        planRushDesc: "당일 빠른 처리.",
+        planSpecialDesc: "긴급 요청 최우선 시작.",
+        planBasicCard1: "1개 장소",
+        planBasicCard2: "최대 5회 전화",
+        planBasicCard3: "10분 간격 재시도",
+        planBasicCard4: "영업시간, 메뉴, 주차, 재고, 분실물 확인",
+        planStandardCard1: "Basic \uD3EC\uD568",
+        planStandardCard2: "예약 요청 전달",
+        planStandardCard3: "대체 날짜/시간 조율",
+        planRushCard1: "Standard \uD3EC\uD568",
+        planRushCard2: "2시간 내 처리",
+        planRushCard3: "당일 긴급 예약/문의 우선 대응",
+        planSpecialCard1: "Rush \uD3EC\uD568",
+        planSpecialCard2: "10분 내 우선 시작",
+        planSpecialCard3: "공항 픽업, 막판 예약, 병원 문의, 여행 문제"
+      },
+      ja: { fromLabel: "\u6700\u4F4E" },
+      zh: { fromLabel: "\u8D77" },
+      fr: { fromLabel: "\u00C0 partir de" }
+    };
+    Object.keys(finalPlanI18n).forEach((lang) => Object.assign(i18n[lang] || (i18n[lang] = {}), finalPlanI18n[lang]));
+    const expandedPlanI18n = {
+      en: {
+        planStandardCard1: "1 location", planStandardCard2: "Up to 5 calls", planStandardCard3: "10 min apart", planStandardCard4: "Hours/menu/parking/stock", planStandardCard5: "Reservation request", planStandardCard6: "Alternative time check",
+        planRushCard1: "1 location, up to 5 calls", planRushCard2: "10 min apart", planRushCard3: "Reservation request", planRushCard4: "Alternative time check", planRushCard5: "Within 2 hours", planRushCard6: "Same-day urgent inquiry",
+        planSpecialCard1: "1 location, up to 5 calls", planSpecialCard2: "Booking and alternatives", planSpecialCard3: "Same-day priority", planSpecialCard4: "Within 2 hours", planSpecialCard5: "Start within 10 minutes", planSpecialCard6: "Pickup, clinic, travel issue",
+        planSpecialLimit: "No emergency medical, police, or legal issues. Clinics: booking/basic inquiry only."
+      },
+      ko: {
+        planStandardCard1: "1개 장소", planStandardCard2: "최대 5회 전화", planStandardCard3: "10분 간격 재시도", planStandardCard4: "영업시간/메뉴/주차/재고 확인", planStandardCard5: "예약 요청 전달", planStandardCard6: "대체 시간 확인",
+        planRushCard1: "1개 장소, 최대 5회 전화", planRushCard2: "10분 간격 재시도", planRushCard3: "예약 요청 전달", planRushCard4: "대체 날짜/시간 조율", planRushCard5: "2시간 내 처리", planRushCard6: "당일 긴급 예약/문의",
+        planSpecialCard1: "1개 장소, 최대 5회 전화", planSpecialCard2: "예약 및 대체 시간 조율", planSpecialCard3: "당일 우선 처리", planSpecialCard4: "2시간 내 처리", planSpecialCard5: "10분 내 우선 시작", planSpecialCard6: "공항/병원/여행 문의",
+        planSpecialLimit: "응급 의료·경찰·법률 문제 제외. 병원은 예약/기본 문의만 가능."
+      },
+      ja: {
+        planStandardCard1: "1か所", planStandardCard2: "最大5回電話", planStandardCard3: "10分間隔で再試行", planStandardCard4: "営業時間/メニュー/駐車場/在庫確認", planStandardCard5: "予約依頼を伝達", planStandardCard6: "代替時間を確認",
+        planRushCard1: "1か所、最大5回電話", planRushCard2: "10分間隔で再試行", planRushCard3: "予約依頼を伝達", planRushCard4: "代替日時を調整", planRushCard5: "2時間以内に対応", planRushCard6: "当日急ぎの予約/問い合わせ",
+        planSpecialCard1: "1か所、最大5回電話", planSpecialCard2: "予約と代替時間調整", planSpecialCard3: "当日優先対応", planSpecialCard4: "2時間以内に対応", planSpecialCard5: "10分以内に優先開始", planSpecialCard6: "空港/病院/旅行の確認",
+        planSpecialLimit: "緊急医療、警察、法律問題は対象外。病院は予約/基本問い合わせのみ。"
+      },
+      zh: {
+        planStandardCard1: "1个地点", planStandardCard2: "最多5次电话", planStandardCard3: "每10分钟重试", planStandardCard4: "营业/菜单/停车/库存确认", planStandardCard5: "传达预约请求", planStandardCard6: "确认替代时间",
+        planRushCard1: "1个地点，最多5次电话", planRushCard2: "每10分钟重试", planRushCard3: "传达预约请求", planRushCard4: "协调替代日期/时间", planRushCard5: "2小时内处理", planRushCard6: "当天紧急预约/咨询",
+        planSpecialCard1: "1个地点，最多5次电话", planSpecialCard2: "预约和替代时间协调", planSpecialCard3: "当天优先处理", planSpecialCard4: "2小时内处理", planSpecialCard5: "10分钟内优先开始", planSpecialCard6: "机场/医院/旅行问题",
+        planSpecialLimit: "不处理紧急医疗、警察或法律问题。医院仅限预约/基本咨询。"
+      },
+      fr: {
+        planStandardCard1: "1 lieu", planStandardCard2: "Jusqu'à 5 appels", planStandardCard3: "Toutes les 10 min", planStandardCard4: "Horaires/menu/parking/stock", planStandardCard5: "Demande de réservation", planStandardCard6: "Vérifier autre horaire",
+        planRushCard1: "1 lieu, jusqu'à 5 appels", planRushCard2: "Toutes les 10 min", planRushCard3: "Demande de réservation", planRushCard4: "Coordination autre date/heure", planRushCard5: "Sous 2 heures", planRushCard6: "Demande urgente le jour même",
+        planSpecialCard1: "1 lieu, jusqu'à 5 appels", planSpecialCard2: "Réservation et alternatives", planSpecialCard3: "Priorité le jour même", planSpecialCard4: "Sous 2 heures", planSpecialCard5: "Départ sous 10 min", planSpecialCard6: "Pickup, clinique, voyage",
+        planSpecialLimit: "Urgences médicales, police et droit exclus. Clinique : réservation/question simple."
+      }
+    };
+    Object.keys(expandedPlanI18n).forEach((lang) => Object.assign(i18n[lang] || (i18n[lang] = {}), expandedPlanI18n[lang]));
+    const diffPlanI18n = {
+      en: {
+        planBasicCard1: "1 location, up to 5 calls", planBasicCard2: "10 min apart", planBasicCard3: "Simple checks: hours, menu, parking, stock, lost items",
+        planStandardCard1: "1 location, up to 5 calls", planStandardCard2: "10 min apart", planStandardCard3: "Simple checks: hours, menu, parking, stock, lost items",
+        planStandardDiff1: "Added: reservation request", planStandardDiff2: "Added: alternative date/time coordination",
+        planRushCard1: "1 location, up to 5 calls", planRushCard2: "10 min apart", planRushCard3: "Simple checks: hours, menu, parking, stock, lost items",
+        planRushDiff1: "Added: processed within 2 hours", planRushDiff2: "Added: same-day urgent booking/inquiry",
+        planSpecialCard1: "1 location, up to 5 calls", planSpecialCard2: "10 min apart", planSpecialCard3: "Simple checks: hours, menu, parking, stock, lost items",
+        planSpecialDiff1: "Added: start within 10 minutes", planSpecialDiff2: "Added: pickup, clinic, travel issue"
+      },
+      ko: {
+        planBasicCard1: "1개 장소, 최대 5회 전화", planBasicCard2: "10분 간격 재시도", planBasicCard3: "단순 확인: 영업시간, 메뉴, 주차, 재고, 분실물",
+        planStandardCard1: "1개 장소, 최대 5회 전화", planStandardCard2: "10분 간격 재시도", planStandardCard3: "단순 확인: 영업시간, 메뉴, 주차, 재고, 분실물",
+        planStandardDiff1: "추가: 예약 요청 전달", planStandardDiff2: "추가: 대체 날짜/시간 조율",
+        planRushCard1: "1개 장소, 최대 5회 전화", planRushCard2: "10분 간격 재시도", planRushCard3: "단순 확인: 영업시간, 메뉴, 주차, 재고, 분실물",
+        planRushDiff1: "추가: 2시간 내 처리", planRushDiff2: "추가: 당일 긴급 예약/문의",
+        planSpecialCard1: "1개 장소, 최대 5회 전화", planSpecialCard2: "10분 간격 재시도", planSpecialCard3: "단순 확인: 영업시간, 메뉴, 주차, 재고, 분실물",
+        planSpecialDiff1: "추가: 10분 내 우선 시작", planSpecialDiff2: "추가: 공항/병원/여행 문의"
+      },
+      ja: {
+        planBasicCard1: "1か所、最大5回電話", planBasicCard2: "10分間隔で再試行", planBasicCard3: "簡単確認: 営業時間、メニュー、駐車場、在庫、忘れ物",
+        planStandardCard1: "1か所、最大5回電話", planStandardCard2: "10分間隔で再試行", planStandardCard3: "簡単確認: 営業時間、メニュー、駐車場、在庫、忘れ物",
+        planStandardDiff1: "追加: 予約依頼を伝達", planStandardDiff2: "追加: 代替日時を調整",
+        planRushCard1: "1か所、最大5回電話", planRushCard2: "10分間隔で再試行", planRushCard3: "簡単確認: 営業時間、メニュー、駐車場、在庫、忘れ物",
+        planRushDiff1: "追加: 2時間以内に対応", planRushDiff2: "追加: 当日急ぎの予約/問い合わせ",
+        planSpecialCard1: "1か所、最大5回電話", planSpecialCard2: "10分間隔で再試行", planSpecialCard3: "簡単確認: 営業時間、メニュー、駐車場、在庫、忘れ物",
+        planSpecialDiff1: "追加: 10分以内に優先開始", planSpecialDiff2: "追加: 空港/病院/旅行の確認"
+      },
+      zh: {
+        planBasicCard1: "1个地点，最多5次电话", planBasicCard2: "每10分钟重试", planBasicCard3: "简单确认：营业、菜单、停车、库存、遗失物",
+        planStandardCard1: "1个地点，最多5次电话", planStandardCard2: "每10分钟重试", planStandardCard3: "简单确认：营业、菜单、停车、库存、遗失物",
+        planStandardDiff1: "新增：传达预约请求", planStandardDiff2: "新增：协调替代日期/时间",
+        planRushCard1: "1个地点，最多5次电话", planRushCard2: "每10分钟重试", planRushCard3: "简单确认：营业、菜单、停车、库存、遗失物",
+        planRushDiff1: "新增：2小时内处理", planRushDiff2: "新增：当天紧急预约/咨询",
+        planSpecialCard1: "1个地点，最多5次电话", planSpecialCard2: "每10分钟重试", planSpecialCard3: "简单确认：营业、菜单、停车、库存、遗失物",
+        planSpecialDiff1: "新增：10分钟内优先开始", planSpecialDiff2: "新增：机场/医院/旅行问题"
+      },
+      fr: {
+        planBasicCard1: "1 lieu, jusqu'à 5 appels", planBasicCard2: "Toutes les 10 min", planBasicCard3: "Vérifs simples: horaires, menu, parking, stock, objet perdu",
+        planStandardCard1: "1 lieu, jusqu'à 5 appels", planStandardCard2: "Toutes les 10 min", planStandardCard3: "Vérifs simples: horaires, menu, parking, stock, objet perdu",
+        planStandardDiff1: "Ajout: demande de réservation", planStandardDiff2: "Ajout: autre date/heure",
+        planRushCard1: "1 lieu, jusqu'à 5 appels", planRushCard2: "Toutes les 10 min", planRushCard3: "Vérifs simples: horaires, menu, parking, stock, objet perdu",
+        planRushDiff1: "Ajout: sous 2 heures", planRushDiff2: "Ajout: urgence le jour même",
+        planSpecialCard1: "1 lieu, jusqu'à 5 appels", planSpecialCard2: "Toutes les 10 min", planSpecialCard3: "Vérifs simples: horaires, menu, parking, stock, objet perdu",
+        planSpecialDiff1: "Ajout: départ sous 10 min", planSpecialDiff2: "Ajout: pickup, clinique, voyage"
+      }
+    };
+    Object.keys(diffPlanI18n).forEach((lang) => Object.assign(i18n[lang] || (i18n[lang] = {}), diffPlanI18n[lang]));
 
     const state = {
       lang: localStorage.getItem("kallLang") || "en",
@@ -2421,9 +2887,9 @@
         el.textContent = formatMoney(planPrices[plan]);
       });
       $$("[data-plan-label]").forEach((el) => {
-        el.textContent = planLabel(el.dataset.planLabel);
+        el.textContent = planName(el.dataset.planLabel);
       });
-      $("#chipPrice").textContent = `From ${formatMoney(planPrices.Basic)}`;
+      $("#chipPrice").textContent = `${t("fromLabel")} ${formatMoney(planPrices.Basic)}`;
     }
 
     function openLanguage() {
@@ -2488,14 +2954,51 @@
       if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
       return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
     }
+    function syncDatePicker(input, picker) {
+      if (!input || !picker) return;
+      if (input.id === "birthDate") {
+        picker.removeAttribute("min");
+        picker.max = todayISO();
+      } else {
+        picker.min = todayISO();
+        picker.removeAttribute("max");
+      }
+      picker.value = isIsoDate(input.value) ? input.value : "";
+    }
     function prepareDateInput(input) {
       setDateInputMode(input);
+      const picker = $(`[data-date-picker-for="${input.id}"]`);
+      const button = $(`[data-date-picker-button="${input.id}"]`);
+      syncDatePicker(input, picker);
       input.addEventListener("input", () => {
         input.value = maskDateValue(input.value);
+        syncDatePicker(input, picker);
       });
       input.addEventListener("paste", () => {
-        requestAnimationFrame(() => { input.value = maskDateValue(input.value); });
+        requestAnimationFrame(() => {
+          input.value = maskDateValue(input.value);
+          syncDatePicker(input, picker);
+        });
       });
+      input.addEventListener("change", () => syncDatePicker(input, picker));
+      if (picker) {
+        picker.addEventListener("change", () => {
+          input.value = picker.value;
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+        });
+      }
+      if (button && picker) {
+        button.addEventListener("click", () => {
+          syncDatePicker(input, picker);
+          try {
+            if (typeof picker.showPicker === "function") picker.showPicker();
+            else picker.click();
+          } catch (error) {
+            picker.click();
+          }
+        });
+      }
       setDateInputMode(input);
     }
     function formatDate(value) {
@@ -2725,7 +3228,7 @@
       const bookingRef = firebase.ref(firebase.db, bookingPath);
       const payload = sanitizeForFirebase({
         ...booking,
-        source: "index_v2",
+        source: "index_v9",
         firebasePath: bookingPath,
         updatedAtClient: new Date().toISOString()
       });
